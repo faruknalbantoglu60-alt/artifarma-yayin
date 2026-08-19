@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="tr" data-af-no-back data-af-no-storage data-af-kilit="0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danışmanlık Talebi — Artıfarma Group</title>
+<meta name="description" content="Eczaneniz için danışmanlık talebi oluşturun. Bilgilerinizi bırakın, mevcut durumunuzu birlikte değerlendirelim.">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css">
+<script src="assets/core.js"></script>
+</head>
+<body>
+
+<div class="brandstrip">
+  <div class="wrap">
+    <span class="bs-mark">ARTIFARMA 360°</span>
+    <span class="bs-sep"></span>
+    <span class="bs-name">Kurumsal Eczane Danışmanlığı</span>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="index.html" class="nav-logo" aria-label="Artıfarma Group ana sayfa">
+        <img src="assets/logo.png" alt="Artıfarma Group">
+      </a>
+      <div class="nav-links">
+        <a href="index.html#yaklasim">Yaklaşımımız</a>
+        <a href="index.html#analiz">Öz Değerlendirme</a>
+        <a href="index.html#araclar">Araçlar</a>
+        <a href="index.html">← Ana sayfa</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="form-page">
+  <div class="wrap">
+    <div class="form-grid">
+
+      <div class="form-intro">
+        <span class="eyebrow">Danışmanlık Talebi</span>
+        <h1>Eczanenizi birlikte değerlendirelim</h1>
+        <p>
+          Bilgilerinizi bırakın, en kısa sürede size dönelim. İlk görüşmede
+          eczanenizin mevcut durumunu birlikte çıkarır, öncelikli başlıkları
+          belirler ve size özel bir yol haritası öneririz.
+        </p>
+        <ul class="form-points">
+          <li>İlk tanı görüşmesi ücretsizdir</li>
+          <li>Bilgileriniz yalnızca danışmanlık amacıyla kullanılır</li>
+          <li>Genellikle aynı gün içinde dönüş yapılır</li>
+        </ul>
+        <div class="form-direct">
+          <span>Doğrudan ulaşmak isterseniz</span>
+          <a href="mailto:faruk@artifarmagroup.com">faruk@artifarmagroup.com</a>
+          <a href="tel:+905334313006">0533 431 30 06</a>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <form id="talepForm" name="danismanlik" method="POST"
+              data-netlify="true" netlify-honeypot="dolduma">
+          <input type="hidden" name="form-name" value="danismanlik">
+          <p class="gizli"><label>Bu alanı boş bırakın <input name="dolduma"></label></p>
+
+          <div class="fld">
+            <label for="ad">Ad Soyad <b>*</b></label>
+            <input id="ad" name="Ad Soyad" type="text" required autocomplete="name" placeholder="Ecz. Ad Soyad">
+          </div>
+
+          <div class="fld-row">
+            <div class="fld">
+              <label for="tel">Telefon <b>*</b></label>
+              <input id="tel" name="Telefon" type="tel" required autocomplete="tel"
+                     inputmode="tel" placeholder="0533 431 30 06">
+            </div>
+            <div class="fld">
+              <label for="eposta">E-posta <b>*</b></label>
+              <input id="eposta" name="E-posta" type="email" required autocomplete="email"
+                     placeholder="ornek@eposta.com">
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="eczane">Eczane Adı <b>*</b></label>
+            <input id="eczane" name="Eczane Adı" type="text" required placeholder="Örn. Naturel Eczanesi">
+          </div>
+
+          <div class="fld-row">
+            <div class="fld">
+              <label for="il">İl <b>*</b></label>
+              <select id="il" name="İl" required>
+                <option value="">Seçiniz</option>
+            <option>Adana</option>
+            <option>Adıyaman</option>
+            <option>Afyonkarahisar</option>
+            <option>Ağrı</option>
+            <option>Aksaray</option>
+            <option>Amasya</option>
+            <option>Ankara</option>
+            <option>Antalya</option>
+            <option>Ardahan</option>
+            <option>Artvin</option>
+            <option>Aydın</option>
+            <option>Balıkesir</option>
+            <option>Bartın</option>
+            <option>Batman</option>
+            <option>Bayburt</option>
+            <option>Bilecik</option>
+            <option>Bingöl</option>
+            <option>Bitlis</option>
+            <option>Bolu</option>
+            <option>Burdur</option>
+            <option>Bursa</option>
+            <option>Çanakkale</option>
+            <option>Çankırı</option>
+            <option>Çorum</option>
+            <option>Denizli</option>
+            <option>Diyarbakır</option>
+            <option>Düzce</option>
+            <option>Edirne</option>
+            <option>Elazığ</option>
+            <option>Erzincan</option>
+            <option>Erzurum</option>
+            <option>Eskişehir</option>
+            <option>Gaziantep</option>
+            <option>Giresun</option>
+            <option>Gümüşhane</option>
+            <option>Hakkâri</option>
+            <option>Hatay</option>
+            <option>Iğdır</option>
+            <option>Isparta</option>
+            <option>İstanbul</option>
+            <option>İzmir</option>
+            <option>Kahramanmaraş</option>
+            <option>Karabük</option>
+            <option>Karaman</option>
+            <option>Kars</option>
+            <option>Kastamonu</option>
+            <option>Kayseri</option>
+            <option>Kilis</option>
+            <option>Kırıkkale</option>
+            <option>Kırklareli</option>
+            <option>Kırşehir</option>
+            <option>Kocaeli</option>
+            <option>Konya</option>
+            <option>Kütahya</option>
+            <option>Malatya</option>
+            <option>Manisa</option>
+            <option>Mardin</option>
+            <option>Mersin</option>
+            <option>Muğla</option>
+            <option>Muş</option>
+            <option>Nevşehir</option>
+            <option>Niğde</option>
+            <option>Ordu</option>
+            <option>Osmaniye</option>
+            <option>Rize</option>
+            <option>Sakarya</option>
+            <option>Samsun</option>
+            <option>Şanlıurfa</option>
+            <option>Siirt</option>
+            <option>Sinop</option>
+            <option>Şırnak</option>
+            <option>Sivas</option>
+            <option>Tekirdağ</option>
+            <option>Tokat</option>
+            <option>Trabzon</option>
+            <option>Tunceli</option>
+            <option>Uşak</option>
+            <option>Van</option>
+            <option>Yalova</option>
+            <option>Yozgat</option>
+            <option>Zonguldak</option>
+              </select>
+            </div>
+            <div class="fld">
+              <label for="calisan">Çalışan Sayısı <b>*</b></label>
+              <select id="calisan" name="Çalışan Sayısı" required>
+                <option value="">Seçiniz</option>
+                <option>Yalnızca eczacı</option>
+                <option>1–2 kişi</option>
+                <option>3–5 kişi</option>
+                <option>6–10 kişi</option>
+                <option>10+ kişi</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="fld">
+            <label for="not">Eklemek istedikleriniz</label>
+            <textarea id="not" name="Not" rows="3"
+                      placeholder="Öncelikli gördüğünüz konular, sorularınız… (isteğe bağlı)"></textarea>
+          </div>
+
+          <label class="onay">
+            <input type="checkbox" id="kvkk" name="KVKK Onayı" value="Onaylandı" required>
+            <span>Bilgilerimin, danışmanlık talebimin değerlendirilmesi ve tarafımla
+              iletişime geçilmesi amacıyla işlenmesini onaylıyorum.
+              <a href="#kvkk-metin" id="kvkkAc">Aydınlatma metni</a></span>
+          </label>
+
+          <button type="submit" class="btn btn-primary genis" id="gonder">Talebi gönder</button>
+          <div class="form-durum" id="durum"></div>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="kvkk-kutu" id="kvkk-metin">
+      <h3>Aydınlatma Metni</h3>
+      <p>
+        Bu form aracılığıyla ilettiğiniz ad, soyad, telefon, e-posta, eczane adı,
+        il ve çalışan sayısı bilgileri; yalnızca danışmanlık talebinizin
+        değerlendirilmesi ve sizinle iletişime geçilmesi amacıyla Artıfarma Group
+        tarafından işlenir. Bilgiler üçüncü taraflarla paylaşılmaz ve pazarlama
+        amacıyla kullanılmaz. KVKK m.11 kapsamında verilerinize erişme, düzeltilmesini
+        veya silinmesini talep etme hakkına sahipsiniz; bunun için
+        <a href="mailto:faruk@artifarmagroup.com">faruk@artifarmagroup.com</a>
+        adresine yazmanız yeterlidir.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-bottom" style="border:none;padding-top:0">
+      <span>© <span id="yil">2026</span> Artıfarma Group. Tüm hakları saklıdır.</span>
+      <span>Kişisel veriler KVKK kapsamında işlenir.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('yil').textContent = new Date().getFullYear();
+
+document.getElementById('kvkkAc').addEventListener('click', function(e){
+  e.preventDefault();
+  document.getElementById('kvkk-metin').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------------------------------------------------------------
+   Gönderim
+   Site statik olduğu için form, yayın ortamının form servisine
+   gönderilir (Netlify). Servis yoksa veya ulaşılamazsa, bilgiler
+   kaybolmasın diye e-posta / WhatsApp seçenekleri sunulur.
+   --------------------------------------------------------------- */
+var form = document.getElementById('talepForm');
+var durum = document.getElementById('durum');
+var gonder = document.getElementById('gonder');
+
+function ozet(fd){
+  var satir = [];
+  fd.forEach(function(v,k){
+    if(k === 'form-name' || k === 'dolduma' || !String(v).trim()) return;
+    satir.push(k + ': ' + v);
+  });
+  return satir.join('\n');
+}
+
+function basarili(){
+  form.innerHTML =
+    '<div class="sonuc ok">' +
+      '<div class="sonuc-ikon">✓</div>' +
+      '<h3>Talebiniz alındı</h3>' +
+      '<p>En kısa sürede size dönüş yapacağız. İlginiz için teşekkür ederiz.</p>' +
+      '<a href="index.html" class="btn btn-line">Ana sayfaya dön</a>' +
+    '</div>';
+}
+
+function yedekYol(metin){
+  var konu = 'Danışmanlık Talebi';
+  var mail = 'mailto:faruk@artifarmagroup.com?subject=' + encodeURIComponent(konu) +
+             '&body=' + encodeURIComponent(metin);
+  var wa   = 'https://wa.me/905334313006?text=' + encodeURIComponent(konu + '\n\n' + metin);
+  durum.className = 'form-durum uyari';
+  durum.innerHTML =
+    '<b>Form doğrudan gönderilemedi.</b> Bilgileriniz hazır — aşağıdaki iki yoldan biriyle ' +
+    'tek dokunuşla iletebilirsiniz:' +
+    '<div class="yedek-dugmeler">' +
+      '<a class="btn btn-primary" href="' + mail + '">E-posta ile gönder</a>' +
+      '<a class="btn btn-line" href="' + wa + '" target="_blank" rel="noopener">WhatsApp ile gönder</a>' +
+    '</div>';
+}
+
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  var fd = new FormData(form);
+  if(String(fd.get('dolduma') || '').trim()) return;      // bot
+
+  /* Gönderim başarısız olsa bile kayıt kaybolmasın diye deftere yazılır. */
+  if (window.ArtifarmaKayit){
+    var k = { tarih: new Date().toISOString(), kaynak: 'site' };
+    fd.forEach(function(v,a){ if(a!=='form-name' && a!=='dolduma') k[a]=v; });
+    ArtifarmaKayit.ekle('talep', k);
+  }
+
+  gonder.disabled = true;
+  gonder.textContent = 'Gönderiliyor…';
+  durum.className = 'form-durum';
+  durum.textContent = '';
+
+  fetch('/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: new URLSearchParams(fd).toString()
+  })
+  .then(function(r){
+    if(!r.ok) throw new Error('HTTP ' + r.status);
+    basarili();
+  })
+  .catch(function(){
+    gonder.disabled = false;
+    gonder.textContent = 'Talebi gönder';
+    yedekYol(ozet(fd));
+  });
+});
+</script>
+
+</body>
+</html>

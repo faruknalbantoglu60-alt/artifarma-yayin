@@ -1,0 +1,19 @@
+# Artıfarma Group
+# Tanıtım sayfası ve ücretsiz öz değerlendirme aranabilir;
+# giriş gerektiren danışmanlık araçları arama sonuçlarında görünmez.
+
+User-agent: *
+Allow: /$
+Allow: /analiz.html
+Allow: /iletisim.html
+Disallow: /swot.html
+Disallow: /yetkinlik.html
+Disallow: /program.html
+Disallow: /egitim.html
+Disallow: /finans.html
+Disallow: /performans.html
+Disallow: /admin.html
+Disallow: /yonetim.html
+Disallow: /eczaneler.html
+Disallow: /kayitlar.html
+Disallow: /yedek/

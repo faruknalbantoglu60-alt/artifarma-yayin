@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artıfarma Değerlendirme Platformu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#2A2A5E;--navy-d:#1E1E45;--navy-t:#3A3A78;--red:#DC1A22;--bg:#F3F4FA;--card:#FFFFFF;--ink:#1C1D2B;--muted:#6B6E82;
+--line:#E3E5F0;--line-2:#EEF0F8;--green:#1F9D6B;--blue:#2F7DC4;--amber:#E8A33D;--orange:#E07A2E;
+--shadow:0 1px 2px rgba(30,30,69,.04),0 8px 24px rgba(30,30,69,.06);--shadow-lg:0 4px 12px rgba(30,30,69,.08),0 24px 48px rgba(30,30,69,.10);--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}html{-webkit-text-size-adjust:100%}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}input,select,textarea{font-family:inherit;font-size:14px}
+::selection{background:var(--navy);color:#fff}
+.topbar{background:var(--navy);color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(30,30,69,.18)}
+.topbar-inner{max-width:1060px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:12px;height:60px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#fff}
+.brand-mark{width:32px;height:32px;border-radius:9px;flex:none;background:linear-gradient(135deg,#fff 0 50%,var(--red) 50% 100%);position:relative;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.25)}
+.brand-mark::after{content:"A";font-weight:800;font-size:16px;color:var(--navy);position:absolute;left:7px;top:3px;letter-spacing:-1px}
+.brand-name{font-weight:800;font-size:14.5px;line-height:1.1}.brand-name span{display:block;font-weight:500;font-size:10.5px;opacity:.62;letter-spacing:.5px;text-transform:uppercase}
+.top-ctx{margin-left:auto;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600}
+.top-ctx .who{opacity:.85}.top-ctx .badge{background:var(--red);font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.4px}
+.logout{color:rgba(255,255,255,.8);font-weight:700;font-size:12.5px;padding:6px 11px;border-radius:8px;background:rgba(255,255,255,.1)}.logout:hover{background:rgba(255,255,255,.18)}
+.wrap{max-width:1060px;margin:0 auto;padding:30px 22px 90px}.wrap-narrow{max-width:460px}
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--red)}
+h1.page{font-size:25px;font-weight:800;letter-spacing:-.5px;margin:6px 0 4px}.page-sub{color:var(--muted);font-size:14.5px;max-width:640px}
+.row{display:flex;gap:14px;flex-wrap:wrap}.spread{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14px;padding:11px 18px;border-radius:11px;transition:.16s;white-space:nowrap}
+.btn-primary{background:var(--navy);color:#fff}.btn-primary:hover{background:var(--navy-d);transform:translateY(-1px)}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{filter:brightness(.94);transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px var(--line)}.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--navy)}
+.btn-sm{padding:8px 13px;font-size:13px;border-radius:9px}.btn-lg{padding:14px 24px;font-size:15px;border-radius:12px}.btn:disabled{opacity:.5;cursor:not-allowed}.btn svg{width:17px;height:17px;flex:none}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--line-2)}
+.panel{padding:22px}.panel h3{font-size:15px;font-weight:800;margin-bottom:3px}.panel .h-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.field{margin-bottom:15px}.field label{display:block;font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.field input,.field select{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;color:var(--ink);background:#fff;transition:.15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(42,42,94,.10)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.stat{padding:18px}.stat .k{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}.stat .v{font-size:27px;font-weight:800;letter-spacing:-1px;margin-top:6px;color:var(--navy)}.stat .v small{font-size:13px;color:var(--muted);font-weight:600}
+.list-head{display:flex;align-items:center;justify-content:space-between;margin:10px 0 14px}.list-head h2{font-size:17px;font-weight:800}
+/* login */
+.login-card{padding:30px 28px}
+.login-logo{width:60px;height:60px;border-radius:16px;background:var(--navy);display:grid;place-items:center;margin:0 auto 18px;box-shadow:var(--shadow-lg)}
+.login-logo::after{content:"A";color:#fff;font-weight:800;font-size:28px}
+.tabs{display:flex;background:#F0F1F8;border-radius:11px;padding:4px;margin-bottom:20px}
+.tabs button{flex:1;padding:9px;border-radius:8px;font-weight:700;font-size:13px;color:var(--muted);transition:.15s}.tabs button.on{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
+/* cards/list */
+.tile{padding:18px;cursor:pointer;transition:.16s;border:1px solid var(--line-2)}.tile:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:var(--line)}
+.tile-top{display:flex;align-items:center;gap:13px;margin-bottom:14px}
+.avatar{width:44px;height:44px;border-radius:12px;flex:none;display:grid;place-items:center;font-weight:800;font-size:16px;color:#fff;background:var(--navy)}
+.tile .nm{font-weight:700;font-size:15px}.tile .mt{font-size:12px;color:var(--muted);margin-top:2px}
+.tile-foot{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line-2);padding-top:13px;font-size:12.5px;color:var(--muted)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.member{display:flex;align-items:center;gap:13px;padding:13px 16px;border-bottom:1px solid var(--line-2);cursor:pointer;transition:.13s}.member:last-child{border-bottom:none}.member:hover{background:#FAFAFE}
+.member .nm{font-weight:700;font-size:14px}.member .rl{font-size:12px;color:var(--muted)}
+.member .stt{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}.member .arr{color:var(--line)}
+.cred{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:#F3F4FA;padding:3px 8px;border-radius:6px;font-weight:700;color:var(--navy)}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.empty{text-align:center;padding:44px 24px;color:var(--muted)}.empty svg{width:42px;height:42px;color:var(--line);margin-bottom:14px}.empty h3{font-size:17px;color:var(--ink);font-weight:700;margin-bottom:6px}
+.back-link{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-weight:700;font-size:13.5px;margin-bottom:16px}.back-link:hover{color:var(--navy)}.back-link svg{width:16px;height:16px}
+/* eval */
+.wiz-steps{height:7px;border-radius:5px;background:var(--line);overflow:hidden;margin:18px 0 6px}.wiz-steps i{display:block;height:100%;background:var(--navy);transition:.3s}
+.wiz-head{display:flex;align-items:center;gap:14px;margin:6px 0 4px}.wiz-head .av{width:48px;height:48px;border-radius:13px;flex:none;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff}
+.wiz-head h2{font-size:20px;font-weight:800}.wiz-head .sub{font-size:13px;color:var(--muted)}
+.dim{padding:15px 0;border-bottom:1px solid var(--line-2)}.dim:last-child{border-bottom:none}
+.dim-name{font-weight:700;font-size:14px}.dim-desc{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+.scale button{border:1.5px solid var(--line);border-radius:10px;padding:9px 4px 8px;text-align:center;transition:.13s;background:#fff}
+.scale button:hover{border-color:var(--navy-t);background:#FAFAFE}.scale button .n{font-weight:800;font-size:16px;color:var(--navy);display:block}.scale button .l{font-size:10px;color:var(--muted);font-weight:600;display:block;margin-top:1px}
+.scale button.sel{background:var(--navy);border-color:var(--navy)}.scale button.sel .n,.scale button.sel .l{color:#fff}
+.savebar{position:sticky;bottom:0;background:rgba(255,255,255,.93);backdrop-filter:blur(8px);border-top:1px solid var(--line);margin:20px 0 0;padding:14px 18px;display:flex;align-items:center;gap:12px;border-radius:var(--r)}
+.savebar .prog{flex:1;font-size:12.5px;color:var(--muted);font-weight:600}.savebar .prog b{color:var(--navy)}
+/* report */
+.rep-head{background:var(--navy);color:#fff;border-radius:var(--r);padding:24px 26px;position:relative;overflow:hidden}
+.rep-head::before{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(220,26,34,.30),transparent 70%)}
+.rep-head-inner{position:relative;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.rep-av{width:60px;height:60px;border-radius:15px;background:rgba(255,255,255,.13);display:grid;place-items:center;font-weight:800;font-size:23px;flex:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22)}
+.rep-id h2{font-size:22px;font-weight:800}.rep-id .meta{opacity:.75;font-size:13px;margin-top:3px}
+.rep-scores{margin-left:auto;display:flex;gap:18px;text-align:center}.rep-scores .b{font-size:10px;text-transform:uppercase;letter-spacing:.6px;opacity:.7;font-weight:700}.rep-scores .v{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1.1}
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.radar-wrap{display:flex;flex-direction:column;align-items:center}.legend{display:flex;gap:16px;justify-content:center;margin-top:8px;flex-wrap:wrap}.legend i{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--muted)}.legend i b{width:12px;height:12px;border-radius:4px;display:inline-block}
+.tw{width:100%;border-collapse:collapse;font-size:13px}.tw th{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);text-align:center;padding:7px 4px;border-bottom:1.5px solid var(--line)}.tw th:first-child{text-align:left}
+.tw td{padding:8px 4px;border-bottom:1px solid var(--line-2);text-align:center;font-weight:800}.tw td:first-child{text-align:left;font-weight:600;color:var(--ink)}
+.findings{display:grid;grid-template-columns:1fr 1fr;gap:16px}.finding-box{padding:20px}.finding-box .ft{display:flex;align-items:center;gap:9px;font-weight:800;font-size:14px;margin-bottom:13px}.finding-box .ft svg{width:18px;height:18px}
+.fitem{display:flex;gap:10px;padding:8px 0;font-size:13px;line-height:1.45}.fitem .ic{flex:none;width:7px;height:7px;border-radius:50%;margin-top:6px}
+.devitem{padding:11px 0;border-bottom:1px solid var(--line-2)}.devitem:last-child{border-bottom:none}.devitem .dh{display:flex;align-items:center;justify-content:space-between;gap:8px}.devitem .dh b{font-size:13.5px}.devitem .tip{font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.5}.devitem .tip::before{content:"→ ";color:var(--red);font-weight:800}
+.cmt{background:#F6F6FB;border-left:3px solid var(--navy);border-radius:8px;padding:10px 13px;margin-top:9px;font-size:12.8px;color:#43455a;line-height:1.5}
+.interp{padding:22px;background:linear-gradient(180deg,#F8F8FD,#fff)}.interp h3{font-size:15px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:9px}.interp p{font-size:13.6px;color:#43455a;line-height:1.65}
+.warnbox{background:#FFF6E8;border:1px solid #F0D9A8;border-radius:10px;padding:12px 15px;font-size:12.5px;color:#8A6311;display:flex;gap:9px;align-items:flex-start}.warnbox svg{width:17px;height:17px;flex:none;margin-top:1px}
+.done-screen{text-align:center;padding:48px 24px}.done-screen .big{width:78px;height:78px;border-radius:50%;background:var(--green);display:grid;place-items:center;margin:0 auto 20px}.done-screen .big svg{width:40px;height:40px;color:#fff}.done-screen h2{font-size:23px;font-weight:800}.done-screen p{color:var(--muted);max-width:380px;margin:10px auto 0;font-size:14.5px}
+.row-edit{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line-2)}.row-edit:last-child{border-bottom:none}
+.overlay{position:fixed;inset:0;background:rgba(28,29,43,.5);backdrop-filter:blur(3px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}.overlay.show{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:460px;width:100%;padding:26px;box-shadow:var(--shadow-lg);max-height:88vh;overflow:auto}.modal h3{font-size:18px;font-weight:800;margin-bottom:6px}.modal p{font-size:13.5px;color:var(--muted);margin-bottom:16px}.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:13.5px;box-shadow:var(--shadow-lg);opacity:0;transition:.25s;z-index:200;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:44px;padding-top:22px;border-top:1px solid var(--line)}.foot b{color:var(--navy)}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.rep-grid,.findings,.grid-2{grid-template-columns:1fr}.rep-scores{margin-left:0}}
+@media(max-width:430px){.scale button .l{display:none}.stats{grid-template-columns:1fr}}
+@media print{.topbar,.savebar,.back-link,.no-print,.toast{display:none!important}body{background:#fff}.wrap{padding:0;max-width:100%}.card,.panel,.rep-head{box-shadow:none;border:1px solid #ddd;break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+.af-chip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:36px;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.18)}.af-chip img{height:24px;width:auto;display:block}
+</style>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo.png">
+<script src="assets/core.js"></script>
+</head>
+<body>
+<header class="topbar"><div class="topbar-inner">
+  <a class="brand" href="#" onclick="home();return false"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span>
+    <span class="brand-name">Artıfarma Değerlendirme<span>360° Eczane Yetkinlik Platformu</span></span></a>
+  <div class="top-ctx" id="topCtx"></div>
+</div></header>
+<main class="wrap" id="app"></main>
+<div class="overlay" id="overlay"><div class="modal" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="importFile" accept="application/json,.json" style="display:none">
+
+<script>
+/* ============ YETKİNLİK SETİ — 5 BAŞLIK / DAVRANIŞSAL GÖSTERGELER ============
+   Kaynak: Faruk'un yetkinlik modeli + performans değerlendirme kategorileri (İş Disiplini,
+   Raf-Satış, İletişim, Eğitim) + iş bölümü (reçete/SGK-Medula, stok, ürün bilgisi). */
+const CATS=[
+ {id:'c1',name:'İş Disiplini, Sorumluluk & Sistemli Çalışma',short:'Disiplin',tip:'Görev takip listesi, gün sonu kontrolü, önceliklendirme ve net sorumluluk tanımlarıyla güçlendirilebilir.'},
+ {id:'c2',name:'Mesleki Bilgi, Mevzuat & Reçete Yönetimi',short:'Mevzuat & Bilgi',tip:'Düzenli SUT/mevzuat bülteni takibi, vaka temelli iç eğitim ve ürün bilgisi oturumlarıyla geliştirilebilir.'},
+ {id:'c3',name:'Satış, Hedef, Raf & Stok Yönetimi',short:'Satış & Stok',tip:'Kategori hedefleri, raf/miad kontrol rutini ve çapraz-tamamlayıcı satış pratiğiyle desteklenebilir.'},
+ {id:'c4',name:'İletişim, Müşteri Odaklılık & Hasta İlişkileri',short:'İletişim',tip:'Aktif dinleme, empati, hasta bilgilendirme ve hizmet standardı çalışmalarıyla güçlendirilebilir.'},
+ {id:'c5',name:'Ekip Çalışması, Gelişim & Problem Çözme',short:'Ekip & Gelişim',tip:'Bilgi paylaşımı oturumları, problem çözme egzersizleri ve düzenli geri bildirim görüşmeleriyle desteklenebilir.'}
+];
+const ITEMS=[
+ // c1 — İş Disiplini, Sorumluluk & Sistemli Çalışma
+ {id:'q11',cat:'c1',text:'Verilen görevleri zamanında ve eksiksiz yerine getirir'},
+ {id:'q12',cat:'c1',text:'Mesai saatlerine ve devam sürekliliğine özen gösterir'},
+ {id:'q13',cat:'c1',text:'Mesai içinde zamanını işine ayırır (telefon, sigara vb. ile dağılmaz)'},
+ {id:'q14',cat:'c1',text:'Eczanenin çıkarlarını korur, kurallara ve eczane düzenine uyar'},
+ {id:'q15',cat:'c1',text:'Üzerine düşen sorumluluğu üstlenir, sonuçlarına sahip çıkar'},
+ {id:'q16',cat:'c1',text:'Yetki sınırları içinde inisiyatif alır, gerektiğinde kendi karar verir'},
+ {id:'q17',cat:'c1',text:'Zamanı iyi yönetir, işleri önceliklendirir ve planlı çalışır'},
+ {id:'q18',cat:'c1',text:'Rutin ve rutin dışı tüm işleri özen ve dikkatle, zamanında tamamlar'},
+ // c2 — Mesleki Bilgi, Mevzuat & Reçete Yönetimi
+ {id:'q21',cat:'c2',text:'İlaçların etki mekanizması, endikasyon, yan etki ve kullanım bilgisine sahiptir'},
+ {id:'q22',cat:'c2',text:'İlaç dışı ürünleri (medikal, besin desteği, ıtriyat) içerik ve kullanımıyla bilir'},
+ {id:'q23',cat:'c2',text:'Güncel SGK/SUT bilgisine sahiptir, reçeteleri kriterlere uygun karşılar'},
+ {id:'q24',cat:'c2',text:'Rapor/reçete uyumu ve ilaç verme koşullarını doğru uygular'},
+ {id:'q25',cat:'c2',text:'Reçete türlerine (kırmızı, yeşil, mor, turuncu vb.) uygun işlem yapar'},
+ {id:'q26',cat:'c2',text:'Fiyat kararnamesi, yönetmelik ve mevzuat değişikliklerini takip eder'},
+ {id:'q27',cat:'c2',text:'Oda/TEB duyuru ve bültenlerini izler, gerekli aksiyonu alır'},
+ {id:'q28',cat:'c2',text:'Ürün etkileşimi ve uygun alternatif konusunda bilgilidir, doğru yönlendirir'},
+ // c3 — Satış, Hedef, Raf & Stok Yönetimi
+ {id:'q31',cat:'c3',text:'Raf stok, fiyat ve etiket takibi ile kontrolünü düzenli yapar'},
+ {id:'q32',cat:'c3',text:'Miad takibi yapar, riskli ürünleri zamanında eczacıya bildirir'},
+ {id:'q33',cat:'c3',text:'Sorumluluk alanındaki satış hedeflerini gerçekleştirir'},
+ {id:'q34',cat:'c3',text:'Müşterinin ihtiyacına en uygun ürünü tespit eder ve alternatif sunar'},
+ {id:'q35',cat:'c3',text:'Çapraz ve tamamlayıcı (birlikte kullanılan) ürün satışı yapar'},
+ {id:'q36',cat:'c3',text:'Reçeteli hastaya ihtiyacı doğrultusunda ek ürün önerebilir'},
+ {id:'q37',cat:'c3',text:'Raf düzeni ve merchandising kurallarına uyar'},
+ {id:'q38',cat:'c3',text:'Ürünlerin mevsimsel/dönemsel hareketini bilir, stok/sipariş önerir'},
+ // c4 — İletişim, Müşteri Odaklılık & Hasta İlişkileri
+ {id:'q41',cat:'c4',text:'Müşteriyi güler yüzle, göz teması kurarak karşılar'},
+ {id:'q42',cat:'c4',text:'Etkin dinler, empati kurar; ihtiyacı doğru analiz eder'},
+ {id:'q43',cat:'c4',text:'Açık, anlaşılır ve doğru bir dille (diksiyon) iletişim kurar'},
+ {id:'q44',cat:'c4',text:'Hasta/müşteriye güven verir, sürdürülebilir ilişki kurar'},
+ {id:'q45',cat:'c4',text:'Hızlı, hatasız ve etkili hizmet sunar'},
+ {id:'q46',cat:'c4',text:'İlaç tesliminde kullanım, uyarı ve olası yan etki bilgisi verir'},
+ {id:'q47',cat:'c4',text:'Şikâyet ve geri bildirimi önemser, çözüm odaklı yaklaşır'},
+ {id:'q48',cat:'c4',text:'Gizlilik ve nezakete özen gösterir; eczaneyi paydaşlara güçlü temsil eder'},
+ // c5 — Ekip Çalışması, Gelişim & Problem Çözme
+ {id:'q51',cat:'c5',text:'Ekiple uyumlu çalışır, yoğunlukta arkadaşlarına destek verir'},
+ {id:'q52',cat:'c5',text:'Bilgi paylaşımına önem verir, arkadaşlarının gelişimine katkı sağlar'},
+ {id:'q53',cat:'c5',text:'Çatışmada yapıcı, uzlaşmacı ve şeffaf davranır'},
+ {id:'q54',cat:'c5',text:'Geri bildirime ve eleştiriye açıktır, kendini geliştirir'},
+ {id:'q55',cat:'c5',text:'Yenilikleri ve eğitimleri takip eder, öğrendiğini işe uygular'},
+ {id:'q56',cat:'c5',text:'Sorun çıktığında çözüme katkı sağlar, alternatif üretir'},
+ {id:'q57',cat:'c5',text:'Olaylara suçlu aramadan, sonuç ve çözüm odaklı yaklaşır'},
+ {id:'q58',cat:'c5',text:'Güçlü ve gelişime açık yönlerinin farkındadır, gelişim için çaba gösterir'}
+];
+const ITEMS_OF=cid=>ITEMS.filter(i=>i.cat===cid);
+const SCALE=[{v:1,l:'Yetersiz'},{v:2,l:'Gelişmeli'},{v:3,l:'Yeterli'},{v:4,l:'İyi'},{v:5,l:'Üstün'}];
+const ROLES=['Eczacı','İkinci Eczacı','Yardımcı Eczacı','Eczane Teknisyeni','Dermokozmetik Uzmanı','Eczane Çırağı / Yardımcı'];
+function band(a){if(a>=4.5)return{label:'Üstün',color:'#1F9D6B'};if(a>=3.75)return{label:'İyi',color:'#2F7DC4'};if(a>=3.0)return{label:'Yeterli',color:'#E8A33D'};if(a>=2.25)return{label:'Gelişime Açık',color:'#E07A2E'};return{label:'Kritik',color:'#DC1A22'};}
+
+/* ============ DEPOLAMA (TEK ANAHTAR · paylaşımlı · atomik) ============ */
+/* Tüm veri tek 'db' anahtarında tutulur; her değişiklik: oku → değiştir → yaz.
+   Böylece çoklu-anahtar yazımındaki kayıp sorunu ortadan kalkar. */
+if(!(typeof window!=='undefined'&&window.storage&&window.storage.get)){const mem={};window.storage={get:async k=>mem[k]!==undefined?{value:mem[k]}:null,set:async(k,v)=>{mem[k]=v;return{value:v}},delete:async k=>{delete mem[k];return{deleted:true}},list:async p=>({keys:Object.keys(mem).filter(x=>!p||x.startsWith(p))})};}
+const DBKEY='artifarma_db_v1';
+let db={masterPin:null,pharmacies:{},evals:{}};
+async function loadDB(){try{const r=await window.storage.get(DBKEY,true);if(r&&r.value){const d=JSON.parse(r.value);db={masterPin:d.masterPin||null,pharmacies:d.pharmacies||{},evals:d.evals||{}};}else{db={masterPin:null,pharmacies:{},evals:{}};}}catch(e){if(!db)db={masterPin:null,pharmacies:{},evals:{}};}}
+async function saveDB(){try{await window.storage.set(DBKEY,JSON.stringify(db),true);}catch(e){console.error(e);}}
+/* Okuma (bellekteki db'den) */
+async function getPharmacy(id){return db.pharmacies[id]||null;}
+async function listPharmacies(){return Object.values(db.pharmacies);}
+async function getEval(phId,rid){return (db.evals[phId]||{})[rid]||null;}
+async function listEvals(phId){return Object.values(db.evals[phId]||{});}
+async function phEvalCount(p){return Object.keys(db.evals[p.id]||{}).length;}
+/* Yazma (önce taze oku → değiştir → yaz) */
+async function setPharmacy(p){await loadDB();db.pharmacies[p.id]=p;await saveDB();}
+async function delPharmacy(id){await loadDB();delete db.pharmacies[id];delete db.evals[id];await saveDB();}
+async function archivePharmacy(id,val){await loadDB();if(db.pharmacies[id])db.pharmacies[id].archived=val;await saveDB();}
+async function setEval(e){await loadDB();if(!db.evals[e.pharmacyId])db.evals[e.pharmacyId]={};db.evals[e.pharmacyId][e.raterId]=e;await saveDB();}
+async function setMasterPin(pin){await loadDB();db.masterPin=pin;await saveDB();}
+
+/* ============ YARDIMCILAR ============ */
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const initials=n=>(n||'').trim().split(/\s+/).slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'?';
+const fmtDate=d=>new Date(d).toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'});
+const pin4=()=>String(Math.floor(1000+Math.random()*9000));
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);}
+function avgD(o){const v=ITEMS.map(i=>o&&o[i.id]).filter(x=>typeof x==='number');return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;}
+function catAvg(o,cid){const v=ITEMS_OF(cid).map(i=>o&&o[i.id]).filter(x=>typeof x==='number');return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;}
+function catScores(o){const r={};CATS.forEach(c=>r[c.id]=catAvg(o,c.id));return r;}
+
+/* ============ OTURUM & YÖNLENDİRME ============ */
+let sess=null;                     // {level:'master'|'eczaci'|'employee', phId, memberId, masterView}
+let ph=null, evals=[];             // aktif eczane
+let view={name:'login'};
+function go(n,o={}){view={name:n,...o};render();window.scrollTo(0,0);}
+function home(){if(!sess)go('login');else if(sess.level==='master'&&!sess.masterView)go('master');else if(sess.level==='employee')go('emp');else go('phpanel');}
+function logout(){sess=null;ph=null;evals=[];go('login');}
+async function loadPharmacy(id){await loadDB();ph=db.pharmacies[id]||null;evals=ph?await listEvals(id):[];}
+
+function setTop(){
+  const t=$('topCtx');if(!sess){t.innerHTML='';return;}
+  if(sess.level==='master'&&!sess.masterView)t.innerHTML=`<span class="badge">ARTIFARMA YÖNETİCİ</span><button class="logout" onclick="logout()">Çıkış</button>`;
+  else{const name=sess.level==='employee'?(memberById(sess.memberId)||{}).name:(ph?ph.name:'');
+    t.innerHTML=`${sess.masterView?'<span class="badge">YÖNETİCİ</span>':''}<span class="who">${esc(ph?ph.name:'')}${sess.level==='employee'?' · '+esc(name):''}</span><button class="logout" onclick="${sess.masterView?'backMaster()':'logout()'}">${sess.masterView?'Platforma dön':'Çıkış'}</button>`;}
+}
+function memberById(id){return ph&&ph.roster.find(m=>m.id===id);}
+function isManagerRater(rid){const m=memberById(rid);return m&&m.manager;}
+
+function render(){
+  setTop();
+  // ---- Erişim koruması: izolasyon ----
+  if(!sess){ if(view.name!=='login') view={name:'login'}; }
+  else{
+    if((view.name==='master'||view.name==='newPh')&&sess.level!=='master') view={name:sess.level==='employee'?'emp':'phpanel'};
+    if(['phpanel','roster','report','teamReport'].includes(view.name)&&sess.level==='employee') view={name:'emp'};
+  }
+  const map={login:rLogin,master:rMaster,newPh:rNewPh,phpanel:rPhPanel,roster:rRoster,report:rReport,teamReport:rTeamReport,emp:rEmp,eval:rEval,done:rDone};
+  (map[view.name]||rLogin)();
+  if(view.name==='eval')restoreScale();
+}
+
+/* ============ GİRİŞ ============ */
+let loginTab='eczane';
+function rLogin(){
+  $('app').className='wrap wrap-narrow';
+  $('app').innerHTML=`<div class="card login-card" style="margin-top:24px">
+    <img src="assets/logo.png" alt="Artıfarma Group" style="height:46px;width:auto;display:block;margin:4px auto 18px">
+    <h1 style="text-align:center;font-size:21px;font-weight:800">Artıfarma Değerlendirme</h1>
+    <p style="text-align:center;color:var(--muted);font-size:13.5px;margin:6px 0 20px">360° eczane yetkinlik platformu</p>
+    <div class="tabs"><button class="${loginTab==='eczane'?'on':''}" onclick="setTab('eczane')">Eczane Girişi</button><button class="${loginTab==='master'?'on':''}" onclick="setTab('master')">Artıfarma Yönetici</button></div>
+    <div id="login-body"></div></div>
+    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:16px">Çalışanlar eczane ID'si ve kişisel şifresiyle, eczacı eczane ID'si ve yönetici şifresiyle girer.</p>`;
+  $('app').className='wrap';renderLoginBody();
+}
+function setTab(t){loginTab=t;renderLoginBody();}
+function renderLoginBody(){
+  if(loginTab==='eczane'){$('login-body').innerHTML=`
+    <div class="field"><label>Eczane ID</label><input id="lg-id" placeholder="Örn. ECZ-4821" style="text-transform:uppercase"></div>
+    <div class="field"><label>Şifreniz</label><input id="lg-pin" type="password" inputmode="numeric" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Giriş</button>`;}
+  else{$('login-body').innerHTML=`
+    <div class="field"><label>Artıfarma Yönetici Şifresi</label><input id="lg-master" type="password" inputmode="numeric" placeholder="Yönetici şifresi" onkeydown="if(event.key==='Enter')doMaster()"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doMaster()">Giriş</button>
+    ${db.masterPin?'':'<p style="font-size:12.5px;color:var(--muted);margin-top:12px;text-align:center">İlk girişte belirlediğiniz şifre yönetici şifreniz olur.</p>'}`;}
+}
+async function doMaster(){
+  const v=($('lg-master').value||'').trim();if(!v){toast('Şifre girin');return;}
+  await loadDB();
+  if(!db.masterPin){db.masterPin=v;await saveDB();sess={level:'master'};toast('Yönetici hesabı oluşturuldu');go('master');return;}
+  if(v===db.masterPin){sess={level:'master'};go('master');}else toast('Hatalı yönetici şifresi');
+}
+async function doLogin(){
+  const id=($('lg-id').value||'').trim().toUpperCase();const pin=($('lg-pin').value||'').trim();
+  if(!id||!pin){toast('Eczane ID ve şifre girin');return;}
+  await loadDB();
+  const p=db.pharmacies[id]||null;
+  if(!p){toast('Bu ID ile eczane bulunamadı');return;}
+  const m=p.roster.find(x=>x.pin===pin);
+  if(!m){toast('Şifre hatalı');return;}
+  if(m.pasif){toast('Bu kullanıcı pasife alınmış. Eczacınıza başvurun.');return;}
+  /* Merkezî yetki: bu eczane bu aracı kullanabiliyor mu? */
+  if(window.ArtifarmaYetki){
+    const _izin=ArtifarmaYetki.izin(id,'yetkinlik',m.manager?'eczaci':'personel');
+    if(_izin==='yok'){toast(ArtifarmaYetki.mesaj(m.manager?'eczaci':'personel'));return;}
+  }
+  await loadPharmacy(id);
+  if(m.manager){sess={level:'eczaci',phId:id,memberId:m.id};go('phpanel');}
+  else{sess={level:'employee',phId:id,memberId:m.id};go('emp');}
+}
+
+/* ============ YÖNETİCİ (MASTER) PANELİ ============ */
+async function rMaster(){
+  await loadDB();
+  const all=await listPharmacies();
+  const active=all.filter(p=>!p.archived);const archived=all.filter(p=>p.archived);
+  let totalMembers=0,totalEvals=0;
+  for(const p of active){totalMembers+=p.roster.length;totalEvals+=await phEvalCount(p);}
+  let html=`<div class="spread"><div><div class="eyebrow">Artıfarma · Merkezi Panel</div>
+    <h1 class="page">Eczaneler</h1><p class="page-sub">Tüm eczaneleri tek panelden yönetin. Yeni eczane açın, ID ve şifre tanımlayın, sonuçlarını görüntüleyin.</p></div>
+    <div class="row no-print"><button class="btn btn-ghost btn-sm" onclick="exportDB()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Yedekle</button>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('importFile').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 9l5-5 5 5M12 4v12"/></svg>Geri yükle</button>
+    <button class="btn btn-ghost btn-sm" onclick="masterSettings()">Yönetici Ayarları</button>
+    <button class="btn btn-red" onclick="go('newPh')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Yeni Eczane</button></div></div>
+  <div class="stats">
+    <div class="card stat"><div class="k">Aktif Eczane</div><div class="v">${active.length}</div></div>
+    <div class="card stat"><div class="k">Toplam Personel</div><div class="v">${totalMembers}</div></div>
+    <div class="card stat"><div class="k">Tamamlanan Değerlendirme</div><div class="v">${totalEvals}</div></div>
+    <div class="card stat"><div class="k">Arşivde</div><div class="v">${archived.length}</div></div>
+  </div>
+  <div class="list-head"><h2>Aktif Eczaneler</h2></div>`;
+  if(!active.length){html+=`<div class="card empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3"/></svg>
+    <h3>${all.length?'Aktif eczane yok':'Henüz eczane eklenmedi'}</h3><p style="margin-bottom:18px">${all.length?'Tüm eczaneler arşivde. Aşağıdan geri alabilirsiniz.':'İlk eczaneyi oluşturup ID ve şifrelerini tanımlayın.'}</p><button class="btn btn-primary" onclick="go('newPh')">Yeni Eczane Oluştur</button></div>`;}
+  else{html+=`<div class="pgrid">`;
+    for(const p of active){const done=await phEvalCount(p);
+      html+=`<div class="card tile"><div onclick="openPh('${p.id}')" style="cursor:pointer"><div class="tile-top"><div class="avatar">${esc(initials(p.name))}</div>
+        <div><div class="nm">${esc(p.name)}</div><div class="mt"><span class="cred">${p.id}</span></div></div></div>
+        <div class="tile-foot" style="border:none;padding-top:8px"><span>${p.roster.length} personel</span><span style="margin-left:auto">${done}/${p.roster.length} değerlendirdi</span></div></div>
+        <div style="display:flex;gap:8px;border-top:1px solid var(--line-2);padding-top:11px;margin-top:4px">
+          <button class="btn btn-ghost btn-sm" style="flex:1" onclick="openPh('${p.id}')">Aç</button>
+          <button class="btn btn-ghost btn-sm" onclick="archivePh('${p.id}')" title="Arşivle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"/></svg></button>
+        </div></div>`;}
+    html+=`</div>`;}
+  if(archived.length){
+    html+=`<div class="list-head" style="margin-top:24px"><h2 style="color:var(--muted)">Arşiv</h2></div><div class="card">`;
+    for(const p of archived){
+      html+=`<div class="member" style="cursor:default"><div class="avatar" style="width:38px;height:38px;font-size:13px;background:#9799ad">${esc(initials(p.name))}</div>
+        <div style="flex:1"><div class="nm">${esc(p.name)}</div><div class="rl"><span class="cred">${p.id}</span> · ${p.roster.length} personel</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="unarchivePh('${p.id}')">Geri al</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="askDeletePh('${p.id}','${esc(p.name)}')">Sil</button></div>`;}
+    html+=`</div>`;
+  }
+  html+=`<div class="warnbox no-print" style="margin-top:18px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+    <span>Şifre/ID kontrolü arayüz düzeyindedir; gerçek sunucu kimlik doğrulaması değildir. Hassas personel verisi için ekipleri KVKK kapsamında bilgilendirin.</span></div>`;
+  $('app').innerHTML=html;
+}
+async function archivePh(id){await archivePharmacy(id,true);toast('Eczane arşivlendi');go('master');}
+async function unarchivePh(id){await archivePharmacy(id,false);toast('Eczane geri alındı');go('master');}
+function askDeletePh(id,name){confirmModal('Eczaneyi kalıcı sil',`<b>${esc(name)}</b> ve tüm değerlendirme verileri kalıcı olarak silinecek. Bu işlem geri alınamaz. Emin misiniz?`,'Kalıcı Sil',async()=>{await delPharmacy(id);closeModal();toast('Eczane silindi');go('master');},true);}
+function masterSettings(){confirmModal('Yönetici Ayarları','Yönetici şifresini değiştirmek için yeni şifreyi girin:','Kaydet',async()=>{const v=($('ms-pin').value||'').trim();if(v){await setMasterPin(v);toast('Şifre güncellendi');}closeModal();});
+  $('modalBox').querySelector('p').insertAdjacentHTML('afterend','<input id="ms-pin" type="text" placeholder="Yeni yönetici şifresi" style="width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:10px">');}
+async function openPh(id){await loadPharmacy(id);sess={level:'master',phId:id,memberId:null,masterView:true};go('phpanel');}
+function backMaster(){sess={level:'master'};ph=null;evals=[];go('master');}
+
+/* ============ YENİ ECZANE ============ */
+let nph=null;
+function rNewPh(){
+  setTimeout(()=>{const i=document.getElementById('np-name');
+    if(i&&window.ArtifarmaEczane)ArtifarmaEczane.onerileriBagla(i);},60);
+  if(!nph)nph={name:'',period:'',eczName:'',eczPin:pin4()};
+  $('app').innerHTML=`<a class="back-link" href="#" onclick="go('master');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Eczanelere dön</a>
+  <div class="eyebrow">Yeni Eczane</div><h1 class="page">Eczane Oluştur</h1><p class="page-sub">Eczaneyi ve eczacı (yönetici) girişini tanımlayın. Eczanenin ID'si otomatik üretilir; çalışanları daha sonra eczane panelinden eklersiniz.</p>
+  <div class="card panel" style="margin-top:20px"><div class="grid-2">
+    <div class="field"><label>Eczane Adı</label><input id="np-name" value="${esc(nph.name)}" placeholder="Örn. Artıfarma Eczanesi"></div>
+    <div class="field"><label>Değerlendirme Dönemi (opsiyonel)</label><input id="np-per" value="${esc(nph.period)}" placeholder="Örn. 2026 1. Dönem"></div></div></div>
+  <div class="card panel" style="margin-top:16px"><h3>Eczacı (Yönetici) Girişi</h3><div class="h-sub">Eczacı, eczane ID'si ve bu şifreyle giriş yapar; ekibi yönetir ve tüm ekibi değerlendirir.</div>
+    <div class="grid-2"><div class="field"><label>Eczacı Adı Soyadı</label><input id="np-ecz" value="${esc(nph.eczName)}" placeholder="Örn. Ecz. Mehmet Demir"></div>
+    <div class="field"><label>Eczacı Şifresi</label><input id="np-pin" value="${esc(nph.eczPin)}" maxlength="8"></div></div></div>
+  <div style="margin-top:20px;display:flex;justify-content:flex-end"><button class="btn btn-primary btn-lg" onclick="createPh()">Eczaneyi Oluştur</button></div>`;
+}
+async function genPhId(){let id;do{id='ECZ-'+Math.floor(1000+Math.random()*9000);}while(await getPharmacy(id));return id;}
+async function createPh(){
+  const name=($('np-name').value||'').trim();const ecz=($('np-ecz').value||'').trim();const pin=($('np-pin').value||'').trim();
+  if(!name){toast('Eczane adı girin');return;}if(!ecz){toast('Eczacı adını girin');return;}if(!pin){toast('Eczacı şifresi girin');return;}
+  await loadDB();
+  const _o=window.ArtifarmaEczane?ArtifarmaEczane.esle(name):null;
+  const id=_o?_o.id:await genPhId();
+  const _pin=_o?_o.sifre:pin;
+  const p={id,name,period:($('np-per').value||'').trim(),archived:false,created:new Date().toISOString(),roster:[{id:uid(),name:ecz,role:'Eczacı',pin:_pin,manager:true}]};
+  await setPharmacy(p);nph=null;toast(name+' eklendi');if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'Yetkinlik Değerlendirme',baslik:name,kalici:true,ortak:true,satirlar:[{etiket:'Eczane ID',deger:id},{etiket:'Eczacı şifresi',deger:_pin}],not:'Çalışanlar aynı Eczane ID ile, kendilerine verilen kişisel şifreyle girer.'});
+  go('master');
+}
+
+/* ============ ECZANE PANELİ (eczacı / master) ============ */
+async function rPhPanel(){
+  if(!ph&&!sess.phId){go(sess.level==='master'?'master':'login');return;}
+  await loadDB();
+  ph=db.pharmacies[ph?ph.id:sess.phId]||null;
+  if(!ph){go(sess.level==='master'?'master':'login');return;}
+  evals=await listEvals(ph.id);
+  const submitted=new Set(evals.map(e=>e.raterId));
+  const done=ph.roster.filter(m=>submitted.has(m.id)).length;
+  const me=memberById(sess.memberId);
+  let html=`${sess.masterView?`<a class="back-link no-print" href="#" onclick="backMaster();return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Tüm eczaneler</a>`:''}
+  <div class="spread"><div><div class="eyebrow">Eczane Paneli · ${ph.id}</div>
+    <h1 class="page">${esc(ph.name)}</h1><p class="page-sub">${ph.period?esc(ph.period)+' · ':''}Ekibi yönetin, değerlendirmeleri takip edin ve raporları görüntüleyin.</p></div>
+    <div class="row no-print"><button class="btn btn-ghost btn-sm" onclick="go('roster')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>Ekip & Şifreler</button>
+    <button class="btn btn-ghost btn-sm" onclick="go('teamReport')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="12" y="6" width="3" height="11"/><rect x="17" y="13" width="3" height="4"/></svg>Toplam Rapor</button>
+    ${me?`<button class="btn btn-primary btn-sm" onclick="startEval('${me.id}')">Ekibi Değerlendir</button>`:''}</div></div>
+  <div class="stats">
+    <div class="card stat"><div class="k">Personel</div><div class="v">${ph.roster.length}</div></div>
+    <div class="card stat"><div class="k">Değerlendirmeyi Yapan</div><div class="v">${done}<small> / ${ph.roster.length}</small></div></div>
+    <div class="card stat"><div class="k">Toplam Geri Bildirim</div><div class="v">${evals.length}</div></div>
+    <div class="card stat"><div class="k">Eczane ID</div><div class="v" style="font-size:20px">${ph.id}</div></div>
+  </div>
+  <div class="list-head"><h2>Personel & Raporlar</h2></div><div class="card">`;
+  ph.roster.forEach(m=>{const md=memberData(m.id);const ov=primaryAvg(md);const b=ov!=null?band(ov):null;const didRate=submitted.has(m.id);
+    html+=`<div class="member" onclick="go('report',{mid:'${m.id}'})"><div class="avatar" style="width:40px;height:40px;font-size:14px">${esc(initials(m.name))}</div>
+      <div style="flex:1"><div class="nm">${esc(m.name)}${m.manager?' <span class="pill" style="background:#2A2A5E12;color:var(--navy)">Eczacı</span>':''}</div><div class="rl">${esc(m.role)} · ${md.nPeers} kişi değerlendirdi</div></div>
+      ${didRate?'<span class="stt" style="background:#1F9D6B1A;color:var(--green)">Değerlendirdi</span>':'<span class="stt" style="background:var(--line-2);color:var(--muted)">Bekliyor</span>'}
+      ${ov!=null?`<span style="font-weight:800;color:${b.color};width:42px;text-align:right">${ov.toFixed(2)}</span>`:'<span style="color:var(--line);width:42px;text-align:right">—</span>'}
+      <span class="arr">›</span></div>`;});
+  html+=`</div><div class="foot">Artıfarma 360° Değerlendirme Platformu · ${esc(ph.name)} · ${fmtDate(new Date())}</div>`;
+  $('app').innerHTML=html;
+}
+
+/* ============ EKİP & ŞİFRELER ============ */
+function rRoster(){
+  let html=`<a class="back-link" href="#" onclick="go('phpanel');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Panele dön</a>
+  <div class="eyebrow">${esc(ph.name)} · ${ph.id}</div><h1 class="page">Ekip & Giriş Bilgileri</h1>
+  <p class="page-sub">Çalışan ekleyin; her birine eczane ID'si ve kişisel şifresiyle giriş yapacağı bilgiler otomatik oluşur. Bu bilgileri çalışanla paylaşın.</p>
+  <div class="card panel" style="margin-top:20px"><h3>Çalışan Ekle</h3><div class="grid-2" style="margin-top:10px">
+    <div class="field" style="margin-bottom:8px"><label>Ad Soyad</label><input id="rm-name" placeholder="Çalışan adı"></div>
+    <div class="field" style="margin-bottom:8px"><label>Görev</label><select id="rm-role">${ROLES.filter(r=>r!=='Eczacı').map(r=>`<option>${r}</option>`).join('')}</select></div>
+    <div class="h-sub" style="margin:-4px 0 8px">Görev adları merkezî pozisyon listesiyle eşleşir; SWOT ve Performans'ta aynı kişiye aynı pozisyonun soruları gelir.</div>
+    <div class="field" style="margin-bottom:8px"><label>Kişisel şifre</label><input id="rm-pin" value="${pin4()}" maxlength="8" placeholder="4–8 karakter"></div></div>
+    <button class="btn btn-ghost btn-sm" onclick="addMember()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Ekle</button></div>
+  <div class="card panel" style="margin-top:16px"><h3>Mevcut Ekip</h3><div class="h-sub">Giriş bilgilerini çalışanlarla paylaşın</div><div id="rm-list"></div></div>
+  <div class="card panel" style="margin-top:16px"><h3>Eczane Ayarları</h3><div class="grid-2" style="margin-top:8px">
+    <div class="field" style="margin-bottom:0"><label>Eczane Adı</label><input id="rm-pname" value="${esc(ph.name)}"></div>
+    <div class="field" style="margin-bottom:0"><label>Dönem</label><input id="rm-period" value="${esc(ph.period||'')}"></div></div>
+    <button class="btn btn-primary btn-sm" style="margin-top:14px" onclick="savePh()">Kaydet</button></div>`;
+  $('app').innerHTML=html;renderRosterList();
+}
+function renderRosterList(){
+  $('rm-list').innerHTML=ph.roster.map(m=>`<div class="row-edit" style="${m.pasif?'opacity:.55':''}"><div class="avatar" style="width:36px;height:36px;font-size:12px">${esc(initials(m.name))}</div>
+    <div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(m.name)}${m.manager?' <span class="pill" style="background:#2A2A5E12;color:var(--navy)">Eczacı</span>':''}</div><div style="font-size:12px;color:var(--muted)">${esc(m.role)}</div></div>
+    <div style="text-align:right"><div style="font-size:11px;color:var(--muted);margin-bottom:2px">ID: <span class="cred">${ph.id}</span></div><div style="font-size:11px;color:var(--muted)">Şifre: <input class="cred" value="${esc(m.pin)}" maxlength="8" onchange="pinDegistir('${m.id}',this)" title="Değiştirmek için yazıp Enter'a basın" style="width:74px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;font:inherit;text-align:center"> <button onclick="regen('${m.id}')" title="Rastgele yeni şifre" style="color:var(--navy);font-weight:800;margin-left:2px">↻</button></div></div>
+    ${m.manager?'':`<button onclick="pasifDegistir('${m.id}')" style="color:var(--navy);font-weight:700;font-size:12.5px;margin-left:8px">${m.pasif?'Etkinleştir':'Pasife al'}</button>
+    <button onclick="rmMember('${m.id}')" style="color:var(--red);font-weight:700;font-size:12.5px;margin-left:8px">Sil</button>`}</div>`).join('');
+}
+async function addMember(){const n=($('rm-name').value||'').trim();if(!n){toast('Ad girin');return;}
+  /* Şifreyi danışman belirler; boş bırakılırsa üretilir. */
+  let pin=($('rm-pin')&&$('rm-pin').value||'').trim();
+  if(pin && pin.length<4){toast('Şifre en az 4 karakter olmalı');return;}
+  if(pin && ph.roster.some(m=>m.pin===pin)){toast('Bu şifre bu eczanede kullanımda');return;}
+  if(!pin){do{pin=pin4();}while(ph.roster.some(m=>m.pin===pin));}
+  ph.roster.push({id:uid(),name:n,role:$('rm-role').value,pin,manager:false});await setPharmacy(ph);$('rm-name').value='';if($('rm-pin'))$('rm-pin').value=pin4();renderRosterList();toast('Çalışan eklendi');if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'Yetkinlik Değerlendirme',baslik:n,kalici:true,satirlar:[{etiket:'Eczane ID',deger:ph.id},{etiket:'Kişisel şifre',deger:pin}],not:'Çalışan bu bilgilerle girip yalnızca kendi değerlendirmesini yapar.'});}
+/* Kadro listesinden şifreyi elle değiştirir. */
+async function pinDegistir(id,alan){
+  const m=memberById(id); const yeni=(alan.value||'').trim();
+  if(yeni.length<4){toast('Şifre en az 4 karakter olmalı');alan.value=m.pin;return;}
+  if(ph.roster.some(x=>x.id!==id&&x.pin===yeni)){toast('Bu şifre kullanımda');alan.value=m.pin;return;}
+  m.pin=yeni;await setPharmacy(ph);renderRosterList();toast('Şifre güncellendi');
+  if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'Yetkinlik Değerlendirme',baslik:m.name,kalici:true,
+    satirlar:[{etiket:'Eczane ID',deger:ph.id},{etiket:'Kişisel şifre',deger:yeni}],
+    not:'Eski şifre artık geçersizdir.'});
+}
+async function regen(id){const m=memberById(id);let pin;do{pin=pin4();}while(ph.roster.some(x=>x.pin===pin));m.pin=pin;await setPharmacy(ph);renderRosterList();toast('Şifre yenilendi');if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'Yetkinlik Değerlendirme',baslik:m.name,kalici:true,satirlar:[{etiket:'Eczane ID',deger:ph.id},{etiket:'Yeni kişisel şifre',deger:pin}],not:'Eski şifre artık geçersizdir.'});}
+/* Yalnızca bu araç için pasife alır; merkezî kütüğe dokunmaz. */
+async function pasifDegistir(id){
+  const m=memberById(id); m.pasif=!m.pasif;
+  await setPharmacy(ph); renderRosterList();
+  toast(m.pasif?'Pasife alındı — bu araca giriş yapamaz':'Yeniden etkinleştirildi');
+}
+function rmMember(id){const m=memberById(id);confirmModal('Çalışanı sil',`<b>${esc(m.name)}</b> kadrodan ve değerlendirmelerden çıkarılacak.`,'Sil',async()=>{ph.roster=ph.roster.filter(x=>x.id!==id);await setPharmacy(ph);await loadDB();if(db.evals[ph.id])delete db.evals[ph.id][id];await saveDB();evals=await listEvals(ph.id);closeModal();renderRosterList();toast('Silindi');},true);}
+async function savePh(){ph.name=($('rm-pname').value||'').trim()||ph.name;ph.period=($('rm-period').value||'').trim();await setPharmacy(ph);toast('Kaydedildi');go('phpanel');}
+
+/* ============ ÇALIŞAN ANA EKRANI ============ */
+function rEmp(){
+  const me=memberById(sess.memberId);if(!me){logout();return;}
+  const myEval=evals.find(e=>e.raterId===me.id);const done=!!myEval;
+  $('app').className='wrap wrap-narrow';
+  $('app').innerHTML=`<div style="text-align:center;padding:30px 10px 6px">
+    <div class="avatar" style="width:64px;height:64px;font-size:24px;margin:0 auto 16px">${esc(initials(me.name))}</div>
+    <h1 style="font-size:23px;font-weight:800">Merhaba, ${esc(me.name.split(' ')[0])}</h1>
+    <p style="color:var(--muted);font-size:14px;max-width:380px;margin:8px auto 0">${esc(ph.name)} ekip değerlendirmesi. Birlikte çalıştığınız her ekip arkadaşınızı değerlendirin. Geri bildirimleriniz anonimdir.</p></div>
+  <div class="card panel" style="margin-top:18px;text-align:center">
+    ${done?`<div style="color:var(--green);font-weight:700;font-size:14px;margin-bottom:10px"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-3px"><path d="M20 6 9 17l-5-5"/></svg> Değerlendirmenizi tamamladınız</div>`:''}
+    <button class="btn btn-primary btn-lg" style="width:100%" onclick="startEval('${me.id}')">${done?'Değerlendirmemi Güncelle':'Ekibi Değerlendirmeye Başla'}</button>
+    <p style="font-size:12px;color:var(--muted);margin-top:12px">${Math.max(0,ph.roster.length-1)} kişi · ~${Math.max(1,Math.round((ph.roster.length-1)*0.7))} dk</p></div>`;
+  $('app').className='wrap';
+}
+
+/* ============ DEĞERLENDİRME AKIŞI (öz + diğerleri) ============ */
+let draft=null,steps=[],sIdx=0;
+async function startEval(meId){
+  await loadPharmacy(ph?ph.id:sess.phId);
+  const ex=evals.find(e=>e.raterId===meId);
+  draft={raterId:meId,ratings:{}};
+  if(ex){Object.keys(ex.ratings||{}).forEach(t=>draft.ratings[t]={...ex.ratings[t]});}
+  const others=ph.roster.filter(m=>m.id!==meId);
+  steps=others.map(o=>o.id);others.forEach(o=>{if(!draft.ratings[o.id])draft.ratings[o.id]={};});
+  sIdx=0;go('eval');
+}
+function rEval(){
+  const me=memberById(draft.raterId);const step=steps[sIdx];const tot=steps.length;
+  if(!tot){return go(sess.level==='employee'?'emp':'phpanel');}
+  let html=`<a class="back-link" href="#" onclick="confirmExit();return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Çıkış</a>
+  <div class="wiz-steps"><i style="width:${sIdx/tot*100}%"></i></div>`;
+  const t=memberById(step);const lbl=me.manager?'yönetici değerlendirmesi':'anonim akran değerlendirmesi';
+  html+=`<div class="wiz-head"><div class="av" style="background:var(--red)">${esc(initials(t.name))}</div><div><h2>${esc(t.name)}</h2><div class="sub">${esc(t.role)} · ${lbl}</div></div></div>
+    <p class="page-sub" style="margin-top:6px">Bu arkadaşınızı birlikte çalışma gözleminize göre puanlayın.</p>`;
+  html+=dimBlock(draft.ratings[step],'r:'+step);
+  html+=`<div class="card panel" style="margin-top:14px"><div class="field" style="margin-bottom:0"><label>Gelişim önerisi (opsiyonel${me.manager?'':', anonim'})</label><input value="${esc(draft.ratings[step].comment||'')}" oninput="setComment('${step}',this.value)" placeholder="Kısa bir not..."></div></div>`;
+  const last=sIdx===tot-1;
+  html+=`<div class="savebar"><div class="prog">Kişi <b>${sIdx+1}</b> / ${tot}</div>
+    ${sIdx>0?'<button class="btn btn-ghost btn-sm" onclick="sPrev()">Geri</button>':''}
+    ${last?'<button class="btn btn-red" onclick="submitEval()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Gönder</button>':'<button class="btn btn-primary" onclick="sNext()">İleri</button>'}</div>`;
+  $('app').innerHTML=html;
+}
+function dimBlock(store,ctx){let h='';CATS.forEach(c=>{
+  h+=`<div class="card panel" style="margin-top:14px"><div style="font-weight:800;font-size:14.5px;color:var(--navy)">${c.name}</div><div style="font-size:11.5px;color:var(--muted);margin:2px 0 4px">1 = Yetersiz · 2 = Gelişmeli · 3 = Yeterli · 4 = İyi · 5 = Üstün</div>`;
+  ITEMS_OF(c.id).forEach(it=>{h+=`<div class="dim"><div class="dim-name">${it.text}</div>
+    <div class="scale" data-ctx="${ctx}" data-dim="${it.id}">${SCALE.map(s=>`<button onclick="setV('${ctx}','${it.id}',${s.v})"><span class="n">${s.v}</span><span class="l">${s.l}</span></button>`).join('')}</div></div>`;});
+  h+=`</div>`;});return h;}
+function storeFor(ctx){return draft.ratings[ctx.slice(2)];}
+function setV(ctx,dim,v){storeFor(ctx)[dim]=v;document.querySelectorAll(`.scale[data-ctx="${ctx}"][data-dim="${dim}"] button`).forEach((b,i)=>b.classList.toggle('sel',i+1===v));}
+function setComment(t,v){draft.ratings[t].comment=v;}
+function restoreScale(){document.querySelectorAll('.scale').forEach(g=>{const v=storeFor(g.dataset.ctx)[g.dataset.dim];if(v)g.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('sel',i+1===v));});}
+function stepDone(){const store=draft.ratings[steps[sIdx]];return ITEMS.every(i=>store[i.id]);}
+function sNext(){if(!stepDone()){toast(`${ITEMS.filter(i=>!draft.ratings[steps[sIdx]][i.id]).length} madde eksik`);return;}if(sIdx<steps.length-1){sIdx++;go('eval');}}
+function sPrev(){if(sIdx>0){sIdx--;go('eval');}}
+function confirmExit(){confirmModal('Çıkmak istiyor musunuz?','Göndermeden çıkarsanız değerlendirmeniz kaydedilmez.','Çık',()=>{closeModal();home();},true);}
+async function submitEval(){if(!stepDone()){toast('Bu adımda eksik boyut var');return;}
+  const me=memberById(draft.raterId);
+  await setEval({pharmacyId:ph.id,raterId:me.id,raterName:me.name,manager:!!me.manager,date:new Date().toISOString(),ratings:draft.ratings});
+  evals=await listEvals(ph.id);
+  if(sess.level==='employee')go('done');else{toast('Değerlendirme kaydedildi');go('phpanel');}
+}
+function rDone(){$('app').innerHTML=`<div class="done-screen"><div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+  <h2>Teşekkürler, değerlendirmeniz alındı</h2><p>Katkınız için teşekkür ederiz. Akran geri bildirimleriniz gizli tutulur.</p>
+  <div style="margin-top:22px"><button class="btn btn-ghost" onclick="go('emp')">Ana sayfa</button></div></div>`;}
+
+/* ============ HESAPLAMA (akran ana sinyal + yönetici) ============ */
+function memberData(mid){
+  const mgrRater=ph.roster.find(m=>m.manager);
+  const mgr=(mgrRater&&mgrRater.id!==mid)?(evals.find(e=>e.raterId===mgrRater.id)||{}).ratings:null;
+  const manager=mgr&&mgr[mid]?mgr[mid]:null;
+  const peerEvals=evals.filter(e=>e.raterId!==mid&&!isManagerRater(e.raterId)&&e.ratings&&e.ratings[mid]);
+  const peerAvg={};ITEMS.forEach(it=>{const vals=peerEvals.map(e=>e.ratings[mid][it.id]).filter(v=>typeof v==='number');peerAvg[it.id]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;});
+  const comments=peerEvals.map(e=>(e.ratings[mid].comment||'').trim()).filter(Boolean);
+  if(manager&&manager.comment)comments.unshift('[Eczacı] '+manager.comment);
+  return {manager,peerAvg,nPeers:peerEvals.length,comments,hasPeer:peerEvals.length>0};
+}
+// birincil skor = akran (varsa), yoksa yönetici
+function primaryAvg(md){return md.hasPeer?avgD(md.peerAvg):avgD(md.manager);}
+function primaryScores(md){return md.hasPeer?md.peerAvg:(md.manager||{});}
+
+/* ============ RAPOR ============ */
+function rReport(){
+  const m=memberById(view.mid);if(!m){go('phpanel');return;}
+  const md=memberData(m.id);
+  const mgrAvg=avgD(md.manager),peerAvg=avgD(md.peerAvg);
+  const ov=primaryAvg(md);const b=ov!=null?band(ov):null;
+  const refScores=primaryScores(md);
+  const scored=ITEMS.map(it=>({it,v:refScores[it.id]})).filter(x=>x.v!=null);
+  const strengths=scored.filter(x=>x.v>=4).sort((a,b)=>b.v-a.v).slice(0,5);
+  const dev=scored.filter(x=>x.v<3).sort((a,b)=>a.v-b.v).slice(0,5);
+  const catTip=cid=>(CATS.find(c=>c.id===cid)||{}).tip||'';
+
+  let html=`<a class="back-link no-print" href="#" onclick="go('phpanel');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Panele dön</a>
+  <div class="spread no-print" style="margin-bottom:14px"><div></div><button class="btn btn-ghost btn-sm" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Yazdır / PDF</button></div>
+  <div class="rep-head"><div class="rep-head-inner"><div class="rep-av">${esc(initials(m.name))}</div>
+    <div class="rep-id"><h2>${esc(m.name)}</h2><div class="meta">${esc(m.role)} · ${esc(ph.name)}${ph.period?' · '+esc(ph.period):''} · ${md.nPeers} kişi değerlendirdi</div></div>
+    <div class="rep-scores">
+      <div><div class="b">Akran</div><div class="v">${peerAvg!=null?peerAvg.toFixed(2):'—'}</div>${b?`<div class="bnd" style="background:${b.color}">${b.label}</div>`:''}</div>
+      <div><div class="b">Yönetici</div><div class="v" style="color:#bfe8d4">${mgrAvg!=null?mgrAvg.toFixed(2):'—'}</div></div>
+    </div></div></div>`;
+
+  if(md.nPeers>0&&md.nPeers<3)html+=`<div class="warnbox" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>Yalnızca ${md.nPeers} kişi değerlendirdi; anonimlik ve güvenilirlik sınırlı olabilir, temkinli yorumlayın.</span></div>`;
+  if(!md.hasPeer&&!md.manager)html+=`<div class="warnbox" style="margin-top:14px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>Bu kişi için henüz değerlendirme girilmedi. Ekip arkadaşları ve eczacı değerlendirmeyi tamamladıkça rapor dolacaktır.</span></div>`;
+
+  const peerCat=catScores(md.peerAvg),mgrCat=md.manager?catScores(md.manager):null;
+  const sets=[];if(md.hasPeer)sets.push({scores:peerCat,color:'#DC1A22',label:'Akran (birlikte çalışanlar)'});if(mgrCat)sets.push({scores:mgrCat,color:'#1F9D6B',label:'Yönetici (eczacı)'});
+  if(sets.length){html+=`<div class="rep-grid">
+    <div class="card panel"><h3>Yetkinlik Profili</h3><div class="h-sub">5 başlık · akran ve yönetici</div>
+      <div class="radar-wrap">${radarSVG(sets)}<div class="legend">${sets.map(s=>`<i><b style="background:${s.color}"></b>${s.label}</i>`).join('')}</div></div></div>
+    <div class="card panel"><h3>Başlık Skorları</h3><div class="h-sub">Her başlıkta akran ve yönetici ortalaması</div>
+      <table class="tw"><thead><tr><th>Başlık</th><th>Akran</th><th>Yönetici</th></tr></thead><tbody>
+      ${CATS.map(c=>{const p=catAvg(md.peerAvg,c.id),g=md.manager?catAvg(md.manager,c.id):null;
+        const cell=v=>v!=null?`<span style="color:${band(v).color}">${v.toFixed(1)}</span>`:'<span style="color:var(--line)">—</span>';
+        return `<tr><td>${c.name}</td><td>${cell(p)}</td><td>${cell(g)}</td></tr>`;}).join('')}
+      </tbody></table></div></div>`;
+
+    // detaylı davranışsal göstergeler
+    html+=`<div class="card panel" style="margin-top:16px"><h3>Davranışsal Göstergeler</h3><div class="h-sub">Madde bazında akran ve yönetici değerlendirmesi</div>`;
+    CATS.forEach(c=>{html+=`<div style="margin-top:14px"><div style="font-weight:800;font-size:13.5px;color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:6px;margin-bottom:4px">${c.name}</div>
+      <table class="tw"><tbody>${ITEMS_OF(c.id).map(it=>{const p=md.peerAvg[it.id],g=md.manager&&md.manager[it.id];
+        const cell=v=>v!=null?`<span style="color:${band(v).color}">${v.toFixed(1)}</span>`:'<span style="color:var(--line)">—</span>';
+        return `<tr><td style="font-weight:500">${it.text}</td><td style="width:54px">${cell(p)}</td><td style="width:54px">${cell(g)}</td></tr>`;}).join('')}</tbody></table></div>`;});
+    html+=`</div>`;}
+
+  html+=`<div class="findings" style="margin-top:16px">
+    <div class="card finding-box"><div class="ft" style="color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Güçlü Yönler</div>`;
+  html+=strengths.length?strengths.map(x=>`<div class="fitem"><span class="ic" style="background:var(--green)"></span><span><b>${x.it.text}</b> <span style="color:var(--muted)">— ${x.v.toFixed(1)}/5</span></span></div>`).join(''):`<p style="font-size:13px;color:var(--muted)">4+ alan henüz yok.</p>`;
+  html+=`</div><div class="card finding-box"><div class="ft" style="color:var(--red)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>Gelişim Alanları & Öneriler</div>`;
+  html+=dev.length?dev.map(x=>`<div class="devitem"><div class="dh"><b>${x.it.text}</b><span class="pill" style="background:${band(x.v).color}1A;color:${band(x.v).color}">${x.v.toFixed(1)}/5</span></div><div class="tip">${catTip(x.it.cat)}</div></div>`).join(''):`<p style="font-size:13px;color:var(--muted)">3'ün altında alan yok.</p>`;
+  html+=`</div></div>`;
+
+  if(md.comments.length){html+=`<div class="card panel" style="margin-top:16px"><h3>Geri Bildirim Notları</h3><div class="h-sub">${md.comments.length} not (akran notları anonim)</div>`;md.comments.forEach(c=>html+=`<div class="cmt">${esc(c)}</div>`);html+=`</div>`;}
+
+  html+=`<div class="card interp" style="margin-top:16px"><h3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Genel Değerlendirme</h3><p>${interp(m,md,peerAvg,mgrAvg,ov,b,strengths,dev)}</p></div>
+  <div class="foot">Artıfarma 360° · ${esc(m.name)} · ${esc(ph.name)} · ${fmtDate(new Date())}</div>`;
+  $('app').innerHTML=html;
+}
+function interp(m,md,peerAvg,mgrAvg,ov,b,strengths,dev){
+  const ad=m.name.trim().split(/\s+/)[0];let t='';
+  if(ov==null)return `${esc(ad)} için henüz değerlendirme verisi yok.`;
+  t+=`${esc(ad)}, birlikte çalıştığı kişilerce <b>${peerAvg!=null?peerAvg.toFixed(2):'—'}/5</b> düzeyinde değerlendirildi (${md.nPeers} değerlendirici) — <b style="color:${b.color}">${b.label}</b>. `;
+  if(mgrAvg!=null&&peerAvg!=null&&Math.abs(mgrAvg-peerAvg)>=0.6)t+=`Yönetici (${mgrAvg.toFixed(1)}) ve akran (${peerAvg.toFixed(1)}) algıları arasında belirgin fark var; bu fark bir görüşmede ele alınabilir. `;
+  else if(mgrAvg!=null&&peerAvg!=null)t+=`Yönetici ve akran algıları büyük ölçüde uyumlu. `;
+  if(strengths.length)t+=`Güçlü yön${strengths.length>1?'ler':''}: ${strengths.slice(0,3).map(s=>s.it.text).join('; ')}. `;
+  if(dev.length)t+=`Öncelikli gelişim alan${dev.length>1?'ları':'ı'}: ${dev.slice(0,3).map(s=>s.it.text).join('; ')}. Önerilen aksiyonlarla bireysel gelişim planı oluşturulabilir.`;
+  else t+=`Belirgin zayıf alan yok; sorumluluk ve mentorluk değerlendirilebilir.`;
+  return t;
+}
+
+/* ============ TOPLAM (EKİP GENELİ) RAPOR ============ */
+function rTeamReport(){
+  if(!ph){go('phpanel');return;}
+  const members=ph.roster.map(m=>{const md=memberData(m.id);return {m,md,score:primaryAvg(md),scores:primaryScores(md)};});
+  const rated=members.filter(x=>x.score!=null).sort((a,b)=>b.score-a.score);
+  // ekip başlık ortalamaları (akran-temelli, kategori bazında)
+  const dimTeam={};CATS.forEach(c=>{const vals=members.map(x=>catAvg(x.scores,c.id)).filter(v=>typeof v==='number');dimTeam[c.id]=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:null;});
+  const dimSorted=CATS.map(c=>({c,v:dimTeam[c.id]})).filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
+  const teamVals=Object.values(dimTeam).filter(v=>v!=null);
+  const teamOverall=teamVals.length?teamVals.reduce((a,b)=>a+b,0)/teamVals.length:null;
+  const tb=teamOverall!=null?band(teamOverall):null;
+  const evalCount=evals.length;const participation=new Set(evals.map(e=>e.raterId)).size;
+
+  let html=`<a class="back-link no-print" href="#" onclick="go('phpanel');return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Panele dön</a>
+  <div class="spread no-print" style="margin-bottom:14px"><div></div><button class="btn btn-ghost btn-sm" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Yazdır / PDF</button></div>
+  <div class="rep-head"><div class="rep-head-inner"><div class="rep-av"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div class="rep-id"><h2>Ekip Geneli Rapor</h2><div class="meta">${esc(ph.name)}${ph.period?' · '+esc(ph.period):''} · ${ph.roster.length} kişi · ${participation}/${ph.roster.length} değerlendirmeyi yaptı</div></div>
+    <div class="rep-scores"><div><div class="b">Ekip Skoru</div><div class="v">${teamOverall!=null?teamOverall.toFixed(2):'—'}</div>${tb?`<div class="bnd" style="background:${tb.color}">${tb.label}</div>`:''}</div></div></div></div>`;
+
+  if(!rated.length){html+=`<div class="warnbox" style="margin-top:16px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span>Henüz yeterli değerlendirme yok. Ekip üyeleri birbirini değerlendirdikçe bu rapor dolacaktır.</span></div>${'<div class="foot">Artıfarma 360°</div>'}`;$('app').innerHTML=html;return;}
+
+  // sıralama + ekip boyutları
+  html+=`<div class="rep-grid">
+    <div class="card panel"><h3>Personel Sıralaması</h3><div class="h-sub">Birlikte çalışanların değerlendirmesine göre</div>`;
+  rated.forEach((x,i)=>{const b=band(x.score);
+    html+=`<div class="member" style="cursor:pointer;padding:11px 0" onclick="go('report',{mid:'${x.m.id}'})"><div style="width:24px;font-weight:800;color:var(--muted);text-align:center">${i+1}</div>
+      <div class="avatar" style="width:36px;height:36px;font-size:12px">${esc(initials(x.m.name))}</div>
+      <div style="flex:1"><div class="nm">${esc(x.m.name)}${x.m.manager?' <span class="pill" style="background:#2A2A5E12;color:var(--navy)">Eczacı</span>':''}</div><div class="rl">${esc(x.m.role)}</div></div>
+      <span style="font-weight:800;color:${b.color}">${x.score.toFixed(2)}</span></div>`;});
+  html+=`</div>
+    <div class="card panel"><h3>Ekip Güçlü & Zayıf Başlıkları</h3><div class="h-sub">Tüm değerlendirmelerin başlık ortalaması</div>`;
+  dimSorted.forEach(x=>{const c=band(x.v).color;
+    html+=`<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:13px"><span style="flex:1;font-weight:600">${x.c.name}</span><div style="width:120px;height:8px;border-radius:5px;background:var(--line-2);overflow:hidden"><i style="display:block;height:100%;width:${x.v/5*100}%;background:${c}"></i></div><span style="width:34px;text-align:right;font-weight:800;color:${c}">${x.v.toFixed(1)}</span></div>`;});
+  html+=`</div></div>`;
+
+  // ısı haritası: kişi x başlık
+  html+=`<div class="card panel" style="margin-top:16px"><h3>Yetkinlik Isı Haritası</h3><div class="h-sub">Kişi × başlık · birlikte çalışanların değerlendirmesi</div>
+    <div style="overflow-x:auto"><table class="tw" style="min-width:560px"><thead><tr><th>Personel</th>${CATS.map(c=>`<th title="${esc(c.name)}">${c.short}</th>`).join('')}<th>Ort.</th></tr></thead><tbody>`;
+  rated.forEach(x=>{html+=`<tr><td>${esc(x.m.name)}</td>${CATS.map(c=>{const v=catAvg(x.scores,c.id);if(v==null)return '<td><span style="color:var(--line)">—</span></td>';const col=band(v).color;return `<td><span style="display:inline-block;min-width:30px;padding:2px 0;border-radius:6px;background:${col}1A;color:${col}">${v.toFixed(1)}</span></td>`;}).join('')}<td><span style="color:${band(x.score).color}">${x.score.toFixed(1)}</span></td></tr>`;});
+  html+=`</tbody></table></div></div>`;
+
+  // ekip özeti
+  const topMember=rated[0];const lowMembers=rated.filter(x=>x.score<3);
+  const teamStrengths=dimSorted.slice(0,2);const teamWeak=dimSorted.slice(-2).reverse().filter(x=>x.v<3.75);
+  html+=`<div class="card interp" style="margin-top:16px"><h3><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--navy)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Ekip Özeti</h3><p>`;
+  html+=`<b>${esc(ph.name)}</b> ekibinin genel skoru <b style="color:${tb.color}">${teamOverall.toFixed(2)}/5 (${tb.label})</b>. `;
+  html+=`Ekibin en güçlü olduğu başlıklar: <b>${teamStrengths.map(x=>x.c.name).join(', ')}</b>. `;
+  if(teamWeak.length)html+=`Ekip düzeyinde gelişime en açık başlıklar: <b>${teamWeak.map(x=>x.c.name).join(', ')}</b> — bu alanlar tüm ekibe yönelik eğitim için önceliklendirilebilir. `;
+  if(topMember)html+=`En yüksek değerlendirilen kişi ${esc(topMember.m.name)} (${topMember.score.toFixed(2)}). `;
+  if(lowMembers.length)html+=`${lowMembers.length} kişi 3,0'ın altında; bireysel gelişim planı önerilir. `;
+  html+=`</p></div>
+  <div class="foot">Artıfarma 360° Ekip Geneli Raporu · ${esc(ph.name)} · ${fmtDate(new Date())}</div>`;
+  $('app').innerHTML=html;
+}
+
+/* ============ RADAR (set overlay) ============ */
+function radarSVG(sets){
+  const AX=CATS,N=AX.length,size=360,cx=size/2,cy=size/2,R=112,levels=5,colA='#2A2A5E';
+  const ang=i=>(-Math.PI/2)+(i*2*Math.PI/N);const pt=(i,r)=>[cx+r*Math.cos(ang(i)),cy+r*Math.sin(ang(i))];
+  let grid='';for(let l=1;l<=levels;l++){const r=R*l/levels;grid+=`<polygon points="${AX.map((_,i)=>pt(i,r).join(',')).join(' ')}" fill="${l===levels?'#FAFAFE':'none'}" stroke="#E3E5F0" stroke-width="1"/>`;}
+  let axes='',marks='';AX.forEach((c,i)=>{const[x,y]=pt(i,R);axes+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E8EAF3" stroke-width="1"/>`;
+    const[lx,ly]=pt(i,R+20);const anchor=Math.abs(lx-cx)<8?'middle':(lx>cx?'start':'end');
+    marks+=`<text x="${lx}" y="${ly+3.5}" text-anchor="${anchor}" font-size="10.5" font-weight="700" fill="${colA}">${c.short}</text>`;});
+  let data='';sets.forEach(s=>{const pts=AX.map((c,i)=>pt(i,R*((s.scores[c.id]||0)/5)).join(',')).join(' ');
+    const dots=AX.map((c,i)=>{const v=s.scores[c.id];if(!v)return'';const[x,y]=pt(i,R*(v/5));return`<circle cx="${x}" cy="${y}" r="2.8" fill="${s.color}"/>`}).join('');
+    data+=`<polygon points="${pts}" fill="${s.color}22" stroke="${s.color}" stroke-width="2" stroke-linejoin="round"/>${dots}`;});
+  return `<svg viewBox="0 0 ${size} ${size}" width="100%" style="max-width:360px" xmlns="http://www.w3.org/2000/svg">${grid}${axes}${data}${marks}</svg>`;
+}
+
+/* ============ YEDEKLE / GERİ YÜKLE (tüm veri tek JSON) ============ */
+async function exportDB(){
+  await loadDB();
+  const data={app:'artifarma-degerlendirme',version:1,exported:new Date().toISOString(),db};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download='artifarma-yedek-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+  const n=Object.keys(db.pharmacies).length;toast(n+' eczane yedeklendi');
+}
+(function(){const f=document.getElementById('importFile');if(!f)return;
+  f.addEventListener('change',e=>{const file=e.target.files[0];if(!file)return;const rd=new FileReader();
+    rd.onload=()=>{let d;try{d=JSON.parse(rd.result);}catch(err){toast('Geçersiz yedek dosyası');e.target.value='';return;}
+      const incoming=d&&d.db?d.db:d;
+      if(!incoming||typeof incoming!=='object'||!incoming.pharmacies){toast('Yedek içeriği tanınmadı');e.target.value='';return;}
+      const cnt=Object.keys(incoming.pharmacies||{}).length;
+      confirmModal('Geri yükle',`Yedekteki <b>${cnt} eczane</b> ve tüm değerlendirmeler yüklenecek. Bu işlem mevcut verilerin yerine geçer. Devam edilsin mi?`,'Geri yükle',async()=>{
+        db={masterPin:incoming.masterPin||db.masterPin||null,pharmacies:incoming.pharmacies||{},evals:incoming.evals||{}};
+        await saveDB();closeModal();toast('Geri yüklendi');go('master');},false);
+      e.target.value='';};
+    rd.readAsText(file);});})();
+
+/* ============ MODAL ============ */
+function confirmModal(t,m,ok,fn,danger){$('modalBox').innerHTML=`<h3>${t}</h3><p>${m}</p><div class="modal-actions"><button class="btn btn-ghost btn-sm" onclick="closeModal()">Vazgeç</button><button class="btn ${danger?'btn-red':'btn-primary'} btn-sm" id="modalOk">${ok}</button></div>`;$('overlay').classList.add('show');$('modalOk').onclick=fn;}
+function closeModal(){$('overlay').classList.remove('show');}
+$('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+
+/* ============ BAŞLAT ============ */
+/* Merkezî kayıt sayfasından gelen eczaneleri kurar. */
+async function kuyruguIsle(){
+  if(!window.ArtifarmaKurulum) return;
+  const bekleyen=ArtifarmaKurulum.bekleyenler('yetkinlik');
+  if(!bekleyen.length) return;
+  await loadDB();
+  bekleyen.forEach(k=>{
+    if(!db.pharmacies[k.id]){
+      db.pharmacies[k.id]={id:k.id,name:k.ad,period:'',archived:false,
+        created:new Date().toISOString(),
+        roster:[{id:uid(),name:k.eczaci||'Eczacı',role:'Eczacı',pin:k.sifre,manager:true}]};
+    }
+    ArtifarmaKurulum.tamamlandi('yetkinlik',k.id);
+  });
+  await saveDB();
+  toast(bekleyen.length+' eczane merkezî kayıttan kuruldu');
+}
+
+/* Eczane kaydının anahtarı ID olduğu için kayıt ve değerlendirmeleri
+   yeni anahtara taşır, eczacının şifresini ortak şifreyle değiştirir. */
+async function kuyruguEsitle(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('yetkinlik','esle');
+  if(!emirler.length) return;
+  await loadDB();
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    const eski=Object.keys(db.pharmacies).find(id=>_sade(db.pharmacies[id].name)===_sade(k.ad));
+    if(eski){
+      const p=db.pharmacies[eski];
+      if(eski!==k.id){
+        delete db.pharmacies[eski];
+        p.id=k.id; db.pharmacies[k.id]=p;
+        if(db.evals[eski]){ db.evals[k.id]=db.evals[eski]; delete db.evals[eski]; }
+      }
+      const yon=p.roster.find(m=>m.manager);
+      if(yon) yon.pin=k.sifre;
+      sayi++;
+    }
+    ArtifarmaKurulum.tamamlandi('yetkinlik',k.id);
+  });
+  if(sayi){ await saveDB(); toast(sayi+' eczane ortak kimliğe getirildi'); }
+}
+/* Merkezden gelen silme emirleri. */
+async function kuyruguSil(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('yetkinlik','sil');
+  if(!emirler.length) return;
+  await loadDB();
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    Object.keys(db.pharmacies).forEach(id=>{
+      const p=db.pharmacies[id];
+      if(id.toUpperCase()===k.id.toUpperCase()||_sade(p.name)===_sade(k.ad)){
+        delete db.pharmacies[id]; delete db.evals[id]; sayi++;
+      }
+    });
+    ArtifarmaKurulum.tamamlandi('yetkinlik',k.id);
+  });
+  if(sayi){ await saveDB(); toast(sayi+' eczane silindi'); }
+}
+/* Merkezden gelen arşiv emirleri. */
+async function kuyruguArsiv(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('yetkinlik','arsiv');
+  if(!emirler.length) return;
+  await loadDB();
+  const _s=x=>(x||'').toLocaleLowerCase('tr-TR').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    Object.keys(db.pharmacies).forEach(id=>{
+      const p=db.pharmacies[id];
+      if(id.toUpperCase()===k.id.toUpperCase()||_s(p.name)===_s(k.ad)){
+        p.archived=!!k.arsivDeger; sayi++;
+      }
+    });
+    ArtifarmaKurulum.tamamlandi('yetkinlik',k.id);
+  });
+  if(sayi) await saveDB();
+}
+
+/* Merkezdeki çalışanları kadroya yansıtır; şifre merkezden gelir. */
+async function merkezCalisanlari(){
+  if(!window.ArtifarmaCalisan) return;
+  await loadDB();
+  const _s=x=>(x||'').toLocaleLowerCase('tr-TR').trim();
+  let degisti=0;
+  Object.keys(db.pharmacies).forEach(eczId=>{
+    const p=db.pharmacies[eczId];
+    ArtifarmaCalisan.liste(eczId).forEach(mc=>{
+      let m=p.roster.find(x=>x.merkezId===mc.id)
+          || p.roster.find(x=>!x.merkezId && _s(x.name)===_s(mc.ad));
+      const rol=(window.ArtifarmaPozisyon && ArtifarmaPozisyon.arac(mc.pozisyon,'yetkinlik'))
+              || 'Eczane Teknisyeni';
+      if(!m){
+        let pin=mc.sifre;
+        if(p.roster.some(x=>x.pin===pin)) pin=ArtifarmaCalisan.sifreYenile(mc.id).sifre;
+        p.roster.push({id:uid(),merkezId:mc.id,name:mc.ad,role:rol,pin,manager:false});
+        degisti++;
+      }else{
+        if(!m.merkezId){ m.merkezId=mc.id; degisti++; }
+        if(m.name!==mc.ad){ m.name=mc.ad; degisti++; }
+        if(m.role!==rol && !m.manager){ m.role=rol; degisti++; }
+        if(m.pin!==mc.sifre && !p.roster.some(x=>x.id!==m.id && x.pin===mc.sifre)){
+          m.pin=mc.sifre; degisti++;
+        }
+      }
+    });
+    /* Merkezde pasife alınan kişi pasif olur; silinen kişi kadrodan kalkar. */
+    const merkezIdler=ArtifarmaCalisan.liste(eczId).map(x=>x.id);
+    ArtifarmaCalisan.liste(eczId).forEach(mc=>{
+      const m=p.roster.find(x=>x.merkezId===mc.id);
+      if(m && !!m.pasif !== (mc.aktif===false)){ m.pasif=(mc.aktif===false); degisti++; }
+    });
+    const kalan=p.roster.filter(x=>!x.merkezId || merkezIdler.indexOf(x.merkezId)>=0);
+    if(kalan.length!==p.roster.length){ p.roster=kalan; degisti++; }
+  });
+  if(degisti) await saveDB();
+}
+(async()=>{await loadDB();await kuyruguIsle();await kuyruguEsitle();await kuyruguSil();
+  await kuyruguArsiv();await merkezCalisanlari();go('login');})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="tr" data-af-no-storage data-af-kilit="0">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eczane Yönetim Analizi — Öz Değerlendirme Panosu</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface-1: #fcfcfb;
+    --text-primary: #0b0b0b;
+    --text-secondary: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --series-1: #2A2A5E;
+    --series-1-soft: rgba(42,120,214,0.14);
+    --st-good: #0ca30c;
+    --st-warning: #fab219;
+    --st-serious: #ec835a;
+    --st-critical: #d03b3b;
+    --good-text: #006300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface-1: #1a1a19;
+      --text-primary: #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --series-1: #8f8fd6;
+      --series-1-soft: rgba(57,135,229,0.20);
+      --good-text: #0ca30c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 24px 20px 64px; }
+  header.app { display:flex; align-items:center; gap:14px; padding: 8px 0 20px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--series-1); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 22px; flex: none;
+  }
+  header.app h1 { font-size: 20px; margin: 0; }
+  header.app p { margin: 2px 0 0; color: var(--text-secondary); font-size: 13.5px; }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+
+  /* ---------- Intro ---------- */
+  .intro h2 { margin: 0 0 8px; font-size: 22px; }
+  .intro p.lead { color: var(--text-secondary); margin: 0 0 18px; max-width: 70ch; }
+  .domain-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(230px,1fr)); gap: 10px; margin: 18px 0 22px; }
+  .domain-chip {
+    display:flex; gap:10px; align-items:center;
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; background: var(--page);
+    font-size: 13.5px;
+  }
+  .domain-chip .ic { font-size: 18px; flex:none; }
+  .domain-chip small { display:block; color: var(--muted); font-size: 11.5px; }
+
+  .btn {
+    appearance:none; border:0; cursor:pointer; font: inherit;
+    background: var(--series-1); color:#fff;
+    padding: 11px 22px; border-radius: 10px; font-weight: 600; font-size: 15px;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost {
+    background: transparent; color: var(--text-primary);
+    border: 1px solid var(--baseline);
+  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* ---------- Survey ---------- */
+  .progress-shell { margin-bottom: 18px; }
+  .progress-meta { display:flex; justify-content:space-between; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 6px; }
+  .progress-track { height: 8px; border-radius: 4px; background: var(--grid); overflow:hidden; }
+  .progress-fill { height:100%; background: var(--series-1); border-radius: 4px; width:0%; transition: width .25s; }
+
+  .module-head { display:flex; align-items:center; gap: 12px; margin-bottom: 4px; }
+  .module-head .ic { font-size: 26px; }
+  .module-head h2 { margin:0; font-size: 19px; }
+  .module-head p { margin: 0; color: var(--text-secondary); font-size: 13px; }
+
+  .q {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--grid);
+  }
+  .q:last-of-type { border-bottom: 0; }
+  .q .qt { font-weight: 600; font-size: 15px; margin-bottom: 3px; }
+  .q .qh { color: var(--muted); font-size: 12.5px; margin-bottom: 10px; }
+  .opts { display:grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  @media (max-width: 720px) { .opts { grid-template-columns: 1fr; } }
+  .opt {
+    border: 1px solid var(--baseline); border-radius: 9px;
+    padding: 8px 9px; cursor:pointer; background: var(--surface-1);
+    font-size: 12.5px; text-align:center; transition: border-color .12s, background .12s;
+  }
+  .opt b { display:block; font-size: 13px; }
+  .opt small { color: var(--muted); font-size: 11px; line-height: 1.3; display:block; margin-top: 2px; }
+  .opt:hover { border-color: var(--series-1); }
+  .opt.sel { border: 2px solid var(--series-1); background: var(--series-1-soft); padding: 7px 8px; }
+  .nav-row { display:flex; justify-content:space-between; align-items:center; margin-top: 20px; gap: 10px; }
+  .nav-row .hint { color: var(--muted); font-size: 12.5px; }
+
+  /* ---------- Results ---------- */
+  .kpi-row { display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap: 12px; margin-bottom: 16px; }
+  .kpi { background: var(--surface-1); border:1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+  .kpi .lbl { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 4px; }
+  .kpi .val { font-size: 34px; font-weight: 700; line-height: 1.1; }
+  .kpi .sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+
+  .level-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--page); color: var(--text-primary);
+  }
+  .level-badge .dot { width: 9px; height: 9px; border-radius: 50%; flex:none; }
+
+  .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+  .card h3 { margin: 0 0 4px; font-size: 16px; }
+  .card p.sub { margin: 0 0 14px; color: var(--muted); font-size: 12.5px; }
+
+  /* domain bars */
+  .dbar { display:grid; grid-template-columns: 30px 1fr 52px; align-items:center; gap: 10px; padding: 7px 0; }
+  .dbar .nm { grid-column: 1 / -1; display:flex; justify-content:space-between; align-items:baseline; font-size: 13px; font-weight:600; margin-bottom:-2px;}
+  .dbar .nm .lv { font-weight: 500; font-size: 11.5px; color: var(--text-secondary); }
+  .dbar .ic { font-size: 17px; text-align:center; }
+  .dbar .track { height: 14px; border-radius: 4px; background: var(--grid); overflow: hidden; cursor: default; }
+  .dbar .fill { height: 100%; border-radius: 4px 4px 4px 4px; background: var(--series-1); min-width: 2px; }
+  .dbar .pct { font-size: 13px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* gaps */
+  .gap-item { display:flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--grid); font-size: 13.5px; align-items:flex-start;}
+  .gap-item:last-child { border-bottom: 0; }
+  .gap-item .sev { flex:none; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; color:#fff; margin-top:1px; white-space:nowrap;}
+  .gap-item .dom { color: var(--muted); font-size: 11.5px; display:block; }
+
+  /* recommendations */
+  .rec-block { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; background: var(--page); }
+  .rec-block .rb-head { display:flex; align-items:center; gap:8px; margin-bottom: 6px; flex-wrap: wrap;}
+  .rec-block .rb-head b { font-size: 14px; }
+  .rec-block ul { margin: 4px 0 0; padding-left: 20px; font-size: 13.5px; color: var(--text-secondary); }
+  .rec-block li { margin-bottom: 4px; }
+
+  /* consultancy packages */
+  .pkg-grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(290px,1fr)); gap: 12px; margin-bottom: 16px; }
+  .pkg {
+    border: 1px solid var(--baseline); border-radius: 12px; padding: 14px 16px;
+    background: var(--surface-1); cursor: pointer; transition: border-color .12s, background .12s;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pkg:hover { border-color: var(--series-1); }
+  .pkg.sel { border: 2px solid var(--series-1); background: var(--series-1-soft); padding: 13px 15px; }
+  .pkg .ph { display:flex; align-items:flex-start; justify-content:space-between; gap: 8px; }
+  .pkg .ph b { font-size: 14px; line-height: 1.3; }
+  .pkg .tag { flex:none; font-size: 10.5px; font-weight: 700; padding: 2.5px 8px; border-radius: 999px; color: #fff; white-space: nowrap; }
+  .pkg ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--text-secondary); }
+  .pkg li { margin-bottom: 3px; }
+  .pkg .pf { margin-top: auto; display:flex; align-items:center; gap: 7px; font-size: 13px; font-weight: 600; }
+  .pkg .cb {
+    width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--baseline);
+    display:inline-flex; align-items:center; justify-content:center; font-size: 12px; color:#fff; flex:none;
+  }
+  .pkg.sel .cb { background: var(--series-1); border-color: var(--series-1); }
+  .pkg-summary { border-top: 1px solid var(--grid); padding-top: 14px; }
+  .pkg-summary h4 { margin: 0 0 6px; font-size: 14.5px; }
+  .pkg-summary .ps-item { display:flex; gap: 8px; font-size: 13.5px; padding: 4px 0; align-items:baseline; }
+  .pkg-summary .ps-item .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .pkg-summary p.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; }
+
+  .radar-wrap { display:flex; justify-content:center; }
+  svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+
+  .tooltip {
+    position: fixed; z-index: 50; pointer-events: none;
+    background: var(--surface-1); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 10px; font-size: 12.5px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.14); display: none; max-width: 240px;
+  }
+  .tooltip b { display:block; font-size: 12.5px; }
+  .tooltip span { color: var(--text-secondary); }
+
+  .actions { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .footnote { color: var(--muted); font-size: 12px; margin-top: 18px; }
+
+  .hidden { display:none !important; }
+
+  @media print {
+    body { background: #fff; }
+    .no-print, header.app .logo { display:none !important; }
+    .card, .kpi { border: 1px solid #ddd; break-inside: avoid; }
+    .wrap { max-width: none; padding: 0; }
+  }
+
+.af-logo{height:40px;width:auto;display:block;flex:none}
+@media print{header.app .af-logo{height:34px}}
+
+/* ---- Başlangıç tanıtım formu ---- */
+.tanit { border-top: 1px solid var(--grid); margin-top: 22px; padding-top: 20px; }
+.tanit h3 { margin: 0 0 4px; font-size: 16px; }
+.tanitAlt { color: var(--text-secondary); font-size: 13.5px; margin: 0 0 16px; }
+.gizliAlan { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.tanitIzgara { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.tanitAlan { display: flex; flex-direction: column; gap: 5px; }
+.tanitAlan > span { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.tanitAlan > span b { color: #d03b3b; }
+.tanitAlan input, .tanitAlan select {
+  font: inherit; font-size: 14.5px; padding: 10px 12px; border-radius: 9px;
+  border: 1.5px solid var(--baseline); background: var(--page); color: var(--text-primary);
+}
+.tanitAlan input:focus, .tanitAlan select:focus { outline: none; border-color: var(--series-1); }
+.tanitAlan.eksik input, .tanitAlan.eksik select { border-color: #d03b3b; }
+.tanitOnay { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; cursor: pointer; }
+.tanitOnay input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--series-1); flex: none; }
+.tanitOnay span { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+.tanitOnay.eksik span { color: #d03b3b; }
+.tanitHata { color: #d03b3b; font-size: 13px; font-weight: 600; min-height: 18px; margin-top: 10px; }
+.tanitYedek { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.tanitYedek a { font-size: 13px; font-weight: 700; text-decoration: underline; color: var(--series-1); }
+@media print { .tanit { display: none } }
+</style>
+<link rel="icon" href="assets/logo.png">
+<script src="assets/core.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="app">
+    <a href="index.html" title="Artıfarma Group"><img src="assets/logo.png" alt="Artıfarma Group" class="af-logo"></a>
+    <div>
+      <h1>Eczane Yönetim Analizi</h1>
+      <p>Eczaneniz için kapsamlı öz değerlendirme ve durum analizi panosu</p>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section id="view-intro" class="card intro">
+    <h2>Eczanenizi 9 boyutta analiz edin</h2>
+    <p class="lead">Bu araç, eczanenizin tüm yönetim süreçlerini sistematik olarak değerlendirmenizi sağlar.
+      <span id="qCountTxt"></span> soruyu mevcut durumunuza en uygun seçenekle yanıtlayın; sonuçta genel yönetim olgunluk seviyenizi,
+      alan alan güçlü ve zayıf yönlerinizi, öncelikli eksiklerinizi, size özel iyileştirme önerilerini göreceksiniz
+      ve ihtiyaçlarınıza göre <b>kendi danışmanlık paketinizi</b> oluşturabileceksiniz.
+      Anket yanıtlarınız yalnızca bu oturumda tutulur ve hiçbir yere gönderilmez; yalnızca aşağıdaki iletişim bilgileriniz Artıfarma Group'a iletilir.</p>
+    <div class="domain-grid" id="introDomains"></div>
+    <form id="tanitForm" class="tanit" name="analiz-talep" method="POST"
+          data-netlify="true" netlify-honeypot="dolduma" novalidate>
+      <input type="hidden" name="form-name" value="analiz-talep">
+      <p class="gizliAlan"><label>Boş bırakın <input name="dolduma"></label></p>
+
+      <h3>Başlamadan önce</h3>
+      <p class="tanitAlt">Raporunuzu size özel hazırlayabilmemiz için bu bilgiler gereklidir.</p>
+
+      <div class="tanitIzgara">
+        <label class="tanitAlan"><span>Ad Soyad <b>*</b></span>
+          <input name="Ad Soyad" id="tfAd" autocomplete="name" placeholder="Ecz. Ad Soyad" required></label>
+        <label class="tanitAlan"><span>E-posta <b>*</b></span>
+          <input name="E-posta" id="tfMail" type="email" autocomplete="email" placeholder="ornek@eposta.com" required></label>
+        <label class="tanitAlan"><span>Telefon <b>*</b></span>
+          <input name="Telefon" id="tfTel" type="tel" inputmode="tel" autocomplete="tel" placeholder="0533 431 30 06" required></label>
+        <label class="tanitAlan"><span>Eczane Adı <b>*</b></span>
+          <input name="Eczane Adı" id="tfEczane" placeholder="Örn. Naturel Eczanesi" required></label>
+        <label class="tanitAlan"><span>İl <b>*</b></span>
+          <select name="İl" id="tfIl" required>
+            <option value="">Seçiniz</option>
+            <option>Adana</option>
+            <option>Adıyaman</option>
+            <option>Afyonkarahisar</option>
+            <option>Ağrı</option>
+            <option>Aksaray</option>
+            <option>Amasya</option>
+            <option>Ankara</option>
+            <option>Antalya</option>
+            <option>Ardahan</option>
+            <option>Artvin</option>
+            <option>Aydın</option>
+            <option>Balıkesir</option>
+            <option>Bartın</option>
+            <option>Batman</option>
+            <option>Bayburt</option>
+            <option>Bilecik</option>
+            <option>Bingöl</option>
+            <option>Bitlis</option>
+            <option>Bolu</option>
+            <option>Burdur</option>
+            <option>Bursa</option>
+            <option>Çanakkale</option>
+            <option>Çankırı</option>
+            <option>Çorum</option>
+            <option>Denizli</option>
+            <option>Diyarbakır</option>
+            <option>Düzce</option>
+            <option>Edirne</option>
+            <option>Elazığ</option>
+            <option>Erzincan</option>
+            <option>Erzurum</option>
+            <option>Eskişehir</option>
+            <option>Gaziantep</option>
+            <option>Giresun</option>
+            <option>Gümüşhane</option>
+            <option>Hakkâri</option>
+            <option>Hatay</option>
+            <option>Iğdır</option>
+            <option>Isparta</option>
+            <option>İstanbul</option>
+            <option>İzmir</option>
+            <option>Kahramanmaraş</option>
+            <option>Karabük</option>
+            <option>Karaman</option>
+            <option>Kars</option>
+            <option>Kastamonu</option>
+            <option>Kayseri</option>
+            <option>Kilis</option>
+            <option>Kırıkkale</option>
+            <option>Kırklareli</option>
+            <option>Kırşehir</option>
+            <option>Kocaeli</option>
+            <option>Konya</option>
+            <option>Kütahya</option>
+            <option>Malatya</option>
+            <option>Manisa</option>
+            <option>Mardin</option>
+            <option>Mersin</option>
+            <option>Muğla</option>
+            <option>Muş</option>
+            <option>Nevşehir</option>
+            <option>Niğde</option>
+            <option>Ordu</option>
+            <option>Osmaniye</option>
+            <option>Rize</option>
+            <option>Sakarya</option>
+            <option>Samsun</option>
+            <option>Şanlıurfa</option>
+            <option>Siirt</option>
+            <option>Sinop</option>
+            <option>Şırnak</option>
+            <option>Sivas</option>
+            <option>Tekirdağ</option>
+            <option>Tokat</option>
+            <option>Trabzon</option>
+            <option>Tunceli</option>
+            <option>Uşak</option>
+            <option>Van</option>
+            <option>Yalova</option>
+            <option>Yozgat</option>
+            <option>Zonguldak</option>
+          </select></label>
+      </div>
+
+      <label class="tanitOnay">
+        <input type="checkbox" name="KVKK Onayı" value="Onaylandı" id="tfKvkk" required>
+        <span>Bilgilerimin, danışmanlık hizmetleri hakkında benimle iletişime geçilmesi
+          amacıyla işlenmesini onaylıyorum. Bilgiler üçüncü taraflarla paylaşılmaz.</span>
+      </label>
+
+      <div class="tanitHata" id="tfHata"></div>
+    </form>
+
+    <button class="btn" id="btnStart">Analize Başla →</button>
+    <p class="footnote">Süre: yaklaşık 15–20 dakika · Her modülü yanıtladıkça ilerleme çubuğu dolar · Sonuç ekranından yazdırabilirsiniz.</p>
+  </section>
+
+  <!-- SURVEY -->
+  <section id="view-survey" class="hidden">
+    <div class="progress-shell no-print">
+      <div class="progress-meta"><span id="progLabel"></span><span id="progPct"></span></div>
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    </div>
+    <div class="card">
+      <div class="module-head">
+        <span class="ic" id="modIcon"></span>
+        <div>
+          <h2 id="modTitle"></h2>
+          <p id="modDesc"></p>
+        </div>
+      </div>
+      <div id="qList"></div>
+      <div class="nav-row">
+        <button class="btn ghost" id="btnPrev">← Geri</button>
+        <span class="hint" id="navHint"></span>
+        <button class="btn" id="btnNext">İleri →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="view-results" class="hidden">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="lbl">Genel Yönetim Skoru</div>
+        <div class="val" id="kpiScore">–</div>
+        <div class="sub"><span id="kpiMax"></span> puan üzerinden <span id="kpiRaw"></span></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Olgunluk Seviyesi</div>
+        <div class="val" id="kpiLevel" style="font-size:24px;">–</div>
+        <div class="sub" id="kpiLevelDesc"></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">En Güçlü Alan</div>
+        <div class="val" id="kpiBest" style="font-size:19px;">–</div>
+        <div class="sub" id="kpiBestPct"></div>
+      </div>
+      <div class="kpi">
+        <div class="lbl">Öncelikli Gelişim Alanı</div>
+        <div class="val" id="kpiWorst" style="font-size:19px;">–</div>
+        <div class="sub" id="kpiWorstPct"></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Alan Bazlı Olgunluk Haritası</h3>
+        <p class="sub">Eczanenizin 8 yönetim alanındaki mevcut seviyesi (%)</p>
+        <div class="radar-wrap" id="radarBox"></div>
+      </div>
+      <div class="card">
+        <h3>Alan Skorları</h3>
+        <p class="sub">Her alanın puanı ve seviye etiketi — çubukların üzerine gelin</p>
+        <div id="barsBox"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Öncelikli Eksikler</h3>
+      <p class="sub">Düşük puan verdiğiniz konular — önce bunları ele almanız önerilir</p>
+      <div id="gapsBox"></div>
+    </div>
+
+    <div class="card">
+      <h3>Size Özel İyileştirme Önerileri</h3>
+      <p class="sub">Her alandaki seviyenize göre hazırlanan aksiyon önerileri</p>
+      <div id="recsBox"></div>
+    </div>
+
+    <div class="card">
+      <h3>Danışmanlık Paketinizi Oluşturun</h3>
+      <p class="sub">Analiz sonuçlarınıza göre size en uygun danışmanlık modülleri işaretlendi. Eklemek veya çıkarmak istediklerinizi seçerek kendi paketinizi oluşturun.</p>
+      <div class="pkg-grid" id="pkgBox"></div>
+      <div class="pkg-summary" id="pkgSummary"></div>
+    </div>
+
+    <div class="actions no-print">
+      <button class="btn" onclick="window.print()">🖨 Raporu Yazdır / PDF Kaydet</button>
+      <button class="btn ghost" id="btnEdit">Yanıtları Düzenle</button>
+      <button class="btn ghost" id="btnRestart">Yeniden Başla</button>
+    </div>
+    <p class="footnote">Bu analiz bir öz değerlendirme aracıdır; mevzuata ilişkin konularda güncel resmî kaynaklar ve bölge eczacı odanız esas alınmalıdır. Sayfa yenilenirse yanıtlar sıfırlanır — sonucu saklamak için yazdırın.</p>
+  </section>
+</div>
+
+<div class="tooltip" id="tip"></div>
+
+<script>
+/* ================= DATA ================= */
+const SCALE = [
+  { v:0, l:"Yok",    d:"Hiç yapılmıyor / bilmiyorum" },
+  { v:1, l:"Zayıf",  d:"Nadiren, plansız" },
+  { v:2, l:"Kısmen", d:"Yapılıyor ama düzensiz" },
+  { v:3, l:"İyi",    d:"Büyük ölçüde, düzenli" },
+  { v:4, l:"Tam",    d:"Sistematik ve ölçülüyor" }
+];
+
+const DOMAINS = [
+  {
+    id:"stok", icon:"📦", name:"Stok ve İlaç Yönetimi", short:"Stok",
+    desc:"Miad, stok devri, sipariş ve depo süreçleri",
+    q:[
+      {t:"Miad (son kullanma tarihi) takibi sistematik yapılıyor ve miadı yaklaşan ürünler için aksiyon planı var.", h:"Örn. aylık miad raporu, iade/erken satış stratejisi"},
+      {t:"Stok devir hızı düzenli ölçülüyor ve kategori bazında değerlendiriliyor.", h:"Hangi ürün grubunun sermayeyi ne kadar bağladığını biliyor musunuz?"},
+      {t:"Ölü stok (hareket görmeyen ürünler) düzenli tespit ediliyor ve eritme stratejisi uygulanıyor.", h:"3–6 aydır satılmayan ürünler listeleniyor mu?"},
+      {t:"Sipariş noktaları ve min–maks stok seviyeleri tanımlı; siparişler veriye dayalı veriliyor.", h:"Otomasyon önerisi mi, göz kararı mı?"},
+      {t:"Depo ve raf yerleşimi tanımlı; ürün bulma süresi kısa, fire ve kayıplar takip ediliyor.", h:"Sayım farkları düzenli inceleniyor mu?"},
+      {t:"Ecza depolarıyla alım koşulları (mal fazlası, vade, iskonto) düzenli karşılaştırılıyor.", h:"Aynı ürün için depo tekliflerini kıyaslıyor musunuz?"},
+      {t:"Eczanede ilaç ve ilaç dışı kategoriler tam ve doğru tanımlı.", h:"Otomasyonda dermokozmetik, gıda takviyesi, medikal vb. ayrımı doğru mu?"},
+      {t:"Kategori bazlı kârlılık analizleri yapılıyor.", h:"Hangi kategori ne kazandırıyor, biliyor musunuz?"},
+      {t:"Kategori bazlı yatırım (alım) planları sistemli yapılıyor.", h:"Hangi kategoriye ne kadar sermaye ayrılacağı planlı mı?"},
+      {t:"Eczanenin ilaç / ilaç dışı ciro oranı biliniyor ve düzenli izleniyor.", h:"Cironuzun yüzde kaçı ilaç dışı ürünlerden geliyor?"},
+      {t:"Marka bazlı satış ve kârlılık analizleri yapılıyor.", h:"Örn. dermokozmetik markalarının performans kıyaslaması"}
+    ]
+  },
+  {
+    id:"finans", icon:"💰", name:"Finansal Yönetim", short:"Finans",
+    desc:"Nakit akışı, kârlılık, alacak ve bütçe",
+    q:[
+      {t:"Aylık gelir–gider ve nakit akışı düzenli takip ediliyor.", h:"Ay sonunu görmeden önce ayın nasıl geçtiğini biliyor musunuz?"},
+      {t:"Kârlılık kategori bazında biliniyor (ilaç, OTC, dermokozmetik, medikal vb.).", h:"Ciro değil, kâr marjı bazında"},
+      {t:"SGK ve kurum alacakları, kesintiler dahil düzenli takip ediliyor ve mutabakat yapılıyor.", h:"Kesinti nedenleri analiz ediliyor mu?"},
+      {t:"Vade, borç ve alacak dengesi planlı yönetiliyor; ödeme takvimi var.", h:"Depo vadeleri ile SGK ödeme günleri eşleştiriliyor mu?"},
+      {t:"Yıllık bütçe ve hedefler belirleniyor, gerçekleşmelerle karşılaştırılıyor.", h:"Ciro / kâr / gider hedefleri"},
+      {t:"Mali müşavirle düzenli değerlendirme yapılıyor; vergi planlaması proaktif.", h:"Yıl sonunda sürprizle karşılaşıyor musunuz?"},
+      {t:"Eczanemde aylık net kârımı ölçebiliyorum.", h:"Tüm giderler düşüldükten sonra kalan"},
+      {t:"Eczanemde aylık brüt kârlılığımı ölçebiliyorum.", h:"Satış − satılan malın maliyeti"},
+      {t:"Yıllık bazda net / brüt kâr oranlarımı takip edebiliyorum.", h:"Yıllar arası kıyaslama yapabiliyor musunuz?"}
+    ]
+  },
+  {
+    id:"mevzuat", icon:"⚖️", name:"Mevzuat ve Uyum", short:"Mevzuat",
+    desc:"İTS, Medula, denetim hazırlığı ve farmakovijilans",
+    q:[
+      {t:"İTS bildirimleri (alım, satış, iade, deaktivasyon) eksiksiz ve zamanında yapılıyor.", h:"Askıda kalan bildirim kontrolü yapılıyor mu?"},
+      {t:"Medula/SGK reçete kontrolleri düzenli yapılıyor; kesinti nedenleri analiz ediliyor.", h:"Rapor, endikasyon, doz uyumu kontrolleri"},
+      {t:"Reçete karşılamada mevzuat gereklilikleri sistematik kontrol ediliyor.", h:"Kırmızı/yeşil reçete defterleri, majistral kayıtlar"},
+      {t:"Farmakovijilans süreci biliniyor; advers etki bildirimi gerektiğinde yapılıyor.", h:"TÜFAM bildirim süreci ekipçe biliniyor mu?"},
+      {t:"Soğuk zincir ürünlerin saklama koşulları ve sıcaklık kayıtları düzenli tutuluyor.", h:"Buzdolabı sıcaklık takip çizelgesi, alarm sistemi"},
+      {t:"Denetime her an hazırsınız: defterler, belgeler, sertifikalar güncel ve erişilebilir.", h:"Son denetimde eksik çıktı mı?"}
+    ]
+  },
+  {
+    id:"hasta", icon:"🤝", name:"Hasta ve Müşteri İlişkileri", short:"Hasta",
+    desc:"Danışmanlık, takip, memnuniyet ve sadakat",
+    q:[
+      {t:"İlaç danışmanlığı standart olarak veriliyor (kullanım, etkileşim, saklama).", h:"Her hastaya mı, sadece soranlara mı?"},
+      {t:"Kronik hastalar için ilaç takibi / hatırlatma sistemi var.", h:"Rapor bitiş tarihi, tekrar reçete hatırlatması"},
+      {t:"Hasta memnuniyeti ölçülüyor; şikayetler kaydedilip değerlendiriliyor.", h:"Geri bildirim alma yönteminiz var mı?"},
+      {t:"Düzenli müşteriler tanınıyor; kişisel takip uygulanıyor.", h:"Alışkanlıkları biliniyor, gelmediklerinde fark ediliyor mu?"},
+      {t:"Danışma alanı ve mahremiyet ihtiyaçları karşılanıyor.", h:"Hassas konular tezgâhta mı konuşuluyor?"},
+      {t:"Telefon/mesajla sipariş, ayırtma ve bilgilendirme süreçleri tanımlı ve işliyor.", h:"WhatsApp siparişleri kim, nasıl yönetiyor?"},
+      {t:"Düzenli olarak sadakat programları kullanıyorum.", h:"Puan, kart, kişiye özel avantajlar"},
+      {t:"Danışanlara kaliteli hizmet sunabiliyorum.", h:"Hizmet standardınız tanımlı ve ölçülüyor mu?"},
+      {t:"Rekabette durum analizi yapabiliyorum.", h:"Çevre eczaneler ve perakendeye göre konumunuzu biliyor musunuz?"},
+      {t:"Perakende satışlarda danışan takibi yapabiliyorum.", h:"OTC/dermo alışverişlerinde kim, ne, ne sıklıkla alıyor?"}
+    ]
+  },
+  {
+    id:"personel", icon:"👥", name:"Personel ve Ekip Yönetimi", short:"Personel",
+    desc:"Görev tanımları, özlük, performans, iletişim ve gelişim",
+    q:[
+      {t:"Görev tanımları ve yazılı çalışma kuralları var; iş bölümü dengeli.", h:"Kim kasadan, kim depodan, kim İTS'den sorumlu?"},
+      {t:"İşe alım, sözleşme ve oryantasyon süreci tanımlı.", h:"Yeni personel ilk hafta neyi, kimden öğreniyor?"},
+      {t:"Düzenli planlanmış haftalık ekip toplantıları yapıyorum.", h:"Gündemli, kısa ve rutin toplantılar"},
+      {t:"Aylık performans yönetimi yapabiliyorum.", h:"Hedefler ve gerçekleşmeler aylık izleniyor mu?"},
+      {t:"Her bir çalışanımla geri bildirim süreçlerini çalışıyorum.", h:"Birebir, karşılıklı geri bildirim görüşmeleri"},
+      {t:"Motivasyon, prim veya ödüllendirme sistemi uygulanıyor.", h:"Satış primi, hedef ikramiyesi, takdir"},
+      {t:"Ekip gelişim süreçlerini takip ediyor, düzenli eğitimler yapıyorum.", h:"Ürün, mevzuat ve iletişim eğitimleri; firma/oda eğitimleri"},
+      {t:"Özlük evraklarım tamdır.", h:"Sözleşme, sağlık raporu, SGK belgeleri her dosyada eksiksiz mi?"},
+      {t:"İzin formları imzalanır ve dosyalanır.", h:"Yıllık izin takibi yazılı ve imzalı mı?"},
+      {t:"Bordroları düzenli kontrol ederim.", h:"Fazla mesai ve yasal kesintiler doğru hesaplanıyor mu?"},
+      {t:"Ekibimle güçlü bir iletişimim vardır.", h:"Çalışanlar size rahatça ulaşıp fikrini söyleyebiliyor mu?"},
+      {t:"Ekibim kendi arasında güçlü bir iletişime sahiptir.", h:"Vardiya devirleri ve bilgi akışı sorunsuz mu?"}
+    ]
+  },
+  {
+    id:"operasyon", icon:"⚙️", name:"Operasyonel Süreçler", short:"Operasyon",
+    desc:"Reçete akışı, kontrol listeleri, düzen ve hız",
+    q:[
+      {t:"Reçete karşılama süreci standart; yanlış ilaç/doz hatalarına karşı kontrol adımları var.", h:"İkinci göz kontrolü, benzer isimli ilaç uyarıları"},
+      {t:"Açılış–kapanış, kasa ve gün sonu işlemleri için rutin kontrol listeleri var.", h:"Z raporu, kasa sayımı, gün sonu İTS kontrolü"},
+      {t:"Raf düzeni ve ürün yerleşimi satış verisine göre gözden geçiriliyor.", h:"Çok satanlar göz hizasında mı?"},
+      {t:"Hizmet hızı ve bekleme süresi izleniyor; yoğun saatlere önlem alınıyor.", h:"Kuyruk oluşan saatler belli mi?"},
+      {t:"Temizlik, hijyen ve düzen standartları tanımlı ve uygulanıyor.", h:"Sorumluluklar ve sıklıklar yazılı mı?"},
+      {t:"Nöbet ve yoğun dönem planlaması önceden yapılıyor.", h:"Nöbet öncesi stok ve personel hazırlığı"},
+      {t:"Veresiye ve emanet takibi düzenli yapılıyor.", h:"Kayıt dışı veresiye var mı, tahsilat izleniyor mu?"},
+      {t:"Zayi ürünler ve ilaç dışı ürünlerin miadları kayıt altında ve takip ediliyor.", h:"İlaç dışı miadlar sisteme giriliyor mu?"}
+    ]
+  },
+  {
+    id:"magaza", icon:"🏪", name:"Mağazacılık ve Görsel Düzen", short:"Mağazacılık",
+    desc:"Vitrin, raf düzeni, sergileme ve eczane atmosferi",
+    q:[
+      {t:"Eczane tabelası görünür ve ilgi çekici; dış cephe bakımlı.", h:"Uzaktan fark ediliyor mu?"},
+      {t:"Vitrin aktif kullanılıyor ve dönemsel olarak yenileniyor.", h:"Vitrin en son ne zaman değişti?"},
+      {t:"Ürünler ana kategorilere ayrılmış ve kendi kategorilerinde sergileniyor.", h:"Dermo, takviye, bebek, medikal alanları net mi?"},
+      {t:"Raf etiketleri ve fiyat/kampanya duyuruları kullanılıyor.", h:"Müşteri fiyatı sormadan görebiliyor mu?"},
+      {t:"Raflar merchandising kurallarına göre düzenleniyor; tezgahlar aktif sergide kullanılıyor.", h:"Göz hizası, blok yerleşim, tezgah sergisi sıklıkla değişiyor mu?"},
+      {t:"Kofre ve dönemsel ürün uygulamaları yapılıyor.", h:"Sezon ürünleri öne çıkarılıyor mu?"},
+      {t:"Orta alan (gondol, havuz, stand, fotoblok) etkin kullanılıyor.", h:"Firma standları ve tanıtım malzemeleri değerlendiriliyor mu?"},
+      {t:"Aydınlatma, müzik, LED ekran ve genel atmosfer yeterli.", h:"Eczane ferah ve davetkâr mı?"}
+    ]
+  },
+  {
+    id:"dijital", icon:"💻", name:"Dijitalleşme ve Teknoloji", short:"Dijital",
+    desc:"Otomasyon, veri analizi, dijital kanallar ve güvenlik",
+    q:[
+      {t:"Eczane otomasyon programı raporlama dahil etkin kullanılıyor.", h:"Sadece satış ekranı mı, raporlar da mı?"},
+      {t:"Satış ve stok verileri analiz edilip kararlarda kullanılıyor.", h:"En çok satanlar, saatlik yoğunluk, sepet analizi"},
+      {t:"Dijital iletişim kanalları (WhatsApp, SMS, sosyal medya) aktif ve planlı yönetiliyor.", h:"Mevzuata uygun bilgilendirme sınırları içinde"},
+      {t:"Veri yedekleme ve bilgi güvenliği (KVKK dahil) önlemleri alınmış.", h:"Otomasyon verisi en son ne zaman yedeklendi?"},
+      {t:"E-reçete, e-fatura, e-arşiv süreçleri sorunsuz işliyor.", h:"Kesinti durumunda B planınız var mı?"},
+      {t:"Yeni teknolojiler takip ediliyor ve fayda/maliyet ile değerlendiriliyor.", h:"Sıra sistemi, akıllı raf, robotik depo vb."}
+    ]
+  },
+  {
+    id:"pazarlama", icon:"📈", name:"Pazarlama ve Büyüme", short:"Büyüme",
+    desc:"Kategori stratejisi, vitrin, kampanya ve yol haritası",
+    q:[
+      {t:"OTC ve dermokozmetik kategorileri için hedef ve strateji var.", h:"Bu kategorilerin cirodaki payını biliyor musunuz?"},
+      {t:"Hedef ürün çalışmaları ve personele ciro/hedef uygulamaları yapılıyor.", h:"Aylık hedef ürünler belirlenip ekiple paylaşılıyor mu?"},
+      {t:"Kampanya ve sezonluk planlama önceden yapılıyor.", h:"Kış ürünleri, güneş koruyucular, okul dönemi"},
+      {t:"Çevre ve rakip analizi yapılmış (konum, sağlık kuruluşları, demografi).", h:"Müşterileriniz nereden, neden geliyor?"},
+      {t:"Katma değerli hizmetler değerlendiriliyor ve duyuruluyor.", h:"Tansiyon/şeker ölçümü, danışmanlık günleri (mevzuata uygun)"},
+      {t:"Büyüme hedefleri ve yıllık yol haritası tanımlı.", h:"1 yıl sonra eczaneniz nerede olacak?"}
+    ]
+  }
+];
+
+const LEVELS = [
+  { min:0,  max:20,  name:"Seviye 1 · Başlangıç",  color:"var(--st-critical)", ic:"⛔", desc:"Süreçler plansız ve kişiye bağlı yürüyor." },
+  { min:20, max:40,  name:"Seviye 2 · Gelişmekte", color:"var(--st-serious)",  ic:"⚠️", desc:"Bazı süreçler var ancak düzensiz ve ölçülmüyor." },
+  { min:40, max:60,  name:"Seviye 3 · Tanımlı",    color:"var(--st-warning)",  ic:"◑", desc:"Süreçler tanımlı; uygulama tutarlılığı değişken." },
+  { min:60, max:80,  name:"Seviye 4 · Yönetilen",  color:"var(--st-good)",     ic:"✔", desc:"Süreçler düzenli izleniyor ve yönetiliyor." },
+  { min:80, max:101, name:"Seviye 5 · Optimize",   color:"var(--st-good)",     ic:"★", desc:"Sürekli iyileştirme kültürü yerleşmiş durumda." }
+];
+
+/* band: low <40, mid 40–70, high ≥70 */
+const RECS = {
+  stok: {
+    low: ["Bu ay bir miad sayımı yapın: 6 ay içinde miadı dolacak tüm ürünleri listeleyip iade/erken eritme planı çıkarın.",
+          "Otomasyondan '90 gündür satılmayan ürünler' raporunu alın; ölü stoku depo iadesi veya kampanya ile eritin.",
+          "En çok satan 50 ürün için min–maks stok seviyesi tanımlayın ve siparişi bu seviyelere bağlayın."],
+    mid: ["Stok devir hızını kategori bazında çeyreklik ölçün; devri yavaş kategorilerde sipariş miktarlarını küçültün.",
+          "Depo tekliflerini (mal fazlası, vade, iskonto) tek tabloda karşılaştırıp alım kararlarını buna göre verin.",
+          "Sayım farklarını aylık inceleyin; fire ve kayıp nedenlerini kayıt altına alın."],
+    high: ["Sipariş sürecini olabildiğince otomatikleştirin; istisnaları (sezonluk, kampanya) ayrıca yönetin.",
+           "Stok maliyetini (bağlanan sermaye + fire + miad kaybı) yıllık raporlayıp hedef koyun.",
+           "Tedarikçi performansını (teslim hızı, hata oranı) puanlayarak izleyin."]
+  },
+  finans: {
+    low: ["Basit bir aylık nakit akış tablosu kurun: tahsilatlar, depo ödemeleri, sabit giderler tek sayfada görünsün.",
+          "SGK kesintilerinizi son 3 ay için listeleyin; en sık kesinti nedenini bulup önlem alın.",
+          "Mali müşavirinizle çeyreklik düzenli değerlendirme randevusu koyun."],
+    mid: ["Kârlılığı kategori bazında hesaplayın; düşük marjlı kategorilerde fiyat/alım stratejinizi gözden geçirin.",
+          "Depo vadeleri ile SGK ödeme günlerini eşleştiren bir ödeme takvimi oluşturun.",
+          "Yıllık ciro, kâr ve gider hedefi belirleyin; her ay gerçekleşmeyle karşılaştırın."],
+    high: ["Aylık kısa bir 'finans panosu' tutun: ciro, kâr marjı, stok değeri, alacak yaşı tek bakışta izlensin.",
+           "Yatırım kararlarını (tadilat, cihaz, ek personel) geri dönüş hesabıyla değerlendirin.",
+           "Vergi planlamasını yıl sonuna bırakmayın; mali müşavirle yıl ortasında projeksiyon yapın."]
+  },
+  mevzuat: {
+    low: ["Her gün sonu İTS'de askıda bildirim kontrolünü rutine bağlayın; sorumlusunu belirleyin.",
+          "Son 3 ayın SGK kesintilerini nedenleriyle listeleyin; reçete girişinde kontrol adımı ekleyin.",
+          "Denetim hazırlık listesi yapın: defterler, sertifikalar, soğuk zincir kayıtları tek klasörde toplansın."],
+    mid: ["Soğuk zincir için sıcaklık kaydını otomatikleştirin (kayıt cihazı/alarm) ve sapma prosedürü yazın.",
+          "Farmakovijilans ve advers etki bildirim sürecini ekiple bir iç eğitimde üzerinden geçin.",
+          "Mevzuat değişikliklerini takip için oda duyuruları ve resmî kaynaklara haftalık kontrol rutini koyun."],
+    high: ["Uyum kontrollerini çeyreklik bir öz denetim listesine dönüştürün ve sonuçları arşivleyin.",
+           "Kesinti oranınızı (kesinti/ciro) izleyin; hedefiniz sıfıra yakın sabit bir oran olsun.",
+           "Ekipte mevzuat sorumlusu belirleyip yedeklilik sağlayın — bilgi tek kişide kalmasın."]
+  },
+  hasta: {
+    low: ["Danışmanlığı standartlaştırın: her ilaç tesliminde kullanım, saklama ve etkileşim üçlüsünü kısaca anlatın.",
+          "Kronik hastalar için basit bir takip listesi kurun: rapor bitişi ve tekrar reçete tarihlerini not edin.",
+          "Şikayet ve geri bildirimleri bir deftere/dosyaya kaydetmeye bugün başlayın."],
+    mid: ["Rapor bitişi ve ilaç hatırlatmalarını telefon/mesajla proaktif yapın (mevzuata uygun biçimde).",
+          "Danışma için görece sakin bir alan/köşe düzenleyin; hassas konuları tezgâhtan uzaklaştırın.",
+          "Düzenli müşterilere kişisel takip uygulayın: alışkanlıklarını bilin, gelmediklerinde fark edin."],
+    high: ["Memnuniyeti düzenli ölçün (kısa anket/QR) ve sonuçları ekip toplantısında değerlendirin.",
+           "İlaç uyum (adherans) danışmanlığını hizmete dönüştürün: çoklu ilaç kullanan hastalara periyodik gözden geçirme.",
+           "Hasta iletişim kanallarını tek noktadan yönetin; yanıt süresi standardı koyun."]
+  },
+  personel: {
+    low: ["Her çalışan için yarım sayfalık görev tanımı yazın; sorumlulukları (kasa, İTS, depo, vitrin) netleştirin.",
+          "Haftalık 15 dakikalık kısa ekip toplantısı başlatın: geçen hafta, bu hafta, sorunlar.",
+          "Özlük dosyalarını tamamlayın: sözleşme, izin formları ve bordro kontrolleri tek klasörde, eksiksiz ve imzalı olsun.",
+          "Yeni personel için ilk hafta oryantasyon listesi hazırlayın."],
+    mid: ["Yılda en az bir yapılandırılmış performans görüşmesi yapın; karşılıklı beklentileri yazılı hale getirin.",
+          "Eğitim planı kurun: firma eğitimleri, oda eğitimleri ve aylık kısa iç eğitimler takvime bağlansın.",
+          "Basit bir prim/ödül sistemi tasarlayın: ölçülebilir, ulaşılabilir, şeffaf."],
+    high: ["Yetkinlik matrisi oluşturun: kim neyi biliyor, kim kimi yedekleyebilir — eksik yetkinlikleri eğitimle kapatın.",
+           "Ekipten iyileştirme önerisi toplayın ve uygulananları görünür şekilde takdir edin.",
+           "Kariyer gelişimi konuşun: sorumluluk devri, uzmanlaşma alanları (dermo, medikal vb.)."]
+  },
+  magaza: {
+    low: ["Ürünleri ana kategorilere ayırıp her kategoriye net bir alan tanımlayın: dermo, takviye, bebek, medikal.",
+          "Raf etiketleri ve fiyat duyuruları kullanmaya başlayın — müşteri sormadan görebilsin.",
+          "Vitrini bir sezon temasıyla yenileyin ve ayda bir değiştirmeyi rutine bağlayın."],
+    mid: ["Merchandising kurallarını uygulayın: çok satanlar göz hizasında, tamamlayıcı ürünler yan yana, bloklar düzenli.",
+          "Tezgah ve orta alanı (gondol, stand, kofre) aktif sergi alanına çevirin; sergiyi sıklıkla değiştirin.",
+          "Kampanya ve dönemsel ürünler için bilgilendirme/duyuru standardı oluşturun."],
+    high: ["Sergileme performansını ölçün: vitrin/kofre değişimlerinin satışa etkisini takip edin.",
+           "Yerleşim planını yılda bir satış verisiyle gözden geçirin; sıcak alanları yüksek marjlı kategorilere verin.",
+           "Atmosferi (aydınlatma, müzik, LED içerikleri) markanızın parçası olarak planlayın."]
+  },
+  operasyon: {
+    low: ["Reçete karşılamada 'ikinci göz' kuralı koyun: teslim öncesi ilaç–doz–hasta eşleşmesini ikinci kişi doğrulasın.",
+          "Açılış ve kapanış için birer kontrol listesi asın: kasa, buzdolabı ısısı, gün sonu İTS, alarm.",
+          "Temizlik ve düzen sorumluluklarını gün/kişi bazında yazılı hale getirin."],
+    mid: ["Yoğun saatleri tespit edin ve o saatlere personel/iş planı yapın; bekleme süresini azaltın.",
+          "Raf düzenini satış verisiyle gözden geçirin: çok satanlar ve tamamlayıcı ürünler stratejik konumlansın.",
+          "Nöbet öncesi hazırlık listesi kurun: stok takviyesi, bozuk para, personel planı."],
+    high: ["Süreçlerinizi kısa yazılı prosedürlere dönüştürün — yeni personel bile aynı kaliteyi verebilsin.",
+           "Hata ve 'ramak kala' olaylarını kaydedin; tekrarını önleyecek kök neden analizi yapın.",
+           "Hizmet hızını periyodik ölçün ve iyileştirme hedefi koyun."]
+  },
+  dijital: {
+    low: ["Otomasyon firmanızdan raporlama eğitimi isteyin; haftada bir satış ve stok raporlarına bakmayı rutine bağlayın.",
+          "Verilerinizin yedeklendiğinden emin olun; yedekleme sıklığını ve yerini öğrenin, test edin.",
+          "KVKK için temel adımları atın: aydınlatma metni, veri erişim yetkileri, ekran gizliliği."],
+    mid: ["Aylık mini veri rutini kurun: en çok satan 20 ürün, kategori ciroları, saatlik yoğunluk.",
+          "WhatsApp/SMS iletişimini tek hat ve tek sorumluda toplayın; mesaj şablonları hazırlayın.",
+          "E-reçete/e-fatura kesintileri için B planınızı yazılı hale getirin."],
+    high: ["Verinizi karar mekanizmasına bağlayın: sipariş, raf düzeni ve kampanya kararları rapora dayansın.",
+           "Yeni teknolojileri (sıra sistemi, akıllı stok) fayda/maliyet analiziyle pilot deneyin.",
+           "Siber güvenlik hijyeni: güçlü parolalar, yetki ayrımı, güncellemeler ve periyodik yedek testi."]
+  },
+  pazarlama: {
+    low: ["OTC ve dermokozmetiğin cirodaki payını hesaplayın; küçük ama net bir büyüme hedefi koyun.",
+          "Vitrini ayda bir tema ile değiştirmeye başlayın (sezon, sağlık günleri).",
+          "Çevrenizi analiz edin: yakın sağlık kuruluşları, rakipler ve müşteri profilinizi bir sayfaya yazın."],
+    mid: ["Yıllık sezon takvimi çıkarın: güneş, kış, okul, bayram dönemleri için ürün ve stok planı.",
+          "Kategori yönetimine geçin: dermo/OTC için ayrı hedef, ayrı raf stratejisi, ayrı takip.",
+          "Katma değerli hizmetlerinizi (ölçümler, danışmanlık) mevzuata uygun şekilde görünür kılın."],
+    high: ["Yıllık yol haritası yazın: ciro ve kategori hedefleri, yatırım planı, hizmet geliştirme adımları.",
+           "Müşteri segmentlerinize göre iletişim planlayın: kronik hastalar, genç aileler, dermo müşterileri.",
+           "Performansı çeyreklik gözden geçirin ve planı güncelleyin — plan yaşayan bir belge olsun."]
+  }
+};
+
+/* danışmanlık paketleri — her alan bir modül */
+const PACKAGES = {
+  stok: { name:"Stok, Kategori ve Kârlılık Yönetimi", items:[
+    "İlaç / ilaç dışı kategori ağacının kurulması ve otomasyonda doğru tanımlanması",
+    "Kategori ve marka bazlı kârlılık raporlama sisteminin kurulması",
+    "Miad, ölü stok ve fire takip sisteminin oluşturulması",
+    "Veriye dayalı sipariş sistemi ve kategori bazlı yatırım planı"] },
+  finans: { name:"Finansal Yönetim ve Kârlılık", items:[
+    "Aylık net / brüt kâr ölçüm altyapısının kurulması",
+    "Nakit akış ve ödeme takvimi sisteminin oluşturulması",
+    "Yıllık bütçe, hedef ve gerçekleşme takibi",
+    "SGK alacak ve kesinti yönetimi"] },
+  mevzuat: { name:"Mevzuat ve Uyum", items:[
+    "İTS süreçlerinin denetimi ve gün sonu kontrol rutini",
+    "Reçete kesinti analizi ve önleme sistemi",
+    "Denetim hazırlık dosyası ve öz denetim listesi",
+    "Soğuk zincir ve farmakovijilans prosedürleri"] },
+  hasta: { name:"Müşteri Deneyimi ve Sadakat", items:[
+    "Sadakat programı tasarımı ve kurulumu",
+    "Perakende danışan takip sisteminin oluşturulması",
+    "Hizmet standartları ve danışmanlık protokolleri",
+    "Rekabet ve çevre analizi"] },
+  personel: { name:"Ekip ve Performans Yönetimi", items:[
+    "Görev tanımları, yazılı çalışma kuralları ve iş bölümü düzeni",
+    "Haftalık toplantı ritmi ve aylık performans sistemi",
+    "Prim / ödüllendirme ve geri bildirim kültürünün kurulması",
+    "Özlük, izin ve bordro süreçlerinin düzenlenmesi"] },
+  operasyon: { name:"Operasyonel Mükemmellik", items:[
+    "Reçete güvenlik akışı ve hata önleme kontrolleri",
+    "Açılış–kapanış ve gün sonu kontrol listeleri",
+    "Veresiye, emanet ve zayi takip düzeni",
+    "Nöbet ve yoğun dönem planlama sistemi"] },
+  magaza: { name:"Mağazacılık ve Görsel Düzen", items:[
+    "Yerleşim planı ve kategori bazlı sergileme düzeni",
+    "Merchandising kuralları ve raf optimizasyonu",
+    "Vitrin, kofre ve dönemsel sergi programı",
+    "Eczane atmosferi (aydınlatma, duyuru, LED) iyileştirmesi"] },
+  dijital: { name:"Dijitalleşme ve Veri Analitiği", items:[
+    "Otomasyon raporlarının etkin kullanımı ve veri paneli kurulumu",
+    "Dijital iletişim kanallarının yapılandırılması",
+    "KVKK, yedekleme ve bilgi güvenliği düzeni",
+    "Teknoloji yatırımlarının fayda/maliyet değerlendirmesi"] },
+  pazarlama: { name:"Pazarlama ve Büyüme Stratejisi", items:[
+    "Yıllık kampanya ve sezon takvimi",
+    "Hedef ürün ve personel hedef sistemi",
+    "Lokasyon, demografi ve rekabet analizi",
+    "Büyüme hedefleri ve yıllık yol haritası"] }
+};
+const PKG_TAG = {
+  low:  { t:"ÖNCELİKLİ ÖNERİ", c:"var(--st-critical)" },
+  mid:  { t:"ÖNERİLİR",        c:"var(--st-warning)" },
+  high: { t:"OPSİYONEL",       c:"var(--st-good)" }
+};
+
+/* ================= STATE ================= */
+const answers = {};      // "domIdx-qIdx" -> 0..4
+let modIdx = 0;
+const selectedPkgs = new Set();
+let pkgTouched = false;  // kullanıcı elle seçim yaptı mı
+const $ = id => document.getElementById(id);
+const Q_TOTAL = DOMAINS.reduce((a,d)=>a+d.q.length,0);
+$("qCountTxt") && ($("qCountTxt").textContent = Q_TOTAL);
+
+/* ================= INTRO ================= */
+$("introDomains").innerHTML = DOMAINS.map(d =>
+  `<div class="domain-chip"><span class="ic">${d.icon}</span><div>${d.name}<small>${d.desc}</small></div></div>`).join("");
+
+/* ---------------------------------------------------------------
+   Başlangıç tanıtım formu
+   Analiz başlamadan önce iletişim bilgileri alınır ve Artıfarma'ya
+   gönderilir. Site statik olduğu için gönderim, yayın ortamının form
+   servisine (Netlify) yapılır; ulaşılamazsa e-posta / WhatsApp
+   seçenekleri sunulur, böylece kayıt hiçbir durumda kaybolmaz.
+   --------------------------------------------------------------- */
+const T_ALANLAR = [
+  ["tfAd", "Ad Soyad"], ["tfMail", "E-posta"], ["tfTel", "Telefon"],
+  ["tfEczane", "Eczane Adı"], ["tfIl", "İl"]
+];
+
+function tanitDogrula() {
+  let ilk = null;
+  T_ALANLAR.forEach(([id]) => {
+    const el = $(id), kap = el.closest(".tanitAlan");
+    const bos = !el.value.trim();
+    kap.classList.toggle("eksik", bos);
+    if (bos && !ilk) ilk = el;
+  });
+  const mail = $("tfMail").value.trim();
+  if (mail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+    $("tfMail").closest(".tanitAlan").classList.add("eksik");
+    if (!ilk) ilk = $("tfMail");
+  }
+  const onay = $("tfKvkk");
+  onay.closest(".tanitOnay").classList.toggle("eksik", !onay.checked);
+  if (!onay.checked && !ilk) ilk = onay;
+  return ilk;
+}
+
+function tanitOzet() {
+  const s = T_ALANLAR.map(([id, ad]) => ad + ": " + $(id).value.trim());
+  s.push("KVKK Onayı: Onaylandı");
+  return s.join("\n");
+}
+
+function tanitYedekYol(metin) {
+  const konu = "Öz Değerlendirme — İletişim Bilgileri";
+  const mail = "mailto:faruk@artifarmagroup.com?subject=" + encodeURIComponent(konu) +
+               "&body=" + encodeURIComponent(metin);
+  const wa = "https://wa.me/905334313006?text=" + encodeURIComponent(konu + "\n\n" + metin);
+  $("tfHata").innerHTML =
+    "Bilgiler otomatik gönderilemedi. Analize devam edebilirsiniz; " +
+    "dilerseniz bilgilerinizi şu yollarla iletebilirsiniz:" +
+    '<div class="tanitYedek"><a href="' + mail + '">E-posta ile gönder</a>' +
+    '<a href="' + wa + '" target="_blank" rel="noopener">WhatsApp ile gönder</a></div>';
+}
+
+function tanitDeftere() {
+  if (!window.ArtifarmaKayit) return;
+  const k = { tarih: new Date().toISOString(), kaynak: "site" };
+  T_ALANLAR.forEach(([id, ad]) => { k[ad] = $(id).value.trim(); });
+  k["KVKK Onayı"] = "Onaylandı";
+  ArtifarmaKayit.ekle("analiz", k);
+}
+
+function tanitGonder() {
+  const f = $("tanitForm");
+  const veri = new FormData(f);
+  if (String(veri.get("dolduma") || "").trim()) return Promise.resolve();   // bot
+  tanitDeftere();                       // gönderim başarısız olsa da kayıt kalsın
+  return fetch("/", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(veri).toString()
+  }).then(r => { if (!r.ok) throw new Error("HTTP " + r.status); });
+}
+
+let tanitGonderildi = false;
+
+$("btnStart").onclick = () => {
+  const eksik = tanitDogrula();
+  if (eksik) {
+    $("tfHata").textContent = "Devam etmek için işaretli alanları doldurun.";
+    eksik.focus();
+    eksik.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  $("tfHata").textContent = "";
+
+  const basla = () => { modIdx = 0; show("survey"); renderModule(); };
+
+  if (tanitGonderildi) return basla();
+
+  const d = $("btnStart");
+  d.disabled = true; d.textContent = "Gönderiliyor…";
+  tanitGonder()
+    .then(() => { tanitGonderildi = true; })
+    .catch(() => { tanitYedekYol(tanitOzet()); })
+    .finally(() => {
+      d.disabled = false; d.textContent = "Analize Başla →";
+      basla();
+    });
+};
+
+function show(v){
+  ["intro","survey","results"].forEach(x => $("view-"+x).classList.toggle("hidden", x!==v));
+  window.scrollTo({top:0});
+}
+
+/* ================= SURVEY ================= */
+function renderModule(){
+  const d = DOMAINS[modIdx];
+  $("modIcon").textContent = d.icon;
+  $("modTitle").textContent = `${modIdx+1}. ${d.name}`;
+  $("modDesc").textContent = d.desc;
+  $("qList").innerHTML = d.q.map((q,qi)=>{
+    const key = `${modIdx}-${qi}`;
+    return `<div class="q">
+      <div class="qt">${qi+1}. ${q.t}</div>
+      <div class="qh">${q.h||""}</div>
+      <div class="opts" role="radiogroup" aria-label="Soru ${qi+1}">
+        ${SCALE.map(s=>`<div class="opt${answers[key]===s.v?' sel':''}" role="radio" aria-checked="${answers[key]===s.v}" tabindex="0" data-k="${key}" data-v="${s.v}"><b>${s.v} · ${s.l}</b><small>${s.d}</small></div>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+  document.querySelectorAll(".opt").forEach(el=>{
+    const pick = ()=>{ answers[el.dataset.k] = +el.dataset.v; renderModule(); };
+    el.onclick = pick;
+    el.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); pick(); } };
+  });
+  updateNav();
+}
+
+function moduleAnswered(){
+  return DOMAINS[modIdx].q.every((_,qi)=> answers[`${modIdx}-${qi}`]!==undefined);
+}
+function totalAnswered(){
+  return Object.keys(answers).length;
+}
+function updateNav(){
+  const total = DOMAINS.reduce((a,d)=>a+d.q.length,0);
+  const done = totalAnswered();
+  const pct = Math.round(done/total*100);
+  $("progFill").style.width = pct+"%";
+  $("progLabel").textContent = `Modül ${modIdx+1} / ${DOMAINS.length} — ${DOMAINS[modIdx].short}`;
+  $("progPct").textContent = `${done}/${total} soru · %${pct}`;
+  $("btnPrev").disabled = modIdx===0;
+  const ok = moduleAnswered();
+  $("btnNext").disabled = !ok;
+  $("btnNext").textContent = modIdx===DOMAINS.length-1 ? "Sonuçları Gör ✓" : "İleri →";
+  $("navHint").textContent = ok ? "" : "Devam etmek için tüm soruları yanıtlayın";
+}
+$("btnPrev").onclick = ()=>{ if(modIdx>0){ modIdx--; renderModule(); } };
+$("btnNext").onclick = ()=>{
+  if(!moduleAnswered()) return;
+  if(modIdx < DOMAINS.length-1){ modIdx++; renderModule(); }
+  else { renderResults(); show("results"); }
+};
+
+/* ================= RESULTS ================= */
+function domainScore(di){
+  const d = DOMAINS[di];
+  let sum = 0;
+  d.q.forEach((_,qi)=> sum += (answers[`${di}-${qi}`]||0));
+  return { raw:sum, max:d.q.length*4, pct: Math.round(sum/(d.q.length*4)*100) };
+}
+function levelOf(pct){ return LEVELS.find(l=> pct>=l.min && pct<l.max) || LEVELS[LEVELS.length-1]; }
+function bandOf(pct){ return pct<40 ? "low" : (pct<70 ? "mid" : "high"); }
+const BAND_LABEL = { low:{t:"Öncelikli gelişim alanı", c:"var(--st-critical)", ic:"⛔"},
+                     mid:{t:"Gelişime açık", c:"var(--st-warning)", ic:"◑"},
+                     high:{t:"Güçlü alan", c:"var(--st-good)", ic:"✔"} };
+
+function renderResults(){
+  const scores = DOMAINS.map((_,i)=>domainScore(i));
+  const totalRaw = scores.reduce((a,s)=>a+s.raw,0);
+  const totalMax = scores.reduce((a,s)=>a+s.max,0);
+  const overall = Math.round(totalRaw/totalMax*100);
+  const lvl = levelOf(overall);
+
+  $("kpiScore").textContent = "%"+overall;
+  $("kpiMax").textContent = totalMax;
+  $("kpiRaw").textContent = totalRaw+" puan";
+  $("kpiLevel").innerHTML = `<span style="color:${lvl.color}">${lvl.ic}</span> ${lvl.name}`;
+  $("kpiLevelDesc").textContent = lvl.desc;
+
+  let bi=0, wi=0;
+  scores.forEach((s,i)=>{ if(s.pct>scores[bi].pct) bi=i; if(s.pct<scores[wi].pct) wi=i; });
+  $("kpiBest").textContent = DOMAINS[bi].icon+" "+DOMAINS[bi].name;
+  $("kpiBestPct").textContent = "%"+scores[bi].pct+" — bu alandaki düzeninizi koruyun";
+  $("kpiWorst").textContent = DOMAINS[wi].icon+" "+DOMAINS[wi].name;
+  $("kpiWorstPct").textContent = "%"+scores[wi].pct+" — iyileştirmeye buradan başlayın";
+
+  renderRadar(scores);
+  renderBars(scores);
+  renderGaps();
+  renderRecs(scores);
+  renderPackages(scores);
+}
+
+/* --- consultancy package builder --- */
+function renderPackages(scores){
+  if(!pkgTouched){
+    selectedPkgs.clear();
+    DOMAINS.forEach((d,i)=>{ if(bandOf(scores[i].pct)==="low") selectedPkgs.add(d.id); });
+  }
+  $("pkgBox").innerHTML = DOMAINS.map((d,i)=>{
+    const band = bandOf(scores[i].pct), tag = PKG_TAG[band], p = PACKAGES[d.id];
+    const sel = selectedPkgs.has(d.id);
+    return `<div class="pkg${sel?' sel':''}" data-id="${d.id}" role="checkbox" aria-checked="${sel}" tabindex="0">
+      <div class="ph"><b>${d.icon} ${p.name}</b><span class="tag" style="background:${tag.c}">${tag.t}</span></div>
+      <ul>${p.items.map(x=>`<li>${x}</li>`).join("")}</ul>
+      <div class="pf"><span class="cb">${sel?"✓":""}</span>${sel?"Pakete eklendi":"Pakete ekle"}
+        <span style="margin-left:auto;font-weight:500;color:var(--muted);font-size:11.5px;">Skorunuz: %${scores[i].pct}</span></div>
+    </div>`;
+  }).join("");
+  $("pkgBox").querySelectorAll(".pkg").forEach(el=>{
+    const toggle = ()=>{
+      pkgTouched = true;
+      const id = el.dataset.id;
+      selectedPkgs.has(id) ? selectedPkgs.delete(id) : selectedPkgs.add(id);
+      renderPackages(scores);
+    };
+    el.onclick = toggle;
+    el.onkeydown = e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } };
+  });
+  renderPkgSummary(scores);
+}
+
+function renderPkgSummary(scores){
+  const chosen = DOMAINS.filter(d=>selectedPkgs.has(d.id));
+  if(!chosen.length){
+    $("pkgSummary").innerHTML = `<h4>Seçili modül yok</h4><p class="note">Yukarıdan en az bir danışmanlık modülü seçerek paketinizi oluşturabilirsiniz.</p>`;
+    return;
+  }
+  $("pkgSummary").innerHTML = `
+    <h4>📋 Danışmanlık Paketiniz — ${chosen.length} modül</h4>
+    ${chosen.map((d,n)=>{
+      const i = DOMAINS.indexOf(d);
+      return `<div class="ps-item"><span class="n">${n+1}.</span><span><b>${PACKAGES[d.id].name}</b> <span style="color:var(--muted)">(mevcut skorunuz %${scores[i].pct})</span></span></div>`;
+    }).join("")}
+    <p class="note">Bu paket, analiz sonuçlarınıza göre oluşturuldu. Raporu yazdırdığınızda paket seçiminiz de rapora dahil edilir; danışmanınızla bu liste üzerinden çalışma planı yapabilirsiniz.</p>`;
+}
+
+/* --- radar (SVG) --- */
+function renderRadar(scores){
+  const W=460, H=420, cx=W/2, cy=H/2+6, R=140, N=DOMAINS.length;
+  const ang = i => -Math.PI/2 + i*2*Math.PI/N;
+  const pt = (i,r) => [cx + r*Math.cos(ang(i)), cy + r*Math.sin(ang(i))];
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:${W}px" role="img" aria-label="8 yönetim alanının olgunluk yüzdeleri radar grafiği">`;
+  // rings
+  [25,50,75,100].forEach(p=>{
+    const pts = Array.from({length:N},(_,i)=>pt(i,R*p/100).join(",")).join(" ");
+    s += `<polygon points="${pts}" fill="none" stroke="var(--grid)" stroke-width="1"/>`;
+    s += `<text x="${cx+4}" y="${cy - R*p/100 - 3}" font-size="10" fill="var(--muted)">%${p}</text>`;
+  });
+  // spokes + labels
+  for(let i=0;i<N;i++){
+    const [x,y] = pt(i,R);
+    s += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--grid)" stroke-width="1"/>`;
+    const [lx,ly] = pt(i,R+26);
+    const anchor = Math.abs(Math.cos(ang(i)))<0.3 ? "middle" : (Math.cos(ang(i))>0 ? "start":"end");
+    s += `<text x="${lx}" y="${ly+4}" font-size="12" font-weight="600" text-anchor="${anchor}" fill="var(--text-primary)">${DOMAINS[i].short}</text>`;
+    s += `<text x="${lx}" y="${ly+18}" font-size="11" text-anchor="${anchor}" fill="var(--text-secondary)">%${scores[i].pct}</text>`;
+  }
+  // data polygon
+  const dpts = scores.map((sc,i)=>pt(i,R*sc.pct/100));
+  s += `<polygon points="${dpts.map(p=>p.join(",")).join(" ")}" fill="var(--series-1-soft)" stroke="var(--series-1)" stroke-width="2" stroke-linejoin="round"/>`;
+  dpts.forEach((p,i)=>{
+    s += `<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="var(--series-1)" stroke="var(--surface-1)" stroke-width="2" data-tip="${DOMAINS[i].name}|%${scores[i].pct} (${scores[i].raw}/${scores[i].max} puan)" style="cursor:default"/>`;
+    // enlarge hit target
+    s += `<circle cx="${p[0]}" cy="${p[1]}" r="12" fill="transparent" data-tip="${DOMAINS[i].name}|%${scores[i].pct} (${scores[i].raw}/${scores[i].max} puan)"/>`;
+  });
+  s += `</svg>`;
+  $("radarBox").innerHTML = s;
+  attachTips($("radarBox"));
+}
+
+/* --- bars --- */
+function renderBars(scores){
+  $("barsBox").innerHTML = DOMAINS.map((d,i)=>{
+    const sc = scores[i], b = BAND_LABEL[bandOf(sc.pct)];
+    return `<div class="dbar">
+      <div class="nm"><span>${d.icon} ${d.name}</span>
+        <span class="lv"><span style="color:${b.c}">${b.ic}</span> ${b.t}</span></div>
+      <span class="ic"></span>
+      <div class="track" data-tip="${d.name}|${sc.raw}/${sc.max} puan · %${sc.pct} · ${b.t}">
+        <div class="fill" style="width:${sc.pct}%"></div>
+      </div>
+      <div class="pct">%${sc.pct}</div>
+    </div>`;
+  }).join("");
+  attachTips($("barsBox"));
+}
+
+/* --- gaps --- */
+function renderGaps(){
+  const gaps = [];
+  DOMAINS.forEach((d,di)=> d.q.forEach((q,qi)=>{
+    const v = answers[`${di}-${qi}`]||0;
+    if(v<=1) gaps.push({d,q,v});
+  }));
+  gaps.sort((a,b)=>a.v-b.v);
+  if(!gaps.length){
+    $("gapsBox").innerHTML = `<p style="color:var(--good-text);font-size:14px;margin:4px 0;">✔ Kritik eksik bulunmadı — tüm konularda en az "Kısmen" seviyesindesiniz. Gelişim için aşağıdaki önerilere göz atın.</p>`;
+    return;
+  }
+  $("gapsBox").innerHTML = gaps.map(g=>{
+    const sev = g.v===0 ? {t:"KRİTİK", c:"var(--st-critical)"} : {t:"ZAYIF", c:"var(--st-serious)"};
+    return `<div class="gap-item">
+      <span class="sev" style="background:${sev.c}">${sev.t}</span>
+      <div>${g.q.t}<span class="dom">${g.d.icon} ${g.d.name}</span></div>
+    </div>`;
+  }).join("");
+}
+
+/* --- recommendations --- */
+function renderRecs(scores){
+  $("recsBox").innerHTML = DOMAINS.map((d,i)=>{
+    const sc = scores[i], band = bandOf(sc.pct), b = BAND_LABEL[band];
+    return `<div class="rec-block">
+      <div class="rb-head">
+        <b>${d.icon} ${d.name}</b>
+        <span class="level-badge"><span class="dot" style="background:${b.c}"></span>%${sc.pct} · ${b.t}</span>
+      </div>
+      <ul>${RECS[d.id][band].map(r=>`<li>${r}</li>`).join("")}</ul>
+    </div>`;
+  }).join("");
+}
+
+/* --- tooltip --- */
+function attachTips(root){
+  root.querySelectorAll("[data-tip]").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      const [t,d] = el.dataset.tip.split("|");
+      const tip = $("tip");
+      tip.innerHTML = `<b>${t}</b><span>${d||""}</span>`;
+      tip.style.display = "block";
+      const x = Math.min(e.clientX+14, window.innerWidth-250);
+      tip.style.left = x+"px";
+      tip.style.top = (e.clientY+14)+"px";
+    });
+    el.addEventListener("mouseleave", ()=> $("tip").style.display="none");
+  });
+}
+
+/* --- actions --- */
+$("btnEdit").onclick = ()=>{ modIdx = 0; show("survey"); renderModule(); };
+$("btnRestart").onclick = ()=>{
+  if(confirmReset()){ Object.keys(answers).forEach(k=>delete answers[k]); selectedPkgs.clear(); pkgTouched=false; modIdx=0; show("intro"); }
+};
+function confirmReset(){ return true; } // no blocking dialogs
+</script>
+</body>
+</html>

@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARTIFARMA 360° Kurumsal Eczane Danışmanlığı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2A2A5E; --navy-700:#20204a; --red:#DC1A22; --red-tint:#FBE9EA;
+    --bg:#F5F6FB; --card:#FFFFFF; --line:#E6E8F2; --ink:#1c1c2e; --muted:#6b6f86;
+    --green:#1FA971; --green-tint:#E6F6EF; --amber:#E08A0B; --amber-tint:#FCF2DE;
+    --tint:#EEF0F8; --navy-soft:#5a5a8a;
+    --r:12px; --shadow:0 1px 3px rgba(20,20,50,.06),0 6px 24px rgba(20,20,50,.05);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.01em}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,textarea,select{font-family:inherit;font-size:14px}
+  .hide{display:none!important}
+
+  /* GATES */
+  .gate{position:fixed;inset:0;background:linear-gradient(150deg,var(--navy),#15152e);display:flex;align-items:center;justify-content:center;z-index:100;padding:92px 20px 24px;overflow:auto}
+  .gate-card{background:var(--card);border-radius:18px;max-width:520px;width:100%;padding:34px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+  .brand-line{font-weight:800;letter-spacing:.14em;color:var(--red);font-size:14px}
+  .gate-card h2{font-size:24px;margin:6px 0 4px;color:var(--navy)}
+  .gate-card p.sub{color:var(--muted);margin:0 0 20px}
+  .kvkk-box{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px;font-size:13px;color:#3a3a52;max-height:230px;overflow:auto;margin-bottom:16px;line-height:1.6}
+  .kvkk-box h4{color:var(--navy);margin:12px 0 4px;font-size:13px}
+  .pin-row{display:flex;gap:10px;margin-top:8px}
+  .pin-input{flex:1;padding:13px 15px;border:1.5px solid var(--line);border-radius:10px;letter-spacing:.3em;text-align:center;font-size:18px;font-weight:600}
+  .pin-input:focus{outline:none;border-color:var(--navy)}
+  .check-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:18px;cursor:pointer}
+  .check-row input{margin-top:3px;width:18px;height:18px;accent-color:var(--navy)}
+  .check-row span{font-size:13px;color:#3a3a52}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:600;font-size:14px;transition:.15s;background:var(--navy);color:#fff}
+  .btn:hover{background:var(--navy-700)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.full{width:100%}
+  .btn.ghost{background:var(--tint);color:var(--navy)}
+  .btn.ghost:hover{background:#e2e5f3}
+  .btn.red{background:var(--red)}.btn.red:hover{background:#b9151c}
+  .btn.sm{padding:7px 13px;font-size:12.5px;border-radius:8px}
+  .btn.line{background:transparent;border:1.5px solid var(--line);color:var(--navy)}
+  .btn.line:hover{border-color:var(--navy)}
+  .err{color:var(--red);font-size:12.5px;margin-top:8px;min-height:16px}
+
+  /* LAYOUT */
+  .app{display:flex;min-height:100vh}
+  .side{width:248px;background:var(--navy);color:#cfd0e6;flex-shrink:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+  .side-top{padding:22px 20px 14px}
+  .side-top .logo{font-weight:800;color:#fff;font-size:18px;letter-spacing:-.02em}
+  .side-top .logo b{color:var(--red)}
+  .side-top .tag{font-size:11px;color:#8e8fc0;letter-spacing:.04em;margin-top:2px}
+  .nav{padding:8px 12px;flex:1;overflow:auto}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:9px;color:#bfc0dd;font-weight:500;font-size:14px;margin-bottom:2px;width:100%;text-align:left;transition:.12s}
+  .nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+  .nav-item.active{background:#fff;color:var(--navy);font-weight:600}
+  .nav-item .ic{width:18px;text-align:center;font-size:15px}
+  .nav-sec{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#7677a8;padding:14px 16px 6px;font-weight:600}
+  .side-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#8788b8}
+  .main{flex:1;min-width:0;display:flex;flex-direction:column}
+  .topbar{background:var(--card);border-bottom:1px solid var(--line);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+  .topbar h1{font-size:19px;color:var(--navy)}
+  .topbar .crumb{font-size:12.5px;color:var(--muted);margin-bottom:2px}
+  .content{padding:26px 28px;flex:1}
+
+  /* CARDS / GRID */
+  .grid{display:grid;gap:16px}
+  .stat-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+  .stat{padding:18px 20px}
+  .stat .lbl{font-size:12px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:7px}
+  .stat .val{font-size:30px;font-weight:800;color:var(--navy);margin-top:6px;letter-spacing:-.02em}
+  .stat .val small{font-size:15px;color:var(--muted);font-weight:600}
+  .stat.alert .val{color:var(--red)}
+  .sec-title{font-size:15px;color:var(--navy);font-weight:700;margin:26px 0 12px;display:flex;align-items:center;gap:9px}
+  .sec-title:first-child{margin-top:0}
+
+  /* PHARMACY CARDS */
+  .ph-grid{grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+  .ph-card{padding:18px 20px;cursor:pointer;transition:.15s;border-left:3px solid var(--navy)}
+  .ph-card:hover{box-shadow:0 8px 28px rgba(20,20,50,.10);transform:translateY(-1px)}
+  .ph-card .ph-name{font-size:16px;font-weight:700;color:var(--ink)}
+  .ph-card .ph-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .ph-card .ph-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:16px}
+  .mat-pill{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:20px}
+  .bar{height:8px;background:var(--tint);border-radius:6px;overflow:hidden;margin-top:12px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--navy),#4b4b8f);border-radius:6px;transition:width .5s}
+  .risk-dot{font-size:11.5px;font-weight:600;color:var(--red);display:flex;align-items:center;gap:5px}
+
+  /* PHARMACY DETAIL */
+  .ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:18px}
+  .ring-wrap{display:flex;align-items:center;gap:16px}
+  .ring{width:84px;height:84px;flex-shrink:0}
+  .ring .lv{font-size:11px;color:var(--muted);font-weight:600;margin-top:3px}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
+  .tab{padding:11px 16px;font-weight:600;font-size:13.5px;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
+  .tab:hover{color:var(--navy)}
+  .tab.active{color:var(--navy);border-color:var(--red)}
+
+  /* CHECKLIST */
+  .cat-block{margin-bottom:14px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--card)}
+  .cat-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:var(--card)}
+  .cat-head:hover{background:#fafbfe}
+  .cat-head .ct-l{display:flex;align-items:center;gap:11px;min-width:0}
+  .cat-head .ct-num{width:26px;height:26px;border-radius:7px;background:var(--navy);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .cat-head .ct-name{font-weight:700;font-size:14.5px;color:var(--ink)}
+  .cat-head .ct-r{display:flex;align-items:center;gap:12px;flex-shrink:0}
+  .cat-mat{font-size:12px;font-weight:700;color:var(--navy)}
+  .mini-bar{width:90px;height:6px;background:var(--tint);border-radius:6px;overflow:hidden}
+  .mini-bar>i{display:block;height:100%;background:var(--navy);border-radius:6px}
+  .cat-items{border-top:1px solid var(--line)}
+  .item{padding:14px 18px;border-bottom:1px solid #eef0f6}
+  .item:last-child{border-bottom:none}
+  .item-top{display:flex;align-items:flex-start;gap:12px}
+  .item-main{flex:1;min-width:0}
+  .item-title{font-weight:600;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .item-obj{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .b-ns{background:var(--tint);color:#5b5f78}
+  .b-ip{background:var(--amber-tint);color:#9a6206}
+  .b-done{background:var(--green-tint);color:#0d7a4f}
+  .b-na{background:#f0e6f5;color:#7a4d96}
+  .b-vis{background:var(--navy);color:#fff}
+  .b-pri-high{background:var(--red-tint);color:var(--red)}
+  .b-pri-mid{background:#eaf0fb;color:#2b5fae}
+  .stages{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+  .stage{display:flex;align-items:center;gap:6px;padding:6px 11px;border:1.5px solid var(--line);border-radius:20px;font-size:11.5px;font-weight:600;color:var(--muted);transition:.12s}
+  .stage:hover{border-color:var(--navy-soft)}
+  .stage .sd{width:13px;height:13px;border-radius:50%;border:2px solid #c5c8da;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff}
+  .stage.on{background:var(--green-tint);border-color:var(--green);color:#0d7a4f}
+  .stage.on .sd{background:var(--green);border-color:var(--green)}
+  .item-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .ctrl{display:flex;flex-direction:column;gap:3px}
+  .ctrl label{font-size:10.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  .ctrl input,.ctrl select{padding:7px 9px;border:1.5px solid var(--line);border-radius:8px;font-size:12.5px;background:#fff}
+  .ctrl input:focus,.ctrl select:focus{outline:none;border-color:var(--navy)}
+  .vis-toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:#444;font-weight:600;cursor:pointer;user-select:none}
+  .switch{width:38px;height:22px;background:#cdd0e0;border-radius:20px;position:relative;transition:.18s;flex-shrink:0}
+  .switch.on{background:var(--navy)}
+  .switch i{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+  .switch.on i{left:18px}
+  .notes-ta{width:100%;margin-top:10px;padding:9px 11px;border:1.5px solid var(--line);border-radius:8px;resize:vertical;min-height:38px;font-size:13px}
+  .notes-ta:focus{outline:none;border-color:var(--navy)}
+  .sub-head{display:flex;justify-content:space-between;align-items:center;padding:9px 18px;background:#f3f4fa;border-top:1px solid #eef0f6;border-bottom:1px solid #eef0f6}
+  .sub-head .sub-name{font-weight:700;font-size:11.5px;color:var(--navy);text-transform:uppercase;letter-spacing:.04em}
+  .sub-head .sub-mat{font-size:11.5px;font-weight:700;color:var(--navy-soft)}
+  .item{padding:0;border-bottom:1px solid #eef0f6}
+  .item-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 18px;cursor:pointer}
+  .item-hd:hover{background:#fafbfe}
+  .item-hd-l{display:flex;align-items:center;gap:9px;min-width:0}
+  .item-hd-l .caret{color:var(--muted);font-size:11px;flex-shrink:0;width:10px}
+  .item-hd-l .item-title{font-weight:500;font-size:13.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .item-hd-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
+  .stage-mini{font-size:10.5px;font-weight:700;color:var(--navy-soft);background:var(--tint);padding:2px 7px;border-radius:10px}
+  .item.exp{background:#fcfcff}
+  .item.exp .item-hd-l .item-title{white-space:normal;font-weight:600}
+  .item-detail{padding:2px 18px 16px;border-top:1px dashed #e6e8f2}
+  .ta-label{display:block;font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin:11px 0 3px}
+
+  /* MATURITY TAB */
+  .mat-row{display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid #eef0f6}
+  .mat-row .mn{flex:1;font-weight:600;font-size:13.5px}
+  .mat-row .mbar{width:200px;max-width:38vw}
+  .mat-row .mp{width:46px;text-align:right;font-weight:700;color:var(--navy)}
+
+  /* RISK */
+  .risk-group{margin-bottom:18px}
+  .risk-group h4{font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .risk-item{padding:10px 14px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);border-radius:9px;margin-bottom:7px;font-size:13px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .risk-item.amber{border-left-color:var(--amber)}
+  .risk-item .rc{font-size:11.5px;color:var(--muted)}
+
+  /* REPORTS */
+  .rep-item{padding:14px 16px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:var(--card)}
+  .rep-item .rh{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .rep-item .rt{font-weight:700;color:var(--navy)}
+  .rep-item .rc{font-size:13px;color:#3a3a52;margin-top:7px;white-space:pre-wrap;line-height:1.55}
+  .rep-item .rd{font-size:11.5px;color:var(--muted)}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(20,20,45,.55);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px}
+  .modal{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:26px;box-shadow:0 24px 70px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+  .modal h3{color:var(--navy);font-size:18px;margin-bottom:16px}
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:#444;margin-bottom:5px}
+  .field input,.field textarea,.field select{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--navy)}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+
+  .empty{text-align:center;padding:50px 20px;color:var(--muted)}
+  .empty .ei{font-size:40px;margin-bottom:10px}
+  .empty h3{color:var(--ink);margin-bottom:6px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 20px;border-radius:10px;font-weight:600;font-size:13px;z-index:200;box-shadow:0 8px 30px rgba(0,0,0,.3);opacity:0;transition:.25s;pointer-events:none}
+  .toast.show{opacity:1;bottom:34px}
+
+  @media(max-width:780px){
+    .side{position:fixed;left:-260px;z-index:80;transition:.25s;box-shadow:0 0 40px rgba(0,0,0,.3)}
+    .side.open{left:0}
+    .menu-btn{display:inline-flex!important}
+    .content{padding:18px 14px}
+    .topbar{padding:14px 16px}
+    .mat-row .mbar{display:none}
+  }
+  .menu-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;border-radius:9px;background:var(--tint);color:var(--navy);font-size:18px;margin-right:8px}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:70;display:none}
+  .scrim.show{display:block}
+  .login-tabs{display:flex;gap:6px;background:var(--tint);padding:4px;border-radius:10px;margin:16px 0}
+  .ltab{flex:1;padding:9px;border-radius:7px;font-weight:600;font-size:13.5px;color:var(--muted)}
+  .ltab.active{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .portal{min-height:100vh;background:var(--bg)}
+  .portal-top{background:var(--navy);color:#fff;padding:15px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+  .portal-top .pl{font-weight:800;font-size:17px;letter-spacing:-.01em}
+  .portal-body{max-width:840px;margin:0 auto;padding:22px 18px}
+  .team-status{margin-top:10px;font-size:12px;font-weight:600;color:#2b5fae;background:#eaf0fb;padding:7px 11px;border-radius:8px}
+  .team-status.done{color:#0d7a4f;background:var(--green-tint)}
+  .phase-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .pchip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border:1px solid var(--line);background:#fff;border-radius:20px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+  .pchip:hover{border-color:var(--navy-soft)}
+  .pchip.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .pchip .pdot{width:9px;height:9px;border-radius:50%}
+  .chk{width:22px;height:22px;border-radius:7px;border:2px solid #c5c8da;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;cursor:pointer;transition:.12s}
+  .chk:hover{border-color:var(--navy)}
+  .chk.on{background:var(--green);border-color:var(--green)}
+  .chk.na{background:#9a8ab5;border-color:#9a8ab5}
+  .chk.st-ip{background:var(--amber);border-color:var(--amber)}
+  .chk.st-done{background:var(--green);border-color:var(--green)}
+  .chk.st-na{background:#9a8ab5;border-color:#9a8ab5}
+  .seg{display:inline-flex;border:1.5px solid var(--line);border-radius:9px;overflow:hidden;flex-wrap:wrap}
+  .seg-btn{padding:8px 15px;font-size:12.5px;font-weight:600;color:var(--muted);background:#fff;border-right:1px solid var(--line);transition:.12s}
+  .seg-btn:last-child{border-right:none}
+  .seg-btn:hover{background:#fafbfe}
+  .seg-btn.on.sb-ns{background:#eceef6;color:#5b5f78}
+  .seg-btn.on.sb-ip{background:var(--amber-tint);color:#9a6206}
+  .seg-btn.on.sb-done{background:var(--green-tint);color:#0d7a4f}
+  .rep-preview{padding:30px 34px;max-width:820px;margin:0 auto;background:#fff}
+  .ptag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .b-asg{background:#eaf0fb;color:#2b5fae}
+  .item.done .item-hd-l .item-title{color:var(--muted);text-decoration:line-through}
+  .item.na .item-hd-l .item-title{color:#9aa0c0}
+
+  @media print{
+    body *{visibility:hidden}
+    #printArea,#printArea *{visibility:visible}
+    #printArea{position:absolute;left:0;top:0;width:100%;padding:24px}
+    .no-print{display:none!important}
+  }
+
+.af-chip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:36px;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.18)}.af-chip img{height:24px;width:auto;display:block}
+
+.prog-name{font-weight:800;font-size:15px;color:var(--navy);letter-spacing:-.01em;margin-top:1px}
+.portal-top .pbrand{display:flex;align-items:center;gap:12px;min-width:0}
+.portal-top .pls{font-size:10.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:#b9b9d6;margin-top:1px}
+@media(max-width:560px){.portal-top .pls{display:none}}
+
+.gate-brandbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:13px;padding:14px 22px;background:rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.13)}
+.gate-brandbar .gb-title{color:#fff;font-weight:800;font-size:15.5px;letter-spacing:.01em;line-height:1.15}
+.gate-brandbar .gb-sub{color:#b9b9d6;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;margin-top:2px}
+@media(max-width:480px){.gate{padding-top:84px}.gate-brandbar{padding:12px 16px;gap:10px}.gate-brandbar .gb-title{font-size:13.5px}.gate-brandbar .gb-sub{font-size:9px;letter-spacing:.08em}}
+</style>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo.png">
+<script src="assets/core.js"></script>
+</head>
+<body>
+
+<!-- KVKK GATE -->
+<div class="gate" id="kvkkGate">
+  <div class="gate-brandbar"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span><div><div class="gb-title">ARTIFARMA 360°</div><div class="gb-sub">Kurumsal Eczane Danışmanlığı</div></div></div>
+  <div class="gate-card">
+    <h2>KVKK Aydınlatma ve Onay</h2>
+    <p class="sub">Devam etmeden önce lütfen kişisel verilerin işlenmesine ilişkin metni okuyun.</p>
+    <div class="kvkk-box" id="kvkkText"></div>
+    <label class="check-row"><input type="checkbox" id="kvkkChk"><span>Aydınlatma metnini okudum; eczane, personel ve finansal verilerin danışmanlık amacıyla bu sistemde işlenmesini onaylıyorum.</span></label>
+    <button class="btn full" id="kvkkBtn" disabled>Onayla ve devam et</button>
+  </div>
+</div>
+
+<!-- PIN GATE -->
+<div class="gate hide" id="loginGate">
+  <div class="gate-brandbar"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span><div><div class="gb-title">ARTIFARMA 360°</div><div class="gb-sub">Kurumsal Eczane Danışmanlığı</div></div></div>
+  <div class="gate-card" style="max-width:420px">
+    <h2 style="text-align:center;font-size:19px">Sisteme giriş</h2>
+    <p class="sub" style="text-align:center">Danışman · Eczane · Ekip</p>
+    <div class="login-tabs"><button class="ltab active" id="tabCons">Danışman</button><button class="ltab" id="tabPh">Eczane</button><button class="ltab" id="tabTeam">Ekip</button></div>
+    <div id="consForm">
+      <div class="field"><label>Danışman PIN</label><input id="pinInput" type="password" inputmode="numeric" placeholder="••••" autocomplete="off"></div>
+      <div class="err" id="pinErr"></div>
+      <button class="btn full" id="pinBtn">Giriş yap</button>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center">Varsayılan PIN: <b>1234</b> · Ayarlardan değiştirin.</p>
+    </div>
+    <div id="phForm" class="hide">
+      <div class="field"><label>Eczane ID</label><input id="phLoginId" placeholder="ECZ-XXXX" autocomplete="off"></div>
+      <div class="field"><label>Şifre</label><input id="phLoginPass" type="password" placeholder="Şifre" autocomplete="off"></div>
+      <div class="err" id="phErr"></div>
+      <button class="btn full" id="phBtn">Eczane girişi</button>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center">Giriş bilgilerinizi danışmanınız verir.</p>
+    </div>
+    <div id="teamForm" class="hide">
+      <div class="field"><label>Ekip ID</label><input id="teamLoginId" placeholder="EKP-XXXX" autocomplete="off"></div>
+      <div class="field"><label>Şifre</label><input id="teamLoginPass" type="password" placeholder="Şifre" autocomplete="off"></div>
+      <div class="err" id="teamErr"></div>
+      <button class="btn full" id="teamBtn">Ekip girişi</button>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:12px;text-align:center">Giriş bilgilerinizi danışmanınız verir.</p>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app hide" id="app">
+  <div class="scrim" id="scrim" onclick="toggleSide()"></div>
+  <aside class="side" id="side">
+    <div class="side-top">
+      <div class="logo"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span></div>
+      <div class="tag">ARTIFARMA 360° · Kurumsal Eczane Danışmanlığı</div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">Veriler bu cihazda saklanır. Düzenli yedek almayı unutmayın (Ayarlar → Yedekle).</div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;min-width:0">
+        <button class="menu-btn" onclick="toggleSide()">☰</button>
+        <div style="min-width:0">
+          <div class="crumb" id="crumb"></div>
+          <h1 id="pageTitle">Panel</h1>
+        </div>
+      </div>
+      <div id="topActions" style="display:flex;gap:8px"></div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div class="portal hide" id="portal"></div>
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+<div id="printArea" class="hide"></div>
+
+<script>
+/* ---------- STORAGE (window.storage with in-memory fallback) ---------- */
+const Store = (typeof window!=='undefined' && window.storage) ? window.storage : (()=>{
+  const m={}; return {
+    get:async k=>{ if(k in m) return {key:k,value:m[k]}; throw new Error('nf'); },
+    set:async (k,v)=>{ m[k]=v; return {key:k,value:v}; },
+    delete:async k=>{ delete m[k]; return {key:k,deleted:true}; },
+    list:async()=>({keys:Object.keys(m)})
+  };
+})();
+const DB_KEY='apos360_db';
+let DB=null, VIEW={name:'dashboard',phId:null,tab:'checklist'};
+
+/* ---------- KVKK TEXT ---------- */
+const KVKK_TEXT=`<h4>Veri Sorumlusu</h4>Artıfarma Danışmanlık, eczane yönetim danışmanlığı kapsamında bu platformu kullanır.
+<h4>İşlenen Veriler</h4>Eczane künye bilgileri, personel ve özlük bilgileri, performans/yetkinlik değerlendirmeleri, finansal ve satış verileri ile danışmanlık sürecine ilişkin notlar ve belgeler.
+<h4>İşleme Amacı</h4>Veriler yalnızca danışmanlık hizmetinin planlanması, yürütülmesi, raporlanması ve gelişimin takibi amacıyla işlenir.
+<h4>Saklama ve Güvenlik</h4>Veriler bu uygulamanın çalıştığı cihazda saklanır; üçüncü taraflarla paylaşılmaz. Eczacı, kendisiyle paylaşılmak üzere işaretlenen içerikleri görüntüleyebilir.
+<h4>Haklar</h4>İlgili kişi, KVKK m.11 kapsamında verilerine erişme, düzeltme ve silinmesini talep etme haklarına sahiptir.`;
+
+/* ---------- METHODOLOGY TEMPLATE ---------- */
+const PHASES=[['Analiz','#2A2A5E'],['Planlama','#B7791F'],['Uygulama','#2F8559'],['Takip','#DC1A22']];
+function phaseColor(ph){const x=PHASES.find(p=>p[0]===ph);return x?x[1]:'#6E6E89';}
+function tpl(){return[
+ {cat:"Yapısal Eczane Yönetimi",sub:"Liderlik, kurumsal kültür ve yapısal yol haritası",subs:[
+   {name:"Tanışma ve Mevcut Durum Analizi",items:[["p1a1","Eczacı ile derinlemesine vizyon, hedef ve beklenti görüşmesi yapıldı","Analiz"],["p1a2","Ekibin her üyesiyle birebir tanışma görüşmesi yapıldı","Analiz"],["p1a3","Mevcut kurumsal kültür (yazılı/yazısız kurallar, alışkanlıklar) tespit edildi","Analiz"],["p1a4","Eczane için SWOT analizi çıkarıldı","Analiz"],["p1a5","Eczacı için bireysel SWOT analizi çıkarıldı","Analiz"],["p1a6","Her personel için ayrı SWOT analizi çıkarıldı","Analiz"],["p1a7","Otomasyon/program verileriyle mevcut iş alışkanlıkları analiz edildi","Analiz"],["p1a8","Bölgesel değerlendirme (lokasyon, rekabet, demografi, hasta profili) yapıldı","Analiz"]]},
+   {name:"Kurumsal Kültür İnşası",items:[["p1b1","Eczane vizyon ve misyonu tanımlandı","Planlama"],["p1b2","Temel değerler (3–5 değer) belirlendi","Planlama"],["p1b3","Eczane kuralları yazılı hale getirildi","Planlama"],["p1b4","Her pozisyon için görev ve sorumluluk tanımları oluşturuldu","Planlama"],["p1b5","Senaryo bazlı davranış protokolleri hazırlandı (zor hasta, yoğunluk, şikâyet vb.)","Planlama"],["p1b6","Açılış/kapanış ve günlük operasyon iş akışları haritalandı","Planlama"]]},
+   {name:"Liderlik ve Yönetim Ritmi",items:[["p1c1","Eczacının liderlik tarzı değerlendirildi ve gelişim alanları belirlendi","Uygulama"],["p1c2","Yetki ve sorumluluk delegasyon planı oluşturuldu","Uygulama"],["p1c3","Toplantı ritmi kuruldu (günlük kısa / haftalık / aylık)","Uygulama"],["p1c4","Karar alma ve onay mekanizmaları netleştirildi","Uygulama"]]},
+   {name:"Yapısal Yol Haritası",items:[["p1d1","Önceliklendirilmiş aksiyon planı (sorumlu + termin) oluşturuldu","Takip"],["p1d2","Kısa / orta / uzun vadeli yapısal hedefler tanımlandı","Takip"],["p1d3","İlerleme periyodik olarak gözden geçirildi","Takip"]]},
+ ]},
+ {cat:"Personel Yönetimi ve Özlük Süreç Yönetimi",sub:"Yasal uyum, yetkinlik ölçümü ve gelişim",subs:[
+   {name:"Özlük ve Yasal Uyum",items:[["p2a1","Tüm personelin özlük dosyaları denetlendi","Analiz"],["p2a2","Eksik belgeler listelendi (iş sözleşmesi, kimlik, diploma, SGK işe giriş vb.)","Analiz"],["p2a3","Eksik belgeler tamamlandı","Uygulama"],["p2a4","İş sözleşmeleri içerik ve güncellik açısından gözden geçirildi","Uygulama"],["p2a5","KVKK aydınlatma metni ve açık rıza süreçleri kontrol edildi","Uygulama"],["p2a6","İSG ve yasal yükümlülükler (sağlık raporu, eğitim) kontrol edildi","Uygulama"],["p2a7","İzin ve mesai takip sistemi kuruldu","Uygulama"]]},
+   {name:"Performans ve Yetkinlik Ölçümü",items:[["p2b1","Program verisiyle personel verimlilik analizi yapıldı","Analiz"],["p2b2","Kişisel ve mesleki yeterlilik değerlendirmesi yapıldı","Analiz"],["p2b3","360° değerlendirme uygulandı","Analiz"],["p2b4","Her personel için bireysel gelişim planı (BGP) oluşturuldu","Planlama"]]},
+   {name:"Eğitim ve Gelişim",items:[["p2c1","Eğitim ihtiyaç analizi yapıldı","Planlama"],["p2c2","OTC eğitimi planlandı / verildi","Uygulama"],["p2c3","Dermokozmetik eğitimi planlandı / verildi","Uygulama"],["p2c4","Satış teknikleri eğitimi planlandı / verildi","Uygulama"],["p2c5","Eğitim takvimi oluşturuldu","Planlama"]]},
+   {name:"Ölçme ve Raporlama",items:[["p2d1","Periyodik quiz / sınavlar uygulandı","Takip"],["p2d2","Gelişim sonuçları raporlandı","Takip"],["p2d3","Bireysel geri bildirim görüşmeleri yapıldı","Takip"]]},
+ ]},
+ {cat:"Satış ve Pazarlama Yönetimi",sub:"Ciro artışı, mağazacılık ve prim sistemi",subs:[
+   {name:"Durum Analizi",items:[["p3a1","Ciro analizi (kanal / kategori / ürün) yapıldı","Analiz"],["p3a2","Kategori performansı (ABC / BCG) analiz edildi","Analiz"],["p3a3","Karlılık bazlı kategori değerlendirmesi yapıldı","Analiz"],["p3a4","Ölü stok tespit edildi ve raporlandı","Analiz"],["p3a5","Sepet / çapraz satış fırsatları belirlendi","Analiz"],["p3a6","Müşteri / CRM ve sadakat analizi yapıldı","Analiz"]]},
+   {name:"Hedef Belirleme",items:[["p3b1","Eczane geneli ciro hedefi belirlendi","Planlama"],["p3b2","Kategori bazlı hedefler belirlendi","Planlama"],["p3b3","Bireysel personel satış hedefleri belirlendi","Planlama"]]},
+   {name:"Mağazacılık ve Yerleşim",items:[["p3c1","Raf / bölge yerleşim planı (planogram) oluşturuldu","Uygulama"],["p3c2","Fiyat yerleşim planı yeniden düzenlendi","Uygulama"],["p3c3","Sıcak nokta ve vitrin / kampanya düzeni kuruldu","Uygulama"],["p3c4","Çapraz satış teşhir noktaları oluşturuldu","Uygulama"]]},
+   {name:"Perakende Matematiği ve Fiyatlama",items:[["p3d1","Alttan / üstten marj analizi yapıldı","Analiz"],["p3d2","Kategori fiyatlandırma stratejisi belirlendi","Planlama"],["p3d3","Kampanya getiri (ROI) takibi kuruldu","Uygulama"]]},
+   {name:"Prim ve Satış Takibi",items:[["p3e1","Hedef prim sistemi kuruldu","Uygulama"],["p3e2","Satış takip panosu oluşturuldu","Takip"],["p3e3","Periyodik satış değerlendirme toplantıları başlatıldı","Takip"]]},
+ ]},
+ {cat:"Eczane Finans Yönetimi",sub:"Nakit akışı, karlılık ve net kâr artışı",subs:[
+   {name:"Finansal Altyapı",items:[["p4a1","Gelir-gider takip sistemi kuruldu","Uygulama"],["p4a2","Nakit akış tablosu oluşturuldu","Uygulama"],["p4a3","Yıllık bütçe hazırlandı","Planlama"]]},
+   {name:"Karlılık Analizi",items:[["p4b1","Brüt ve net karlılık analizi yapıldı","Analiz"],["p4b2","Kategori bazlı karlılık analizi yapıldı","Analiz"],["p4b3","Yıllık karlılık değerlendirmesi yapıldı","Analiz"]]},
+   {name:"Maliyet ve Stok Yönetimi",items:[["p4c1","Sabit / değişken gider analizi yapıldı","Analiz"],["p4c2","Gider optimizasyon fırsatları belirlendi","Planlama"],["p4c3","Stok devir hızı ve stok maliyeti değerlendirildi","Analiz"]]},
+   {name:"Nakit ve Tahsilat",items:[["p4d1","SGK / Medula alacak takibi kuruldu","Uygulama"],["p4d2","Ecza deposu vade / ödeme yönetimi düzenlendi","Uygulama"],["p4d3","Tahsilat ve borç yapısı gözden geçirildi","Uygulama"]]},
+   {name:"Finansal Raporlama",items:[["p4e1","Aylık finansal rapor düzeni kuruldu","Takip"],["p4e2","Net karlılık artış hedefi takibe alındı","Takip"]]},
+ ]},
+];}
+function seed(){
+  const methodology=tpl().map((c,ci)=>{const items=[];c.subs.forEach(sub=>sub.items.forEach(it=>{items.push({id:it[0],title:it[1],sub:sub.name,phase:it[2]});}));return {id:'c'+ci,category:c.cat,sub:c.sub,items};});
+  return {meta:{kvkkAccepted:false,kvkkAcceptedAt:null,pin:'1234'},methodology,pharmacies:[],team:[]};
+}
+
+/* ---------- PERSISTENCE ---------- */
+async function loadDB(){
+  try{const r=await Store.get(DB_KEY);DB=JSON.parse(r.value);}catch(e){DB=seed();await saveDB();}
+  if(!DB||!DB.methodology){DB=seed();await saveDB();}
+  DB.pharmacies.forEach(ensurePharmacyItems);
+  if(!DB.team)DB.team=[];
+}
+let saveT=null;
+function saveDB(){return Store.set(DB_KEY,JSON.stringify(DB)).catch(e=>console.error('save',e));}
+function saveSoon(){clearTimeout(saveT);saveT=setTimeout(saveDB,300);}
+
+/* ---------- HELPERS ---------- */
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const today=()=>new Date().toISOString().slice(0,10);
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900);}
+function genPhId(){let id;do{id='ECZ-'+Math.random().toString(36).slice(2,6).toUpperCase();}while(DB.pharmacies&&DB.pharmacies.some(p=>p.loginId===id));return id;}
+function genPass(){return Math.random().toString(36).slice(2,8);}
+function genTeamId(){let id;do{id='EKP-'+Math.random().toString(36).slice(2,6).toUpperCase();}while(DB.team&&DB.team.some(t=>t.loginId===id));return id;}
+function defaultItemState(){return {status:'ns',priority:'mid',responsible:'',assignee:'',dueDate:'',notes:'',pharmNote:'',teamDone:false,teamNote:'',teamDoneAt:'',visible:false,na:false};}
+function newPharmacyItems(){const o={};DB.methodology.forEach(c=>c.items.forEach(it=>{o[it.id]=defaultItemState();}));return o;}
+function ensurePharmacyItems(ph){if(!ph.items)ph.items={};DB.methodology.forEach(c=>c.items.forEach(it=>{if(!ph.items[it.id])ph.items[it.id]=defaultItemState();const d=ph.items[it.id];if(d.status===undefined)d.status=d.done?'done':'ns';if('done' in d)delete d.done;}));if(!ph.loginId)ph.loginId=genPhId();if(!ph.password)ph.password=genPass();if(ph.pharmacistMessage===undefined)ph.pharmacistMessage='';if(!ph.assignments)ph.assignments=[];if(!ph.files)ph.files=[];}
+
+function itemStatus(d){if(!d)return 'ns';if(d.na)return 'na';return d.status||'ns';}
+function itemPct(d){if(!d)return 0;if(d.na)return 100;const s=d.status||'ns';return s==='done'?100:(s==='ip'?50:0);}
+function cycleStatus(s){return ({ns:'ip',ip:'done',done:'ns'})[s||'ns'];}
+const STATUS_META={ns:['Başlanmadı','#9aa0c0',''],ip:['Devam ediyor','#E08A0B','◐'],done:['Tamamlandı','#1FA971','✓'],na:['Uygulanamaz','#7a4d96','–']};
+function catMaturity(ph,cat){const its=cat.items;if(!its.length)return 0;let s=0;its.forEach(it=>s+=itemPct(ph.items[it.id]||{stages:{},na:false}));return Math.round(s/its.length);}
+function phMaturity(ph){let s=0;DB.methodology.forEach(c=>s+=catMaturity(ph,c));return Math.round(s/DB.methodology.length);}
+function matLevel(p){if(p<=20)return['Seviye 1','Başlangıç','#9aa0c0'];if(p<=40)return['Seviye 2','Gelişiyor','#E08A0B'];if(p<=60)return['Seviye 3','Yönetilebilir','#2b5fae'];if(p<=80)return['Seviye 4','Kurumsallaşmış','#1FA971'];return['Seviye 5','Örnek Eczane','#1FA971'];}
+function phRisks(ph){const r={notStarted:[],overdue:[],highPending:[]};const t=today();DB.methodology.forEach(function(c){c.items.forEach(function(it){const d=ph.items[it.id];if(!d||d.na)return;const st=itemStatus(d);if(st==='ns')r.notStarted.push({c:c.category,t:it.title});if(d.dueDate&&d.dueDate<t&&st!=='done')r.overdue.push({c:c.category,t:it.title,due:d.dueDate});if(d.priority==='high'&&st!=='done')r.highPending.push({c:c.category,t:it.title});});});return r;}
+function riskCount(ph){const r=phRisks(ph);return r.overdue.length+r.highPending.length;}
+
+/* ---------- RENDER: NAV ---------- */
+function renderNav(){
+  const nav=$('#nav');nav.innerHTML='';
+  const mk=(name,ic,label,active)=>{const b=el('button','nav-item'+(active?' active':''),`<span class="ic">${ic}</span>${label}`);b.onclick=()=>{go(name);closeSideMobile();};return b;};
+  nav.appendChild(mk('dashboard','▦','Panel',VIEW.name==='dashboard'));
+  nav.appendChild(mk('pharmacies','⊞','Eczaneler',VIEW.name==='pharmacies'||VIEW.name==='pharmacy'));
+  nav.appendChild(mk('team','◎','Ekip',VIEW.name==='team'));
+  if(DB.pharmacies.some(p=>!p.arsiv)){
+    nav.appendChild(el('div','nav-sec',null)).textContent='ECZANELERİM';
+    DB.pharmacies.filter(p=>!p.arsiv).forEach(p=>{const b=el('button','nav-item'+(VIEW.name==='pharmacy'&&VIEW.phId===p.id?' active':''),`<span class="ic">◍</span>${esc(p.name)}`);b.onclick=()=>{openPharmacy(p.id);closeSideMobile();};nav.appendChild(b);});
+  }
+  nav.appendChild(el('div','nav-sec',null)).textContent='SİSTEM';
+  nav.appendChild(mk('settings','⚙','Ayarlar',VIEW.name==='settings'));
+}
+
+/* ---------- ROUTER ---------- */
+function go(name){VIEW={name,phId:null,tab:'checklist'};render();}
+function openPharmacy(id){VIEW={name:'pharmacy',phId:id,tab:'checklist'};render();}
+function render(){renderNav();const c=$('#content');const ta=$('#topActions');ta.innerHTML='';$('#crumb').textContent='';
+  if(VIEW.name==='dashboard'){$('#pageTitle').textContent='Panel';renderDashboard(c);}
+  else if(VIEW.name==='pharmacies'){$('#pageTitle').textContent='Eczaneler';const b=el('button','btn sm','+ Eczane ekle');b.onclick=addPharmacyModal;ta.appendChild(b);renderPharmacies(c);}
+  else if(VIEW.name==='pharmacy'){renderPharmacy(c);}
+  else if(VIEW.name==='team'){$('#pageTitle').textContent='Ekip';const b=el('button','btn sm','+ Ekip üyesi');b.onclick=()=>teamModal();ta.appendChild(b);renderTeam(c);}
+  else if(VIEW.name==='settings'){$('#pageTitle').textContent='Ayarlar';renderSettings(c);}
+}
+
+/* ---------- DASHBOARD ---------- */
+function renderDashboard(c){
+  c.innerHTML='';
+  const phs=DB.pharmacies.filter(p=>!p.arsiv);
+  const avg=phs.length?Math.round(phs.reduce((a,p)=>a+phMaturity(p),0)/phs.length):0;
+  const totalRisk=phs.reduce((a,p)=>a+riskCount(p),0);
+  const lv=matLevel(avg);
+  const sg=el('div','grid stat-grid');
+  sg.appendChild(el('div','card stat',`<div class="lbl">▦ Aktif eczane</div><div class="val">${phs.length}</div>`));
+  sg.appendChild(el('div','card stat',`<div class="lbl">◐ Ortalama olgunluk</div><div class="val">%${avg} <small>· ${lv[1]}</small></div>`));
+  sg.appendChild(el('div','card stat'+(totalRisk?' alert':''),`<div class="lbl">⚠ Açık risk</div><div class="val">${totalRisk}</div>`));
+  const totItems=DB.methodology.reduce((a,c)=>a+c.items.length,0);
+  const doneAll=phs.reduce((a,p)=>a+DB.methodology.reduce((x,cc)=>x+cc.items.filter(it=>itemStatus(p.items[it.id]||{stages:{}})==='done').length,0),0);
+  sg.appendChild(el('div','card stat',`<div class="lbl">✓ Tamamlanan konu</div><div class="val">${doneAll}<small> / ${totItems*phs.length||0}</small></div>`));
+  c.appendChild(sg);
+
+  if(!phs.length){c.appendChild(emptyState('Henüz eczane yok','Danışmanlık vermeye başladığın eczaneleri ekleyerek 360° takibe başla.','+ İlk eczaneyi ekle',addPharmacyModal));return;}
+
+  c.appendChild(el('div','sec-title','⚠ Dikkat gerektiren eczaneler'));
+  const riskWrap=el('div','grid');riskWrap.style.gap='10px';
+  let any=false;
+  phs.forEach(p=>{const r=phRisks(p);const n=r.overdue.length+r.highPending.length;if(!n)return;any=true;
+    const row=el('div','card',`<div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div><b style="color:var(--navy)">${esc(p.name)}</b> <span style="color:var(--muted);font-size:12.5px">· %${phMaturity(p)} olgunluk</span>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:3px">${r.overdue.length} geciken · ${r.highPending.length} yüksek öncelik bekleyen · ${r.notStarted.length} başlanmamış</div></div>
+      <span class="risk-dot">${n} risk →</span></div>`);
+    row.style.borderLeft='3px solid var(--red)';row.style.cursor='pointer';row.onclick=()=>openPharmacy(p.id);riskWrap.appendChild(row);});
+  if(!any)riskWrap.appendChild(el('div','card',`<div style="padding:16px 18px;color:var(--green);font-weight:600">✓ Açık risk yok — tüm eczaneler planlı ilerliyor.</div>`));
+  c.appendChild(riskWrap);
+
+  c.appendChild(el('div','sec-title','◍ Tüm eczaneler'));
+  const g=el('div','grid ph-grid');phs.forEach(p=>g.appendChild(phCard(p)));c.appendChild(g);
+}
+
+function phCard(p){
+  const m=phMaturity(p),lv=matLevel(m),rc=riskCount(p);
+  const card=el('div','card ph-card');card.style.borderLeftColor=lv[2];
+  card.innerHTML=`<div class="ph-name">${esc(p.name)}</div><div class="ph-meta">${esc(p.city||'—')}${p.owner?' · '+esc(p.owner):''}</div>
+    <div class="bar"><i style="width:${m}%"></i></div>
+    <div class="ph-bottom"><span class="mat-pill" style="background:${lv[2]}22;color:${lv[2]}">%${m} · ${lv[1]}</span>
+    ${rc?`<span class="risk-dot">⚠ ${rc} risk</span>`:`<span style="font-size:11.5px;color:var(--green);font-weight:600">✓ Yolunda</span>`}</div>`;
+  card.onclick=()=>openPharmacy(p.id);return card;
+}
+
+/* ---------- PHARMACIES LIST ---------- */
+function renderPharmacies(c){c.innerHTML='';const _liste=DB.pharmacies.filter(p=>!p.arsiv);
+  const _ars=DB.pharmacies.filter(p=>p.arsiv);
+  if(_ars.length){const b=el('button','btn line sm',`Arşiv (${_ars.length})`);
+    b.style.cssText='margin-bottom:14px';
+    b.onclick=()=>{const g=el('div','grid ph-grid');g.style.marginBottom='22px';
+      _ars.forEach(p=>{const k=phCard(p);k.style.opacity='.6';g.appendChild(k);});
+      b.replaceWith(g);};
+    c.appendChild(b);}
+  if(!_liste.length){c.appendChild(emptyState('Henüz eczane yok','Yeni bir eczane ekleyerek 360° danışmanlık takibine başla.','+ Eczane ekle',addPharmacyModal));return;}
+  const g=el('div','grid ph-grid');_liste.forEach(p=>g.appendChild(phCard(p)));c.appendChild(g);}
+
+/* ---------- PHARMACY DETAIL ---------- */
+function renderPharmacy(c){
+  const p=DB.pharmacies.find(x=>x.id===VIEW.phId);if(!p){go('pharmacies');return;}
+  $('#pageTitle').textContent=p.name;$('#crumb').textContent='Eczaneler';
+  const ta=$('#topActions');ta.innerHTML='';
+  const ed=el('button','btn line sm','Düzenle');ed.onclick=()=>editPharmacyModal(p.id);
+  const ex=el('button','btn sm','⤓ Eczacı raporu');ex.onclick=()=>exportReport(p.id);
+  ta.appendChild(ed);ta.appendChild(ex);
+  c.innerHTML='';
+  const m=phMaturity(p),lv=matLevel(m);
+  const head=el('div','ph-head');
+  head.appendChild(el('div','ring-wrap',`${ringSVG(m,lv[2])}
+    <div><div style="font-size:20px;font-weight:800;color:var(--navy)">${esc(p.name)}</div>
+    <div style="color:var(--muted);font-size:13px;margin-top:2px">${esc(p.city||'—')}${p.owner?' · '+esc(p.owner):''}${p.startDate?' · Başlangıç: '+esc(p.startDate):''}</div>
+    <div style="margin-top:6px"><span class="mat-pill" style="background:${lv[2]}22;color:${lv[2]}">${lv[0]} · ${lv[1]} (%${m})</span></div><div style="margin-top:8px;font-size:12px;color:var(--muted)">🔑 Eczacı girişi · ID <b style="color:var(--navy)">${esc(p.loginId||'—')}</b> · Şifre <b style="color:var(--navy)">${esc(p.password||'—')}</b></div></div>`));
+  c.appendChild(head);
+
+  const tabs=el('div','tabs');
+  [['checklist','360° Checklist'],['maturity','Olgunluk'],['assignments','Görevler'],['files','Dosyalar'],['risks','Riskler'],['reports','Notlar']].forEach(t=>{
+    const b=el('button','tab'+(VIEW.tab===t[0]?' active':''),t[1]);b.onclick=()=>{VIEW.tab=t[0];render();};tabs.appendChild(b);});
+  c.appendChild(tabs);
+  const body=el('div');c.appendChild(body);
+  if(VIEW.tab==='checklist')renderChecklist(body,p);
+  else if(VIEW.tab==='maturity')renderMaturity(body,p);
+  else if(VIEW.tab==='assignments')renderAssignments(body,p);
+  else if(VIEW.tab==='files')renderFiles(body,p);
+  else if(VIEW.tab==='risks')renderRisks(body,p);
+  else if(VIEW.tab==='reports')renderReports(body,p);
+}
+
+function ringSVG(pct,col){const r=34,cir=2*Math.PI*r,off=cir*(1-pct/100);
+  return `<svg class="ring" viewBox="0 0 84 84"><circle cx="42" cy="42" r="${r}" fill="none" stroke="#eceef6" stroke-width="9"/>
+  <circle cx="42" cy="42" r="${r}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${cir}" stroke-dashoffset="${off}" transform="rotate(-90 42 42)"/>
+  <text x="42" y="47" text-anchor="middle" font-size="18" font-weight="800" fill="var(--navy)">%${pct}</text></svg>`;}
+
+/* ---------- CHECKLIST ---------- */
+let openCats={};
+let activePhase='all';
+function renderChecklist(body,p){
+  body.innerHTML='';
+  const fbar=el('div','phase-bar');
+  const chips=[['all','Tümü','#6E6E89']].concat(PHASES.map(x=>[x[0],x[0],x[1]]));
+  chips.forEach(ch=>{const b=el('button','pchip'+(activePhase===ch[0]?' active':''),`<span class="pdot" style="background:${ch[2]}"></span>${ch[1]}`);b.onclick=()=>{activePhase=ch[0];renderChecklist(body,p);};fbar.appendChild(b);});
+  body.appendChild(fbar);
+  const info=el('div','card');info.style.cssText='padding:11px 15px;margin-bottom:14px;font-size:12px;color:var(--muted);background:var(--tint);border:none';
+  info.innerHTML='💡 Maddeyi <b>işaretleyerek</b> tamamlandı yaparsınız. Her madde bir faza etiketli: <b>Analiz · Planlama · Uygulama · Takip</b>. Konuya tıklayıp sorumlu, ekip görevlisi, tarih ve notları düzenleyebilir; eczacıya/ekibe görünürlüğünü seçebilirsiniz.';
+  body.appendChild(info);
+  DB.methodology.forEach((cat,ci)=>{
+    const mt=catMaturity(p,cat);
+    const open=openCats[cat.id]===true;
+    const fitems=cat.items.filter(it=>activePhase==='all'||it.phase===activePhase);
+    if(!fitems.length)return;
+    const cnt=cat.items.length;const done=cat.items.filter(it=>itemStatus(p.items[it.id]||{})==='done').length;
+    const block=el('div','cat-block');
+    const head=el('div','cat-head',`<div class="ct-l"><div class="ct-num">${ci+1}</div><div><div class="ct-name">${esc(cat.category)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(cat.sub||'')} · ${done}/${cnt} tamamlandı</div></div></div>
+      <div class="ct-r"><div class="mini-bar"><i style="width:${mt}%"></i></div><span class="cat-mat">%${mt}</span><span style="color:var(--muted);font-size:13px">${open?'▾':'▸'}</span></div>`);
+    head.onclick=()=>{openCats[cat.id]=!open;renderChecklist(body,p);};
+    block.appendChild(head);
+    if(open){
+      const wrap=el('div','cat-items');
+      const subs=[];const map={};
+      fitems.forEach(it=>{const k=it.sub||'Genel';if(!map[k]){map[k]={name:k,items:[]};subs.push(map[k]);}map[k].items.push(it);});
+      subs.forEach(sub=>{
+        let sp=0;sub.items.forEach(it=>sp+=itemPct(p.items[it.id]||{}));const smt=Math.round(sp/sub.items.length);
+        wrap.appendChild(el('div','sub-head',`<span class="sub-name">${esc(sub.name)}</span><span class="sub-mat">%${smt}</span>`));
+        sub.items.forEach(it=>wrap.appendChild(itemRow(p,it)));
+      });
+      block.appendChild(wrap);
+    }
+    body.appendChild(block);
+  });
+}
+
+let openItems={};
+function itemRow(p,it){
+  const d=p.items[it.id]||defaultItemState();const st=itemStatus(d);const exp=openItems[it.id];
+  const asg=d.assignee||'';const asgName=asg?(((DB.team||[]).find(t=>t.id===asg)||{}).name||''):'';
+  const pc=phaseColor(it.phase);
+  const row=el('div','item'+(exp?' exp':'')+(d.done?' done':'')+(d.na?' na':''));
+  const hd=el('div','item-hd');
+  hd.innerHTML=`<div class="item-hd-l"><div class="chk ${d.done?'on':''} ${d.na?'na':''}" data-chk>${d.done?'✓':(d.na?'–':'')}</div><span class="item-title">${esc(it.title)}</span></div>
+    <div class="item-hd-r"><span class="ptag" style="background:${pc}1a;color:${pc}">${esc(it.phase||'')}</span>${d.visible?'<span class="badge b-vis">Eczacı</span>':''}${asg?`<span class="badge b-asg">👥 ${esc((asgName||'Ekip').split(' ')[0])}</span>`:''}<span class="caret">${exp?'▾':'▸'}</span></div>`;
+  hd.querySelector('[data-chk]').onclick=e=>{e.stopPropagation();if(d.na)return;d.done=!d.done;saveSoon();renderPharmacy($('#content'));};
+  hd.onclick=()=>{openItems[it.id]=!exp;renderPharmacy($('#content'));};
+  row.appendChild(hd);
+  if(exp){
+    const dt=el('div','item-detail');
+    dt.innerHTML=`<div class="item-controls">
+        <div class="ctrl"><label>Öncelik</label><select data-f="priority"><option value="low"${d.priority==='low'?' selected':''}>Düşük</option><option value="mid"${d.priority==='mid'?' selected':''}>Orta</option><option value="high"${d.priority==='high'?' selected':''}>Yüksek</option></select></div>
+        <div class="ctrl"><label>Sorumlu</label><input data-f="responsible" value="${esc(d.responsible)}" placeholder="Kişi" style="width:110px"></div>
+        <div class="ctrl"><label>Ekip görevlisi</label><select data-f="assignee"><option value="">—</option>${(DB.team||[]).map(t=>`<option value="${t.id}"${asg===t.id?' selected':''}>${esc(t.name)}</option>`).join('')}</select></div>
+        <div class="ctrl"><label>Hedef tarih</label><input data-f="dueDate" type="date" value="${esc(d.dueDate||'')}"></div>
+      </div>
+      <div class="item-controls">
+        <div class="vis-toggle" data-vis><div class="switch ${d.visible?'on':''}"><i></i></div>Eczacıya göster</div>
+        <div class="vis-toggle" data-na><div class="switch ${d.na?'on':''}" style="${d.na?'background:#7a4d96':''}"><i></i></div>Uygulanamaz</div>
+      </div>
+      ${asg?`<div class="team-status ${d.teamDone?'done':''}">👥 ${esc(asgName||'Ekip')} · ${d.teamDone?'✓ tamamladı':'atandı, bekliyor'}${d.teamNote?' — '+esc(d.teamNote):''}</div>`:''}
+      <label class="ta-label">Danışman notu</label><textarea class="notes-ta" data-f="notes" placeholder="Danışman notu, aksiyon...">${esc(d.notes)}</textarea>
+      <label class="ta-label">Eczacı notu</label><textarea class="notes-ta" data-f="pharmNote" placeholder="Eczacının notu / geri bildirimi...">${esc(d.pharmNote||'')}</textarea>`;
+    row.appendChild(dt);
+    dt.querySelector('[data-vis]').onclick=()=>{d.visible=!d.visible;saveSoon();renderPharmacy($('#content'));};
+    dt.querySelector('[data-na]').onclick=()=>{d.na=!d.na;if(d.na)d.done=false;saveSoon();renderPharmacy($('#content'));};
+    dt.querySelectorAll('[data-f]').forEach(inp=>{const f=inp.dataset.f;if(inp.tagName==='TEXTAREA'){inp.oninput=()=>{d[f]=inp.value;saveSoon();};}else{inp.onchange=()=>{d[f]=inp.value;saveSoon();if(f==='priority'||f==='assignee')renderPharmacy($('#content'));};}});
+  }
+  return row;
+}
+
+/* ---------- MATURITY ---------- */
+function renderMaturity(body,p){
+  body.innerHTML='';const m=phMaturity(p),lv=matLevel(m);
+  const top=el('div','card');top.style.cssText='padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap';
+  top.innerHTML=`${ringSVG(m,lv[2])}<div><div style="font-size:13px;color:var(--muted);font-weight:600">GENEL OLGUNLUK</div>
+    <div style="font-size:26px;font-weight:800;color:var(--navy)">${lv[0]} — ${lv[1]}</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:2px">Seviye, 8 kategorinin 5 aşamalı ilerleme ortalamasından hesaplanır.</div></div>`;
+  body.appendChild(top);
+  const card=el('div','card');card.style.padding='8px 18px';
+  DB.methodology.forEach((cat,ci)=>{const mt=catMaturity(p,cat);const r=el('div','mat-row',`<div class="mn">${ci+1}. ${esc(cat.category)}</div>
+    <div class="mbar mini-bar" style="height:8px"><i style="width:${mt}%;background:${matLevel(mt)[2]}"></i></div><div class="mp">%${mt}</div>`);card.appendChild(r);});
+  card.lastChild.style.borderBottom='none';body.appendChild(card);
+}
+
+/* ---------- RISKS ---------- */
+function renderRisks(body,p){
+  body.innerHTML='';const r=phRisks(p);
+  const total=r.overdue.length+r.highPending.length;
+  if(!total&&!r.notStarted.length){body.appendChild(el('div','card',`<div style="padding:22px;color:var(--green);font-weight:600">✓ Açık risk yok. Tüm konular planlı şekilde ilerliyor.</div>`));return;}
+  const grp=(title,arr,cls,fmt)=>{if(!arr.length)return;const g=el('div','risk-group');g.appendChild(el('h4',null,title));arr.forEach(x=>{const it=el('div','risk-item'+(cls==='amber'?' amber':''),`<span><b>${esc(x.t)}</b><div class="rc">${esc(x.c)}</div></span>${fmt?fmt(x):''}`);g.appendChild(it);});body.appendChild(g);};
+  grp(`⛔ Geciken konular (${r.overdue.length})`,r.overdue,'',x=>`<span style="color:var(--red);font-size:12px;font-weight:600">Tarih: ${esc(x.due)}</span>`);
+  grp(`★ Yüksek öncelik bekleyen (${r.highPending.length})`,r.highPending,'amber');
+  grp(`○ Henüz başlanmamış (${r.notStarted.length})`,r.notStarted,'amber');
+}
+
+/* ---------- REPORTS & NOTES ---------- */
+function renderReports(body,p){
+  body.innerHTML='';
+  const nc=el('div','card');nc.style.padding='16px 18px';nc.style.marginBottom='16px';
+  nc.innerHTML=`<div style="font-weight:700;color:var(--navy);margin-bottom:8px">Genel danışmanlık notları</div>`;
+  const ta=el('textarea','notes-ta');ta.style.minHeight='90px';ta.value=p.generalNotes||'';ta.placeholder='Eczaneyle ilgili genel durum, öncelikler, gözlemler...';ta.oninput=()=>{p.generalNotes=ta.value;saveSoon();};
+  nc.appendChild(ta);body.appendChild(nc);if(p.pharmacistMessage&&p.pharmacistMessage.trim()){const pm=el('div','card');pm.style.cssText='padding:14px 18px;margin-bottom:16px;border-left:3px solid var(--green)';pm.innerHTML='<div style="font-weight:700;color:var(--navy);margin-bottom:6px">💬 Eczacıdan mesaj</div><div style="font-size:13px;white-space:pre-wrap;color:#333">'+esc(p.pharmacistMessage)+'</div>';body.appendChild(pm);}
+
+  const hd=el('div');hd.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px';
+  hd.innerHTML=`<div style="font-weight:700;color:var(--navy)">Analiz & Raporlar</div>`;
+  const add=el('button','btn sm','+ Rapor ekle');add.onclick=()=>reportModal(p.id);hd.appendChild(add);body.appendChild(hd);
+  if(!p.reports||!p.reports.length){body.appendChild(el('div','card',`<div style="padding:20px;color:var(--muted)">Henüz rapor eklenmedi. Eczaneye yaptığın analiz ve değerlendirmeleri buraya ekleyebilir, eczacıyla paylaşmak istediklerini işaretleyebilirsin.</div>`));return;}
+  p.reports.slice().reverse().forEach(rep=>{
+    const item=el('div','rep-item',`<div class="rh"><div><span class="rt">${esc(rep.title)}</span> ${rep.visible?'<span class="badge b-vis">Eczacı görür</span>':''}<div class="rd">${esc(rep.date)}</div></div></div><div class="rc">${esc(rep.content)}</div>`);
+    const acts=el('div');acts.style.cssText='display:flex;gap:8px;margin-top:10px';
+    const tg=el('button','btn line sm',rep.visible?'Eczacıdan gizle':'Eczacıya göster');tg.onclick=()=>{rep.visible=!rep.visible;saveSoon();renderPharmacy($('#content'));};
+    const tg2=el('button','btn line sm',rep.teamVisible?'Ekipten gizle':'Ekibe göster');tg2.onclick=()=>{rep.teamVisible=!rep.teamVisible;saveSoon();renderPharmacy($('#content'));};
+    const dl=el('button','btn line sm','Sil');dl.onclick=()=>{if(confirm('Rapor silinsin mi?')){p.reports=p.reports.filter(x=>x.id!==rep.id);saveSoon();renderPharmacy($('#content'));}};
+    acts.appendChild(tg);acts.appendChild(tg2);acts.appendChild(dl);item.querySelector('.rh').appendChild(acts);
+    body.appendChild(item);
+  });
+}
+
+/* ---------- MODALS ---------- */
+function modal(html){const root=$('#modalRoot');root.innerHTML=`<div class="modal-bg" id="mbg"><div class="modal">${html}</div></div>`;$('#mbg').onclick=e=>{if(e.target.id==='mbg')closeModal();};}
+function closeModal(){$('#modalRoot').innerHTML='';}
+function addPharmacyModal(){const pw=genPass();modal(`<h3>Yeni eczane ekle</h3>
+  <div class="field"><label>Eczane adı *</label><input id="f_name" placeholder="Örn. Naturel Eczanesi"></div>
+  <div class="field"><label>Şehir / bölge</label><input id="f_city" placeholder="İstanbul"></div>
+  <div class="field"><label>Eczacı adı</label><input id="f_owner" placeholder="Ecz. ..."></div>
+  <div class="field"><label>Program başlangıç tarihi</label><input id="f_start" type="date" value="${today()}"></div>
+  <div class="field"><label>Eczacı giriş şifresi</label><input id="f_pass" value="${pw}"></div>
+  <div class="field"><label>Sorumlu yönetici — varsa (ara yönetici)</label><input id="f_mgr" placeholder="Ad soyad (opsiyonel)"></div>
+  <div class="field"><label>Yönetici giriş şifresi — varsa</label><input id="f_mgrpass" placeholder="Boş bırakılabilir"></div>
+  <p style="font-size:12px;color:var(--muted);margin:-6px 0 12px">Eczane ID otomatik oluşturulur. ID + eczacı şifresiyle eczacı, ID + yönetici şifresiyle ara yönetici aynı eczane portalına girer.</p>
+  <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="f_save">Ekle</button></div>`);
+  if(window.ArtifarmaEczane)ArtifarmaEczane.onerileriBagla($('#f_name'));
+  $('#f_save').onclick=()=>{const n=$('#f_name').value.trim();if(!n){toast('Eczane adı gerekli');return;}
+    const _o=window.ArtifarmaEczane?ArtifarmaEczane.esle(n):null;DB.pharmacies.push({id:'p'+Date.now(),loginId:_o?_o.id:genPhId(),password:_o?_o.sifre:($('#f_pass').value.trim()||genPass()),name:n,city:$('#f_city').value.trim(),owner:$('#f_owner').value.trim(),startDate:$('#f_start').value,createdAt:today(),items:newPharmacyItems(),reports:[],generalNotes:'',pharmacistMessage:'',assignments:[],files:[],managerName:$('#f_mgr').value.trim(),managerPassword:$('#f_mgrpass').value.trim()});
+    saveDB();closeModal();toast('Eczane eklendi');const _y=DB.pharmacies[DB.pharmacies.length-1];if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'Danışman Kokpiti',baslik:_y.name,kalici:true,ortak:true,satirlar:[{etiket:'Eczane ID',deger:_y.loginId},{etiket:'Eczacı şifresi',deger:_y.password}].concat(_y.managerPassword?[{etiket:'Yönetici şifresi',deger:_y.managerPassword}]:[]),not:'Eczacı bu bilgilerle kendi portalına girer ve paylaştığınız içerikleri görür.'});openPharmacy(_y.id);};
+}
+function editPharmacyModal(id){const p=DB.pharmacies.find(x=>x.id===id);modal(`<h3>Eczane bilgileri</h3>
+  <div class="field"><label>Eczane adı</label><input id="f_name" value="${esc(p.name)}"></div>
+  <div class="field"><label>Şehir / bölge</label><input id="f_city" value="${esc(p.city||'')}"></div>
+  <div class="field"><label>Eczacı adı</label><input id="f_owner" value="${esc(p.owner||'')}"></div>
+  <div class="field"><label>Program başlangıç tarihi</label><input id="f_start" type="date" value="${esc(p.startDate||'')}"></div>
+  <div class="field"><label>Eczane ID (eczacıya verin)</label><input value="${esc(p.loginId||'')}" readonly style="background:#f3f4fa;font-weight:700;letter-spacing:.04em"></div>
+  <div class="field"><label>Eczacı giriş şifresi</label><div style="display:flex;gap:8px"><input id="f_pass" value="${esc(p.password||'')}" style="flex:1"><button class="btn line sm" id="f_regen" type="button">Yeni üret</button></div></div>
+  <div class="field"><label>Sorumlu yönetici (ara yönetici)</label><input id="f_mgr" value="${esc(p.managerName||'')}" placeholder="Ad soyad (opsiyonel)"></div>
+  <div class="field"><label>Yönetici giriş şifresi</label><input id="f_mgrpass" value="${esc(p.managerPassword||'')}" placeholder="Boş bırakılabilir"></div>
+  <p style="font-size:12px;color:var(--muted);margin:-6px 0 12px">Arşivleme ve silme yalnızca bu aracı etkiler; diğer araçlardaki kayıtlar olduğu gibi kalır.</p>
+  <div class="modal-actions" style="justify-content:space-between"><div style="display:flex;gap:8px">
+    <button class="btn line" id="f_ars">${p.arsiv?'Arşivden çıkar':'Arşivle'}</button>
+    <button class="btn red" id="f_del">Eczaneyi sil</button></div>
+    <div style="display:flex;gap:10px"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="f_save">Kaydet</button></div></div>`);
+  $('#f_save').onclick=()=>{p.name=$('#f_name').value.trim()||p.name;p.city=$('#f_city').value.trim();p.owner=$('#f_owner').value.trim();p.startDate=$('#f_start').value;p.password=$('#f_pass').value.trim()||p.password;p.managerName=$('#f_mgr').value.trim();p.managerPassword=$('#f_mgrpass').value.trim();saveDB();closeModal();toast('Kaydedildi');render();};
+  $('#f_regen').onclick=()=>{$('#f_pass').value=genPass();};
+  /* Yalnızca bu araç için arşiv — merkezî kütüğe dokunmaz. */
+  $('#f_ars').onclick=()=>{p.arsiv=!p.arsiv;saveDB();closeModal();
+    toast(p.arsiv?'Eczane bu araçta arşivlendi':'Arşivden çıkarıldı');go('pharmacies');};
+  $('#f_del').onclick=()=>{if(confirm('Bu eczane ve tüm danışmanlık verisi silinsin mi? Geri alınamaz.')){DB.pharmacies=DB.pharmacies.filter(x=>x.id!==id);saveDB();closeModal();go('pharmacies');toast('Eczane silindi');}};
+}
+function reportModal(id){const p=DB.pharmacies.find(x=>x.id===id);modal(`<h3>Rapor / analiz ekle</h3>
+  <div class="field"><label>Başlık *</label><input id="r_title" placeholder="Örn. Başlangıç Durum Analizi"></div>
+  <div class="field"><label>İçerik / özet</label><textarea id="r_content" rows="7" placeholder="Analiz sonuçları, bulgular, öneriler..."></textarea></div>
+  <label class="check-row" style="margin-bottom:6px"><input type="checkbox" id="r_vis"><span>Bu raporu eczacı görebilsin</span></label>
+  <label class="check-row" style="margin-bottom:6px"><input type="checkbox" id="r_tvis"><span>Ekip de görebilsin</span></label>
+  <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="r_save">Ekle</button></div>`);
+  $('#r_save').onclick=()=>{const t=$('#r_title').value.trim();if(!t){toast('Başlık gerekli');return;}p.reports=p.reports||[];p.reports.push({id:'r'+Date.now(),title:t,content:$('#r_content').value.trim(),visible:$('#r_vis').checked,teamVisible:$('#r_tvis').checked,date:today()});saveDB();closeModal();toast('Rapor eklendi');renderPharmacy($('#content'));};
+}
+
+/* ---------- ASSIGNMENTS ---------- */
+function renderAssignments(body,p){
+  body.innerHTML='';
+  const hd=el('div');hd.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
+  hd.innerHTML='<div style="font-weight:700;color:var(--navy)">Eczacıya verilen görevler</div>';
+  const add=el('button','btn sm','+ Görev ata');add.onclick=()=>assignmentModal(p.id);hd.appendChild(add);body.appendChild(hd);
+  if(!p.assignments||!p.assignments.length){body.appendChild(el('div','card',`<div style="padding:18px;color:var(--muted)">Henüz görev atanmadı. Eczacıya bu ay için ödev/aksiyon atayın; eczacı kendi portalından görüp tamamladığında işaretleyebilir, siz de buradan takip edersiniz.</div>`));return;}
+  const groups={};const order=[];
+  p.assignments.forEach(a=>{const k=a.month||'Tarihsiz';if(!groups[k]){groups[k]=[];order.push(k);}groups[k].push(a);});
+  order.forEach(k=>{const g=groups[k];body.appendChild(el('div','sub-head',`<span class="sub-name">${esc(k)}</span><span class="sub-mat">${g.filter(a=>a.done).length}/${g.length} tamamlandı</span>`));g.forEach(a=>body.appendChild(assignmentRow(p,a)));});
+}
+function assignmentRow(p,a){
+  const row=el('div','card');row.style.cssText='padding:12px 16px;margin-bottom:8px';
+  row.innerHTML=`<div style="display:flex;gap:12px;align-items:flex-start">
+    <div class="switch ${a.done?'on':''}" data-done style="margin-top:1px;${a.done?'background:var(--green)':''};flex-shrink:0;cursor:pointer"><i></i></div>
+    <div style="flex:1;min-width:0"><div style="font-weight:600;${a.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(a.title)}</div>
+      ${a.desc?`<div style="font-size:12.5px;color:#555;margin-top:3px">${esc(a.desc)}</div>`:''}
+      <div style="font-size:11.5px;color:var(--muted);margin-top:4px">${a.dueDate?'Hedef: '+esc(a.dueDate)+' · ':''}${a.done?('✓ Tamamlandı'+(a.doneBy?' ('+esc(a.doneBy)+')':'')):'Bekliyor'}</div></div>
+    <button class="btn line sm" data-del>Sil</button></div>`;
+  row.querySelector('[data-done]').onclick=()=>{a.done=!a.done;a.doneBy=a.done?'Danışman':'';a.doneAt=a.done?today():'';saveDB();renderPharmacy($('#content'));};
+  row.querySelector('[data-del]').onclick=()=>{if(confirm('Görev silinsin mi?')){p.assignments=p.assignments.filter(x=>x.id!==a.id);saveDB();renderPharmacy($('#content'));}};
+  return row;
+}
+function assignmentModal(id){const p=DB.pharmacies.find(x=>x.id===id);const mon=new Date().toLocaleDateString('tr-TR',{month:'long',year:'numeric'});
+  modal(`<h3>Görev ata</h3>
+  <div class="field"><label>Görev başlığı *</label><input id="a_title" placeholder="Örn. Haftalık ekip toplantıları"></div>
+  <div class="field"><label>Açıklama</label><textarea id="a_desc" rows="3" placeholder="Detay, beklenti, nasıl yapılacağı..."></textarea></div>
+  <div class="field"><label>Dönem</label><input id="a_month" value="${esc(mon)}"></div>
+  <div class="field"><label>Hedef tarih</label><input id="a_due" type="date"></div>
+  <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="a_save">Ata</button></div>`);
+  $('#a_save').onclick=()=>{const t=$('#a_title').value.trim();if(!t){toast('Başlık gerekli');return;}p.assignments=p.assignments||[];p.assignments.push({id:'a'+Date.now(),title:t,desc:$('#a_desc').value.trim(),month:$('#a_month').value.trim(),dueDate:$('#a_due').value,done:false,doneBy:'',doneAt:'',createdAt:today()});saveDB();closeModal();toast('Görev atandı');renderPharmacy($('#content'));};
+}
+
+/* ---------- FILES ---------- */
+function fileKey(id){return 'apos_file_'+id;}
+function fmtSize(b){if(!b)return '';return b/1024<1024?Math.round(b/1024)+' KB':(b/1048576).toFixed(1)+' MB';}
+function addFileUpload(p,file){
+  if(file.size>3.6*1024*1024){toast('Dosya çok büyük (en fazla ~3.5 MB). Büyükler için bağlantı ekleyin.');return;}
+  const rd=new FileReader();
+  rd.onload=async()=>{const id='f'+Date.now();try{await Store.set(fileKey(id),rd.result);}catch(e){toast('Dosya kaydedilemedi');return;}
+    p.files.push({id,name:file.name,type:file.type,size:file.size,kind:'file',visible:false,date:today()});saveDB();toast('Dosya eklendi');renderPharmacy($('#content'));};
+  rd.readAsDataURL(file);
+}
+async function downloadFile(f){if(f.kind==='link'){window.open(f.url,'_blank');return;}try{const r=await Store.get(fileKey(f.id));const a=document.createElement('a');a.href=r.value;a.download=f.name;document.body.appendChild(a);a.click();a.remove();}catch(e){toast('Dosya bulunamadı');}}
+function deleteFileRec(p,f){if(!confirm('Dosya silinsin mi?'))return;if(f.kind==='file'){Store.delete(fileKey(f.id)).catch(()=>{});}p.files=p.files.filter(x=>x.id!==f.id);saveDB();renderPharmacy($('#content'));}
+function renderFiles(body,p){
+  body.innerHTML='';
+  const hd=el('div');hd.style.cssText='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px';
+  hd.innerHTML='<div style="font-weight:700;color:var(--navy)">Dosyalar</div>';
+  const acts=el('div');acts.style.cssText='display:flex;gap:8px';
+  const up=el('button','btn sm','⤒ Dosya yükle');const lnk=el('button','btn line sm','🔗 Bağlantı ekle');
+  const fi=el('input');fi.type='file';fi.className='hide';
+  up.onclick=()=>fi.click();fi.onchange=e=>{if(e.target.files[0])addFileUpload(p,e.target.files[0]);fi.value='';};
+  lnk.onclick=()=>linkModal(p.id);
+  acts.appendChild(up);acts.appendChild(lnk);acts.appendChild(fi);hd.appendChild(acts);body.appendChild(hd);
+  const info=el('div','card');info.style.cssText='padding:10px 14px;margin-bottom:12px;background:var(--tint);border:none;font-size:12px;color:var(--muted)';
+  info.textContent='Yüklenen dosyalar uygulamada saklanır (en fazla ~3.5 MB). Büyük dosyalar için bağlantı (örn. Google Drive) ekleyin. "Göster" açıkken eczacı portalından görüp indirebilir/açabilir.';
+  body.appendChild(info);
+  if(!p.files||!p.files.length){body.appendChild(el('div','card',`<div style="padding:18px;color:var(--muted)">Henüz dosya yok.</div>`));return;}
+  p.files.slice().reverse().forEach(f=>{
+    const item=el('div','card');item.style.cssText='padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap';
+    item.innerHTML=`<div style="min-width:0"><div style="font-weight:600">${f.kind==='link'?'🔗':'📄'} ${esc(f.name)} ${f.visible?'<span class="badge b-vis">Eczacı görür</span>':''}</div><div style="font-size:11.5px;color:var(--muted)">${esc(f.date||'')}${f.kind==='link'?' · Bağlantı':(f.size?' · '+fmtSize(f.size):'')}</div></div>`;
+    const a=el('div');a.style.cssText='display:flex;gap:6px;flex-wrap:wrap';
+    const dl=el('button','btn line sm',f.kind==='link'?'Aç':'İndir');dl.onclick=()=>downloadFile(f);
+    const tg=el('button','btn line sm',f.visible?'Eczacıdan gizle':'Eczacıya göster');tg.onclick=()=>{f.visible=!f.visible;saveDB();renderPharmacy($('#content'));};
+    const tg2=el('button','btn line sm',f.teamVisible?'Ekipten gizle':'Ekibe göster');tg2.onclick=()=>{f.teamVisible=!f.teamVisible;saveDB();renderPharmacy($('#content'));};
+    const dr=el('button','btn line sm','Sil');dr.onclick=()=>deleteFileRec(p,f);
+    a.appendChild(dl);a.appendChild(tg);a.appendChild(tg2);a.appendChild(dr);item.appendChild(a);body.appendChild(item);
+  });
+}
+function linkModal(id){const p=DB.pharmacies.find(x=>x.id===id);modal(`<h3>Bağlantı ekle</h3>
+  <div class="field"><label>Görünen ad *</label><input id="l_name" placeholder="Örn. Kategori Analizi (Drive)"></div>
+  <div class="field"><label>Bağlantı (URL) *</label><input id="l_url" placeholder="https://..."></div>
+  <label class="check-row" style="margin-bottom:6px"><input type="checkbox" id="l_vis"><span>Eczacı görebilsin</span></label>
+  <label class="check-row" style="margin-bottom:6px"><input type="checkbox" id="l_tvis"><span>Ekip görebilsin</span></label>
+  <div class="modal-actions"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="l_save">Ekle</button></div>`);
+  $('#l_save').onclick=()=>{const n=$('#l_name').value.trim();const u=$('#l_url').value.trim();if(!n||!u){toast('Ad ve bağlantı gerekli');return;}p.files=p.files||[];p.files.push({id:'f'+Date.now(),name:n,url:u,kind:'link',visible:$('#l_vis').checked,teamVisible:$('#l_tvis').checked,date:today()});saveDB();closeModal();toast('Bağlantı eklendi');renderPharmacy($('#content'));};
+}
+
+/* ---------- EXPORT (pharmacist report, visibility-filtered) ---------- */
+function exportReport(id){
+  const p=DB.pharmacies.find(x=>x.id===id);const m=phMaturity(p),lv=matLevel(m);
+  let html=`<div style="font-family:'Plus Jakarta Sans',sans-serif;color:#1c1c2e">
+    <div style="border-bottom:3px solid #DC1A22;padding-bottom:12px;margin-bottom:18px">
+      <div style="font-weight:800;letter-spacing:.12em;color:#DC1A22;font-size:12px">ARTIFARMA 360° · KURUMSAL ECZANE DANIŞMANLIĞI</div>
+      <h1 style="color:#2A2A5E;font-size:24px;margin:4px 0">${esc(p.name)} — Danışmanlık İlerleme Raporu</h1>
+      <div style="color:#6b6f86;font-size:13px">${esc(p.city||'')} · ${today()} · Genel olgunluk: %${m} (${lv[1]})</div></div>`;
+  DB.methodology.forEach((cat,ci)=>{
+    const vis=cat.items.filter(it=>(p.items[it.id]||{}).visible);
+    if(!vis.length)return;
+    html+=`<h3 style="color:#2A2A5E;margin:16px 0 6px;font-size:15px">${ci+1}. ${esc(cat.category)} <span style="color:#6b6f86;font-weight:600;font-size:12px">(%${catMaturity(p,cat)})</span></h3>`;
+    vis.forEach(it=>{const d=p.items[it.id];const st=itemStatus(d);const stx={ns:'Bekliyor',done:'Tamamlandı',na:'Uygulanamaz'}[st];const pc=phaseColor(it.phase);
+      html+=`<div style="border:1px solid #E6E8F2;border-radius:8px;padding:10px 12px;margin-bottom:7px">
+        <div style="font-weight:600">${d.done?'✓ ':''}${esc(it.title)} <span style="font-size:10px;font-weight:700;color:${pc};background:${pc}1a;padding:2px 7px;border-radius:10px;margin-left:4px">${esc(it.phase||'')}</span> <span style="font-size:11px;color:${st==='done'?'#0d7a4f':'#6b6f86'}">· ${stx}</span></div>
+        ${d.notes?`<div style="font-size:12.5px;margin-top:5px">${esc(d.notes)}</div>`:''}</div>`;});
+  });
+  const visReps=(p.reports||[]).filter(r=>r.visible);
+  if(visReps.length){html+=`<h3 style="color:#2A2A5E;margin:18px 0 6px;font-size:15px">Paylaşılan Raporlar</h3>`;
+    visReps.forEach(r=>{html+=`<div style="border:1px solid #E6E8F2;border-radius:8px;padding:10px 12px;margin-bottom:7px"><b>${esc(r.title)}</b> <span style="font-size:11px;color:#6b6f86">${esc(r.date)}</span><div style="font-size:12.5px;margin-top:5px;white-space:pre-wrap">${esc(r.content)}</div></div>`;});}
+  const totalVis=DB.methodology.reduce((a,c)=>a+c.items.filter(it=>(p.items[it.id]||{}).visible).length,0);
+  if(!totalVis&&!visReps.length){toast('Eczacıya görünür içerik seçilmemiş');return;}
+  html+=`<div style="margin-top:24px;color:#9aa0c0;font-size:11px;border-top:1px solid #E6E8F2;padding-top:10px">Bu rapor ARTIFARMA 360° Kurumsal Eczane Danışmanlığı programı ile üretilmiştir. Yalnızca eczacıyla paylaşılmak üzere işaretlenen içerikleri gösterir.</div></div>`;
+  const pa=$('#printArea');pa.innerHTML=html;pa.classList.remove('hide');window.print();setTimeout(()=>pa.classList.add('hide'),500);
+}
+
+/* ---------- TEAM ---------- */
+function renderTeam(c){
+  c.innerHTML='';
+  const info=el('div','card');info.style.cssText='padding:12px 16px;margin-bottom:16px;background:var(--tint);border:none;font-size:12.5px;color:var(--muted)';
+  info.textContent='Ekip üyelerinizi ekleyin; her birine bir ID ve şifre verilir. Üyeler kendi girişlerinden, kendilerine atanan görevleri görür, tamamlayıp not bırakır.';
+  c.appendChild(info);
+  if(!DB.team.length){c.appendChild(el('div','card',`<div class="empty" style="padding:40px"><div class="ei">◎</div><h3>Henüz ekip üyesi yok</h3><p>Ekibinizi ekleyerek maddelere görev atamaya başlayın.</p></div>`));return;}
+  const g=el('div','grid ph-grid');
+  DB.team.forEach(t=>{
+    let asg=0,done=0;DB.pharmacies.forEach(pp=>DB.methodology.forEach(cat=>cat.items.forEach(it=>{const d=pp.items[it.id];if(d&&d.assignee===t.id){asg++;if(d.teamDone)done++;}})));
+    const card=el('div','card ph-card');card.style.borderLeftColor='#2b5fae';
+    card.innerHTML=`<div class="ph-name">${esc(t.name)}</div><div class="ph-meta">${esc(t.role||'Ekip üyesi')}</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted)">🔑 ID <b style="color:var(--navy)">${esc(t.loginId)}</b> · Şifre <b style="color:var(--navy)">${esc(t.password)}</b></div>
+      <div class="ph-bottom"><span class="mat-pill" style="background:#eaf0fb;color:#2b5fae">${done}/${asg} görev tamam</span><span style="font-size:12px;color:var(--navy);font-weight:600">Düzenle →</span></div>`;
+    card.onclick=()=>teamModal(t.id);g.appendChild(card);
+  });
+  c.appendChild(g);
+}
+function teamModal(id){
+  const t=id?DB.team.find(x=>x.id===id):null;
+  modal(`<h3>${t?'Ekip üyesi':'Yeni ekip üyesi'}</h3>
+    <div class="field"><label>Ad soyad *</label><input id="t_name" value="${t?esc(t.name):''}" placeholder="Örn. Evren ..."></div>
+    <div class="field"><label>Görev / rol</label><input id="t_role" value="${t?esc(t.role||''):''}" placeholder="Örn. Dermokozmetik Eğitmeni"></div>
+    ${t?`<div class="field"><label>Giriş ID (üyeye verin)</label><input value="${esc(t.loginId)}" readonly style="background:#f3f4fa;font-weight:700;letter-spacing:.04em"></div>`:''}
+    <div class="field"><label>Giriş şifresi</label><div style="display:flex;gap:8px"><input id="t_pass" value="${t?esc(t.password):genPass()}" style="flex:1"><button class="btn line sm" type="button" id="t_regen">Yeni üret</button></div></div>
+    <div class="modal-actions" style="justify-content:space-between">${t?'<button class="btn red" id="t_del">Sil</button>':'<span></span>'}
+      <div style="display:flex;gap:10px"><button class="btn ghost" onclick="closeModal()">Vazgeç</button><button class="btn" id="t_save">${t?'Kaydet':'Ekle'}</button></div></div>`);
+  $('#t_regen').onclick=()=>{$('#t_pass').value=genPass();};
+  $('#t_save').onclick=()=>{const n=$('#t_name').value.trim();if(!n){toast('Ad gerekli');return;}const pass=$('#t_pass').value.trim()||genPass();const role=$('#t_role').value.trim();
+    if(t){t.name=n;t.role=role;t.password=pass;}else{DB.team.push({id:'t'+Date.now(),name:n,role:role,loginId:genTeamId(),password:pass});}
+    saveDB();closeModal();toast('Kaydedildi');
+    if(!t&&window.ArtifarmaKimlik){const _u=DB.team[DB.team.length-1];
+      ArtifarmaKimlik.goster({arac:'Danışman Kokpiti · Ekip',baslik:_u.name,kalici:true,
+        satirlar:[{etiket:'Ekip ID',deger:_u.loginId},{etiket:'Şifre',deger:_u.password}],
+        not:'Ekip üyesi bu bilgilerle girip yalnızca kendisine atanan görevleri görür.'});}
+    render();};
+  if(t){$('#t_del').onclick=()=>{if(confirm('Ekip üyesi silinsin mi? Atanmış görevlerdeki ataması kaldırılır.')){DB.pharmacies.forEach(pp=>DB.methodology.forEach(cat=>cat.items.forEach(it=>{const d=pp.items[it.id];if(d&&d.assignee===id){d.assignee='';d.teamDone=false;}})));DB.team=DB.team.filter(x=>x.id!==id);saveDB();closeModal();go('team');toast('Silindi');}};}
+}
+
+/* ---------- SETTINGS ---------- */
+function renderSettings(c){
+  c.innerHTML='';
+  const pinCard=el('div','card');pinCard.style.cssText='padding:20px;margin-bottom:16px;max-width:480px';
+  pinCard.innerHTML=`<h3 style="color:var(--navy);font-size:16px;margin-bottom:12px">Giriş PIN'i</h3>
+    <div class="field"><label>Yeni PIN (en az 4 hane)</label><input id="s_pin" type="password" inputmode="numeric" placeholder="Yeni PIN"></div>
+    <button class="btn sm" id="s_pinSave">PIN'i güncelle</button>`;
+  c.appendChild(pinCard);
+  $('#s_pinSave').onclick=()=>{const v=$('#s_pin').value.trim();if(v.length<4){toast('En az 4 hane');return;}DB.meta.pin=v;saveDB();$('#s_pin').value='';toast('PIN güncellendi');};
+
+  const bk=el('div','card');bk.style.cssText='padding:20px;margin-bottom:16px;max-width:480px';
+  bk.innerHTML=`<h3 style="color:var(--navy);font-size:16px;margin-bottom:8px">Veri yedekleme</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 12px">Tüm veriler (eczaneler, görevler, raporlar ve yüklenen dosyalar) tek dosyaya indirilir. Claude ortamından aldığın yedekleri de buradan yükleyebilirsin.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn sm" id="s_exp">⤓ Yedeği indir</button><button class="btn line sm" id="s_imp">⤒ Yedekten yükle</button><input type="file" id="s_file" accept=".json" class="hide"></div>`;
+  c.appendChild(bk);
+  /* Yedek, yüklenen dosyaların içeriğini de kapsar.
+     (Dosya içerikleri DB'nin dışında ayrı anahtarlarda saklanır; bunlar
+     yedeğe alınmazsa geri yüklemede "dosya bulunamadı" hatası çıkar.) */
+  $('#s_exp').onclick=async()=>{
+    const files={};let n=0;
+    for(const p of DB.pharmacies){
+      for(const f of (p.files||[])){
+        if(f.kind==='link')continue;
+        try{const r=await Store.get(fileKey(f.id));if(r&&r.value){files[f.id]=r.value;n++;}}catch(e){}
+      }
+    }
+    const paket={app:'apos360',version:2,exported:new Date().toISOString(),db:DB,files:files};
+    const blob=new Blob([JSON.stringify(paket,null,2)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+    a.download='apos360-yedek-'+today()+'.json';a.click();
+    toast(n?('Yedek indirildi · '+n+' dosya dahil'):'Yedek indirildi');
+  };
+  $('#s_imp').onclick=()=>$('#s_file').click();
+  /* Hem yeni paket biçimini hem de Claude ortamındaki eski
+     (yalnızca veritabanı içeren) yedekleri kabul eder. */
+  $('#s_file').onchange=e=>{
+    const f=e.target.files[0];if(!f)return;
+    const rd=new FileReader();
+    rd.onload=async()=>{
+      let o;
+      try{o=JSON.parse(rd.result);}catch(_){toast('Dosya okunamadı — geçerli bir yedek değil');return;}
+      const gelenDB=(o&&o.db)?o.db:o;
+      const gelenFiles=(o&&o.files)?o.files:null;
+      if(!gelenDB||!gelenDB.methodology||!gelenDB.pharmacies){toast('Yedek içeriği tanınmadı');return;}
+      const ec=gelenDB.pharmacies.length;
+      const df=gelenFiles?Object.keys(gelenFiles).length:0;
+      if(!confirm('Yedekteki '+ec+' eczane'+(df?(' ve '+df+' dosya'):'')+
+                  ' yüklenecek.\n\nMevcut veriler bunun yerine geçecek. Devam edilsin mi?'))return;
+      if(gelenFiles){
+        for(const id of Object.keys(gelenFiles)){
+          try{await Store.set(fileKey(id),gelenFiles[id]);}catch(err){
+            toast('Kayıt alanı doldu — büyük dosyalar aktarılamadı');break;}
+        }
+      }
+      DB=gelenDB;await saveDB();
+      toast(df?('Geri yüklendi · '+ec+' eczane, '+df+' dosya'):('Geri yüklendi · '+ec+' eczane'));
+      go('dashboard');
+    };
+    rd.readAsText(f);
+  };
+
+  const kv=el('div','card');kv.style.cssText='padding:20px;max-width:680px';
+  kv.innerHTML=`<h3 style="color:var(--navy);font-size:16px;margin-bottom:8px">KVKK metni</h3><div class="kvkk-box" style="max-height:240px">${KVKK_TEXT}</div>
+    <p style="color:var(--muted);font-size:12px;margin:10px 0 0">Onay tarihi: ${esc(DB.meta.kvkkAcceptedAt||'—')}</p>`;
+  c.appendChild(kv);
+}
+
+/* ---------- EMPTY ---------- */
+function emptyState(title,desc,btn,fn){const e=el('div','card');e.style.cssText='padding:10px';const inner=el('div','empty',`<div class="ei">◍</div><h3>${title}</h3><p>${desc}</p>`);const b=el('button','btn',btn);b.style.marginTop='14px';b.onclick=fn;inner.appendChild(b);e.appendChild(inner);return e;}
+
+/* ---------- SIDEBAR MOBILE ---------- */
+function toggleSide(){$('#side').classList.toggle('open');$('#scrim').classList.toggle('show');}
+function closeSideMobile(){$('#side').classList.remove('open');$('#scrim').classList.remove('show');}
+
+/* ---------- BOOT ---------- */
+/* Merkezî kayıt sayfasından gelen eczaneleri kendi biçimimizde oluşturur. */
+async function kuyruguIsle(){
+  if(!window.ArtifarmaKurulum) return;
+  const bekleyen=ArtifarmaKurulum.bekleyenler('program');
+  if(!bekleyen.length) return;
+  bekleyen.forEach(k=>{
+    if(DB.pharmacies.some(p=>(p.loginId||'').toUpperCase()===k.id.toUpperCase())){
+      ArtifarmaKurulum.tamamlandi('program',k.id); return;
+    }
+    DB.pharmacies.push({id:'p'+Date.now()+Math.random().toString(36).slice(2,5),
+      loginId:k.id,password:k.sifre,name:k.ad,city:k.sehir||'',owner:k.eczaci||'',
+      startDate:today(),createdAt:today(),items:newPharmacyItems(),reports:[],
+      generalNotes:'',pharmacistMessage:'',assignments:[],files:[],
+      managerName:'',managerPassword:''});
+    ArtifarmaKurulum.tamamlandi('program',k.id);
+  });
+  await saveDB();
+  toast(bekleyen.length+' eczane merkezî kayıttan kuruldu');
+}
+
+/* Merkezden gelen "tek kimliğe getir" emirlerini uygular:
+   eczaneyi adından bulur, ID ve şifresini ortak değerlerle değiştirir. */
+async function kuyruguEsitle(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('program','esle');
+  if(!emirler.length) return;
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    const p=DB.pharmacies.find(x=>_sade(x.name)===_sade(k.ad));
+    if(p){ p.loginId=k.id; p.password=k.sifre; sayi++; }
+    ArtifarmaKurulum.tamamlandi('program',k.id);
+  });
+  if(sayi){ await saveDB(); toast(sayi+' eczane ortak kimliğe getirildi'); }
+}
+
+/* Merkezden gelen silme emirleri — eczaneyi ve verisini kaldırır. */
+async function kuyruguSil(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('program','sil');
+  if(!emirler.length) return;
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    const once=DB.pharmacies.length;
+    DB.pharmacies=DB.pharmacies.filter(p=>
+      (p.loginId||'').toUpperCase()!==k.id.toUpperCase() && _sade(p.name)!==_sade(k.ad));
+    sayi+=once-DB.pharmacies.length;
+    ArtifarmaKurulum.tamamlandi('program',k.id);
+  });
+  if(sayi){ await saveDB(); toast(sayi+' eczane silindi'); }
+}
+
+async function boot(){
+  await loadDB();
+/* Merkezden gelen arşiv emirleri — eczane listelerde gizlenir. */
+async function kuyruguArsiv(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler('program','arsiv');
+  if(!emirler.length) return;
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let sayi=0;
+  emirler.forEach(k=>{
+    DB.pharmacies.forEach(p=>{
+      if((p.loginId||'').toUpperCase()===k.id.toUpperCase()||_sade(p.name)===_sade(k.ad)){
+        p.arsiv=!!k.arsivDeger; sayi++;
+      }
+    });
+    ArtifarmaKurulum.tamamlandi('program',k.id);
+  });
+  if(sayi) await saveDB();
+}
+
+  await kuyruguIsle();
+  await kuyruguEsitle();
+  await kuyruguSil();
+  await kuyruguArsiv();
+  $('#kvkkText').innerHTML=KVKK_TEXT;
+  if(DB.meta.kvkkAccepted){$('#kvkkGate').classList.add('hide');showLogin();}
+  else{
+    $('#kvkkChk').onchange=e=>{$('#kvkkBtn').disabled=!e.target.checked;};
+    $('#kvkkBtn').onclick=()=>{DB.meta.kvkkAccepted=true;DB.meta.kvkkAcceptedAt=new Date().toLocaleString('tr-TR');saveDB();$('#kvkkGate').classList.add('hide');showLogin();};
+  }
+}
+function showLogin(){
+  const g=$('#loginGate');g.classList.remove('hide');
+  const _tabs={cons:['#tabCons','#consForm'],ph:['#tabPh','#phForm'],team:['#tabTeam','#teamForm']};
+  const showTab=k=>{Object.keys(_tabs).forEach(x=>{$(_tabs[x][0]).classList.toggle('active',x===k);$(_tabs[x][1]).classList.toggle('hide',x!==k);});};
+  $('#tabCons').onclick=()=>showTab('cons');$('#tabPh').onclick=()=>showTab('ph');$('#tabTeam').onclick=()=>showTab('team');
+  const consLogin=()=>{const v=$('#pinInput').value.trim();if(v===DB.meta.pin){g.classList.add('hide');$('#app').classList.remove('hide');go('dashboard');}else{$('#pinErr').textContent='Hatalı PIN. Tekrar deneyin.';$('#pinInput').value='';}};
+  $('#pinBtn').onclick=consLogin;$('#pinInput').onkeydown=e=>{if(e.key==='Enter')consLogin();};
+  const phLogin=()=>{const id=$('#phLoginId').value.trim().toUpperCase();const pw=$('#phLoginPass').value.trim();const ph=DB.pharmacies.find(x=>x.loginId&&x.loginId.toUpperCase()===id&&((x.password||'')===pw||(x.managerPassword&&x.managerPassword===pw)));if(ph){/* Ara yönetici şifresi danışmanın bilerek verdiği bir yetkidir; eczacı seviyesinde sayılır. */
+const _rol='eczaci';if(window.ArtifarmaYetki&&ArtifarmaYetki.izin(ph.loginId,'program',_rol)==='yok'){$('#phErr').textContent=ArtifarmaYetki.mesaj(_rol);return;}g.classList.add('hide');renderPortal(ph);}else{$('#phErr').textContent='Eczane ID veya şifre hatalı.';}};
+  $('#phBtn').onclick=phLogin;$('#phLoginPass').onkeydown=e=>{if(e.key==='Enter')phLogin();};
+  const teamLogin=()=>{const id=$('#teamLoginId').value.trim().toUpperCase();const pw=$('#teamLoginPass').value.trim();const tm=(DB.team||[]).find(x=>x.loginId&&x.loginId.toUpperCase()===id&&(x.password||'')===pw);if(tm){g.classList.add('hide');renderTeamPortal(tm);}else{$('#teamErr').textContent='Ekip ID veya şifre hatalı.';}};
+  $('#teamBtn').onclick=teamLogin;$('#teamLoginPass').onkeydown=e=>{if(e.key==='Enter')teamLogin();};
+}
+function logout(){$('#app').classList.add('hide');$('#portal').classList.add('hide');$('#portal').innerHTML='';['pinInput','phLoginId','phLoginPass','teamLoginId','teamLoginPass'].forEach(i=>{const e=$('#'+i);if(e)e.value='';});['pinErr','phErr','teamErr'].forEach(i=>{const e=$('#'+i);if(e)e.textContent='';});showLogin();}
+function renderTeamPortal(tm){
+  const portal=$('#portal');portal.classList.remove('hide');
+  let h=`<div class="portal-top"><div class="pbrand"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span><div><div class="pl">ARTIFARMA 360°</div><div class="pls">Kurumsal Eczane Danışmanlığı</div></div></div><button class="btn sm" style="background:rgba(255,255,255,.16);color:#fff" onclick="logout()">Çıkış</button></div><div class="portal-body">
+    <div style="margin-bottom:18px"><div style="font-size:22px;font-weight:800;color:var(--navy)">${esc(tm.name)}</div><div style="color:var(--muted);font-size:13px">${esc(tm.role||'Ekip üyesi')} · Görev portalınız</div></div>`;
+  let totalA=0,totalD=0;let tasksHtml='';
+  DB.pharmacies.forEach(p=>{
+    const items=[];DB.methodology.forEach(cat=>cat.items.forEach(it=>{const d=p.items[it.id];if(d&&d.assignee===tm.id)items.push({it,d,cat});}));
+    if(!items.length)return;
+    tasksHtml+=`<div class="card" style="padding:14px 16px;margin-bottom:10px"><div style="font-weight:700;color:var(--navy);margin-bottom:6px">${esc(p.name)}</div>`;
+    items.forEach(o=>{const it=o.it,d=o.d,cat=o.cat;totalA++;if(d.teamDone)totalD++;
+      tasksHtml+=`<div style="padding:9px 0;border-top:1px solid #eef0f6"><div style="display:flex;gap:10px;align-items:flex-start">
+        <div class="switch ${d.teamDone?'on':''}" data-tt="${p.id}|${it.id}" style="margin-top:1px;${d.teamDone?'background:var(--green)':''};flex-shrink:0;cursor:pointer"><i></i></div>
+        <div style="flex:1;min-width:0"><div style="font-weight:600;${d.teamDone?'color:var(--muted)':''}">${esc(it.title)}</div>
+        <div style="font-size:11.5px;color:var(--muted)">${esc(cat.category)}${it.sub&&it.sub!=='Genel'?' · '+esc(it.sub):''}${d.dueDate?' · Hedef: '+esc(d.dueDate):''}</div>
+        ${d.notes?`<div style="font-size:12px;color:#555;margin-top:3px">Danışman notu: ${esc(d.notes)}</div>`:''}
+        <input data-tn="${p.id}|${it.id}" class="tn-inp" placeholder="Tamamlama notunuz / durum..." value="${esc(d.teamNote||'')}" style="width:100%;margin-top:6px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:12.5px"></div></div></div>`;});
+    tasksHtml+=`</div>`;
+  });
+  h+=`<div class="sec-title">Görevlerim (${totalD}/${totalA})</div>`;
+  h+= totalA? tasksHtml : `<div class="card" style="padding:18px;color:var(--muted)">Size atanmış görev yok. Danışmanınız bir maddeyi size atadığında burada görünür.</div>`;
+  let rfHtml='';
+  DB.pharmacies.forEach(p=>{
+    const vr=(p.reports||[]).filter(r=>r.teamVisible);const vf=(p.files||[]).filter(f=>f.teamVisible);
+    if(!vr.length&&!vf.length)return;
+    rfHtml+=`<div class="card" style="padding:14px 16px;margin-bottom:10px"><div style="font-weight:700;color:var(--navy);margin-bottom:6px">${esc(p.name)}</div>`;
+    vr.forEach(r=>{rfHtml+=`<div style="padding:7px 0;border-top:1px solid #eef0f6"><div style="font-weight:600">📑 ${esc(r.title)}</div><div style="font-size:12.5px;white-space:pre-wrap;color:#444;margin-top:3px">${esc(r.content)}</div></div>`;});
+    vf.forEach(f=>{rfHtml+=`<div style="padding:7px 0;border-top:1px solid #eef0f6;display:flex;justify-content:space-between;align-items:center;gap:10px"><span style="font-weight:600">${f.kind==='link'?'🔗':'📄'} ${esc(f.name)}</span><button class="btn line sm" data-tf="${p.id}|${f.id}">${f.kind==='link'?'Aç':'İndir'}</button></div>`;});
+    rfHtml+=`</div>`;
+  });
+  if(rfHtml){h+=`<div class="sec-title">Paylaşılan rapor & dosyalar</div>`+rfHtml;}
+  h+=`<div style="text-align:center;color:#aab;font-size:11px;margin-top:22px">ARTIFARMA 360° Kurumsal Eczane Danışmanlığı · Ekip Portalı</div></div>`;
+  portal.innerHTML=h;
+  portal.querySelectorAll('[data-tt]').forEach(sw=>sw.onclick=()=>{const a=sw.dataset.tt.split('|');const p=DB.pharmacies.find(x=>x.id===a[0]);const d=p.items[a[1]];d.teamDone=!d.teamDone;d.teamDoneAt=d.teamDone?today():'';saveDB();renderTeamPortal(tm);});
+  portal.querySelectorAll('.tn-inp').forEach(inp=>inp.oninput=()=>{const a=inp.dataset.tn.split('|');const p=DB.pharmacies.find(x=>x.id===a[0]);p.items[a[1]].teamNote=inp.value;saveSoon();});
+  portal.querySelectorAll('[data-tf]').forEach(b=>b.onclick=()=>{const a=b.dataset.tf.split('|');const p=DB.pharmacies.find(x=>x.id===a[0]);const f=p.files.find(x=>x.id===a[1]);downloadFile(f);});
+}
+function renderPortal(ph){
+  ensurePharmacyItems(ph);
+  const portal=$('#portal');portal.classList.remove('hide');
+  const m=phMaturity(ph),lv=matLevel(m);
+  let h=`<div class="portal-top"><div class="pbrand"><span class="af-chip"><img src="assets/logo.png" alt="Artıfarma Group"></span><div><div class="pl">ARTIFARMA 360°</div><div class="pls">Kurumsal Eczane Danışmanlığı</div></div></div><button class="btn sm" style="background:rgba(255,255,255,.16);color:#fff" onclick="logout()">Çıkış</button></div><div class="portal-body">
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:18px">${ringSVG(m,lv[2])}
+      <div><div style="font-size:22px;font-weight:800;color:var(--navy)">${esc(ph.name)}</div>
+      <div style="color:var(--muted);font-size:13px">Danışmanlık ilerleme portalınız</div>
+      <div style="margin-top:6px"><span class="mat-pill" style="background:${lv[2]}22;color:${lv[2]}">${lv[0]} · ${lv[1]} (%${m})</span></div></div></div>`;
+  let anyVis=false;let body='';
+  DB.methodology.forEach((cat,ci)=>{
+    const vis=cat.items.filter(it=>(ph.items[it.id]||{}).visible);
+    if(!vis.length)return;anyVis=true;
+    body+=`<div class="card" style="padding:14px 16px;margin-bottom:10px"><div style="font-weight:700;color:var(--navy);margin-bottom:6px">${ci+1}. ${esc(cat.category)}</div>`;
+    vis.forEach(it=>{const d=ph.items[it.id];const st=itemStatus(d);
+      const stxt={ns:'Bekliyor',done:'Tamamlandı',na:'—'}[st];const col=st==='done'?'#0d7a4f':'#6b6f86';const pc=phaseColor(it.phase);
+      body+=`<div style="padding:9px 0;border-top:1px solid #eef0f6"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span style="font-weight:500">${d.done?'✓ ':''}${esc(it.title)} <span style="font-size:9.5px;font-weight:700;color:${pc};background:${pc}1a;padding:2px 6px;border-radius:9px">${esc(it.phase||'')}</span></span><span style="font-size:11.5px;font-weight:700;color:${col};white-space:nowrap">${stxt}</span></div>
+        ${d.notes?`<div style="font-size:12.5px;color:#555;margin-top:4px">${esc(d.notes)}</div>`:''}
+        <input data-pn="${it.id}" class="pn-inp" placeholder="Bu konuda notunuz / sorunuz..." value="${esc(d.pharmNote||'')}" style="width:100%;margin-top:6px;padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:12.5px"></div>`;});
+    body+=`</div>`;
+  });
+  h+=`<div class="sec-title">Çalışmalarımız</div>`;
+  h+= anyVis? body : `<div class="card" style="padding:18px;color:var(--muted)">Danışmanınız sizinle paylaşılacak içerikleri hazırladıkça burada görünecek.</div>`;
+  const vr=(ph.reports||[]).filter(r=>r.visible);
+  if(vr.length){h+=`<div class="sec-title">Paylaşılan Raporlar</div>`;vr.forEach(r=>{h+=`<div class="card" style="padding:14px 16px;margin-bottom:10px"><div style="font-weight:700;color:var(--navy)">${esc(r.title)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(r.date)}</div><div style="font-size:13px;margin-top:6px;white-space:pre-wrap">${esc(r.content)}</div></div>`;});}
+  if(ph.assignments&&ph.assignments.length){h+=`<div class="sec-title">Görevlerim</div>`;
+    ph.assignments.forEach(a=>{h+=`<div class="card" style="padding:12px 16px;margin-bottom:8px"><div style="display:flex;gap:12px;align-items:flex-start">
+      <div class="switch ${a.done?'on':''}" data-pa="${a.id}" style="margin-top:1px;${a.done?'background:var(--green)':''};flex-shrink:0;cursor:pointer"><i></i></div>
+      <div style="flex:1;min-width:0"><div style="font-weight:600;${a.done?'text-decoration:line-through;color:var(--muted)':''}">${esc(a.title)}</div>
+      ${a.desc?`<div style="font-size:12.5px;color:#555;margin-top:3px">${esc(a.desc)}</div>`:''}
+      <div style="font-size:11.5px;color:var(--muted);margin-top:4px">${a.month?esc(a.month)+' · ':''}${a.dueDate?'Hedef: '+esc(a.dueDate)+' · ':''}${a.done?'✓ Tamamlandı':'Bekliyor'}</div></div></div></div>`;});}
+  const vf=(ph.files||[]).filter(f=>f.visible);
+  if(vf.length){h+=`<div class="sec-title">Dosyalar</div>`;vf.forEach(f=>{h+=`<div class="card" style="padding:12px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px"><div style="min-width:0"><div style="font-weight:600">${f.kind==='link'?'🔗':'📄'} ${esc(f.name)}</div><div style="font-size:11.5px;color:var(--muted)">${esc(f.date||'')}</div></div><button class="btn line sm" data-pf="${f.id}">${f.kind==='link'?'Aç':'İndir'}</button></div>`;});}
+  h+=`<div class="sec-title">Danışmanınıza mesaj</div><div class="card" style="padding:14px 16px"><textarea id="phMsg" class="notes-ta" style="min-height:80px" placeholder="Danışmanınıza iletmek istedikleriniz...">${esc(ph.pharmacistMessage||'')}</textarea></div>
+  <div class="sec-title">Hesabım</div><div class="card" style="padding:14px 16px"><div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">Eczane ID: <b style="color:var(--navy)">${esc(ph.loginId||'')}</b></div><div class="field" style="margin-bottom:8px"><label>Yeni şifre</label><input id="phNewPass" type="password" placeholder="En az 4 karakter"></div><button class="btn sm" id="phPassBtn">Şifremi güncelle</button></div>
+    <div style="text-align:center;color:#aab;font-size:11px;margin-top:22px">ARTIFARMA 360° Kurumsal Eczane Danışmanlığı</div></div>`;
+  portal.innerHTML=h;
+  portal.querySelectorAll('.pn-inp').forEach(inp=>inp.oninput=()=>{ph.items[inp.dataset.pn].pharmNote=inp.value;saveSoon();});
+  portal.querySelectorAll('[data-pa]').forEach(sw=>sw.onclick=()=>{const a=ph.assignments.find(x=>x.id===sw.dataset.pa);a.done=!a.done;a.doneBy=a.done?'Eczacı':'';a.doneAt=a.done?today():'';saveDB();renderPortal(ph);});
+  portal.querySelectorAll('[data-pf]').forEach(b=>b.onclick=()=>{const f=ph.files.find(x=>x.id===b.dataset.pf);downloadFile(f);});
+  const msg=portal.querySelector('#phMsg');if(msg)msg.oninput=()=>{ph.pharmacistMessage=msg.value;saveSoon();};
+  const ppb=portal.querySelector('#phPassBtn');if(ppb)ppb.onclick=()=>{const np=portal.querySelector('#phNewPass');const v=np.value.trim();if(v.length<4){toast('Şifre en az 4 karakter olmalı');return;}ph.password=v;saveDB();np.value='';toast('Şifreniz güncellendi');};
+}
+boot();
+</script>
+</body>
+</html>

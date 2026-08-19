@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artıfarma · 360° SWOT Tanı Paneli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2A2A5E;--navy-700:#22224d;--navy-900:#16162f;
+    --red:#DC1A22;--red-700:#b71219;
+    --ink:#1d1d2b;--muted:#6b6b80;--line:#e6e6ee;--line-strong:#d2d2e0;
+    --bg:#f5f5f9;--card:#fff;--soft:#f0f0f6;
+    --ok:#1f8a52;--ok-bg:#e7f4ec;--warn:#b8860b;--warn-bg:#fbf3e0;
+    --s:#1f8a52;--w:#DC1A22;--o:#2A6FDC;--t:#b35a00;
+    --radius:14px;--radius-sm:9px;
+    --shadow:0 1px 2px rgba(22,22,47,.04),0 8px 24px rgba(22,22,47,.06);
+    --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  header.top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--red)}
+  .top-inner{display:flex;align-items:center;gap:14px;height:62px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;letter-spacing:-.01em;cursor:pointer}
+  .logo .mark{width:30px;height:30px;border-radius:8px;background:var(--red);display:grid;place-items:center;font-size:15px;font-weight:800}
+  .logo small{display:block;font-size:10px;font-weight:600;letter-spacing:.14em;color:#b9b9d6;text-transform:uppercase;margin-top:1px}
+  .top-spacer{flex:1}
+  .top-nav{display:flex;gap:6px;align-items:center}
+  .top-nav button{background:transparent;border:none;color:#c2c2df;font-family:var(--font);font-weight:600;font-size:13px;padding:8px 12px;border-radius:7px;cursor:pointer}
+  .top-nav button:hover,.top-nav button.active{background:rgba(255,255,255,.1);color:#fff}
+  .whoami{font-size:12px;color:#b9b9d6;border-left:1px solid rgba(255,255,255,.2);padding-left:12px}
+  .whoami b{color:#fff;display:block;font-size:13px}
+  .btn{font-family:var(--font);font-weight:600;font-size:14px;border:none;border-radius:var(--radius-sm);padding:10px 16px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px;line-height:1}
+  .btn:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+  .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-700)}
+  .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+  .btn-ghost{background:var(--soft);color:var(--navy)}.btn-ghost:hover{background:#e6e6f0}
+  .btn-line{background:#fff;color:var(--navy);border:1.5px solid var(--line-strong)}.btn-line:hover{border-color:var(--navy)}
+  .btn-sm{padding:7px 12px;font-size:13px}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  main{padding:30px 0 80px}
+  .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
+  .page-head h1{font-size:25px;font-weight:800;letter-spacing:-.02em;color:var(--navy)}
+  .page-head p{color:var(--muted);font-size:14px;margin-top:4px;max-width:600px}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+  .grid{display:grid;gap:16px}.grid-cards{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .ph-card{padding:20px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+  .ph-card:hover{border-color:var(--navy);transform:translateY(-2px)}
+  .ph-card .accent{position:absolute;top:0;left:0;width:4px;height:100%;background:var(--navy)}
+  .ph-card h3{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:3px}
+  .ph-card .loc{font-size:13px;color:var(--muted);margin-bottom:6px}
+  .ph-card .code{font-size:11px;font-weight:700;color:var(--red);letter-spacing:.05em;margin-bottom:14px}
+  .ph-card .stats{display:flex;gap:18px;border-top:1px solid var(--line);padding-top:13px}
+  .ph-card .stat b{display:block;font-size:18px;font-weight:800}.ph-card .stat span{font-size:11px;color:var(--muted);font-weight:500}
+  .empty{text-align:center;padding:70px 20px;border:2px dashed var(--line-strong);border-radius:var(--radius);background:#fafafd}
+  .empty .ico{width:54px;height:54px;border-radius:14px;background:var(--soft);display:grid;place-items:center;margin:0 auto 16px;font-size:24px}
+  .empty h3{font-size:18px;color:var(--navy);margin-bottom:6px}
+  .empty p{color:var(--muted);font-size:14px;max-width:420px;margin:0 auto 18px}
+  .section{margin-bottom:26px}
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px;flex-wrap:wrap}
+  .section-head h2{font-size:15px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:9px}
+  .section-head h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--red)}
+  .info-row{display:flex;gap:14px;flex-wrap:wrap}
+  .info-box{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px}
+  .info-box label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px}
+  .info-box .v{font-size:15px;font-weight:600}
+  .info-box .v.code{color:var(--red);letter-spacing:.04em}
+  .person-row{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:9px;flex-wrap:wrap}
+  .avatar{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:800;color:#fff;font-size:14px;flex-shrink:0;background:var(--navy)}
+  .person-row .who{flex:1;min-width:140px}
+  .person-row .who b{font-size:15px;display:block}.person-row .who span{font-size:12px;color:var(--muted)}
+  .pwbox{font-size:12px;background:var(--soft);border-radius:7px;padding:5px 9px;font-weight:700;color:var(--navy);letter-spacing:.04em}
+  .progress{height:7px;background:var(--soft);border-radius:20px;overflow:hidden;margin-top:12px}
+  .progress>i{display:block;height:100%;background:var(--ok);border-radius:20px;transition:width .3s}
+  .tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:30px;white-space:nowrap}
+  .tag-done{background:var(--ok-bg);color:var(--ok)}.tag-todo{background:var(--soft);color:var(--muted)}.tag-part{background:var(--warn-bg);color:var(--warn)}
+  .row-actions{display:flex;gap:7px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+  .overlay{position:fixed;inset:0;background:rgba(22,22,47,.55);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto}
+  .overlay.open{display:flex}
+  .modal{background:#fff;border-radius:var(--radius);width:100%;max-width:560px;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:pop .18s ease}
+  .modal.wide{max-width:780px}
+  @keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .modal-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+  .modal-head h3{font-size:18px;font-weight:700;color:var(--navy)}
+  .modal-head .x{background:var(--soft);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:18px;color:var(--muted)}
+  .modal-body{padding:22px 24px;max-height:66vh;overflow-y:auto}
+  .modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px;background:#fafafd;border-radius:0 0 var(--radius) var(--radius)}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+  .field input,.field textarea,.field select{width:100%;font-family:var(--font);font-size:14px;padding:10px 12px;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);color:var(--ink);background:#fff}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--navy)}
+  .field textarea{resize:vertical;min-height:70px}
+  .checks{display:grid;gap:8px;max-height:230px;overflow-y:auto}
+  .checks label{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);cursor:pointer;font-size:14px}
+  .checks label:hover{border-color:var(--navy)}.checks input{width:auto}
+  .dim{border:1px solid var(--line);border-radius:var(--radius-sm);margin-bottom:14px;overflow:hidden}
+  .dim-head{background:var(--soft);padding:11px 15px;font-size:13px;font-weight:700;color:var(--navy)}
+  .dim-head.fb{background:var(--navy);color:#fff}
+  .q{padding:12px 15px;border-top:1px solid var(--line)}.q:first-of-type{border-top:none}
+  .q-text{font-size:13.5px;margin-bottom:9px;font-weight:500}
+  .scale-grp{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .scale-grp .lbl{font-size:11px;font-weight:700;color:var(--muted);width:78px;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em}
+  .likert{display:flex;gap:5px}
+  .likert button{width:34px;height:34px;border:1.5px solid var(--line-strong);background:#fff;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted)}
+  .likert button.on{color:#fff;background:var(--navy);border-color:var(--navy)}
+  .peer-block{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 15px;margin-bottom:10px}
+  .peer-block .ph{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+  .peer-block .ph .av{width:26px;height:26px;border-radius:7px;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800}
+  /* question bank rows */
+  .qbank-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+  .qbank-tabs button{padding:8px 13px;font-size:13px;font-weight:600;border:1.5px solid var(--line);background:#fff;border-radius:30px;cursor:pointer;color:var(--muted)}
+  .qbank-tabs button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .qb-group{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);margin:18px 0 8px}
+  .qb-row{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 14px;margin-bottom:7px}
+  .qb-row.hidden{opacity:.5;background:#fafafd}
+  .qb-row .qt{flex:1;font-size:13.5px}
+  .qb-row .typ{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--soft);color:var(--muted);text-transform:uppercase}
+  .aud{display:flex;gap:3px;flex-wrap:wrap;max-width:130px;justify-content:flex-end}
+  .aud-badge{font-size:9px;font-weight:800;color:#fff;padding:2px 5px;border-radius:5px;letter-spacing:.02em}
+  .iconbtn{background:var(--soft);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:15px;color:var(--navy)}
+  .iconbtn:hover{background:#e6e6f0}
+  /* swot */
+  .swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+  .quad{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;background:#fff}
+  .quad h4{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+  .quad h4 .b{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;color:#fff;font-size:12px}
+  .quad.s{border-top:3px solid var(--s)}.quad.s h4{color:var(--s)}.quad.s .b{background:var(--s)}
+  .quad.w{border-top:3px solid var(--w)}.quad.w h4{color:var(--w)}.quad.w .b{background:var(--w)}
+  .quad.o{border-top:3px solid var(--o)}.quad.o h4{color:var(--o)}.quad.o .b{background:var(--o)}
+  .quad.t{border-top:3px solid var(--t)}.quad.t h4{color:var(--t)}.quad.t .b{background:var(--t)}
+  .quad ul{list-style:none}
+  .quad li{font-size:13.5px;padding:6px 0 6px 16px;position:relative;border-top:1px dashed var(--line)}
+  .quad li:first-child{border-top:none}
+  .quad li:before{content:"";position:absolute;left:2px;top:13px;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+  .insight{background:var(--navy);color:#fff;border-radius:var(--radius-sm);padding:18px 20px;margin-bottom:14px}
+  .insight h4{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;margin-bottom:10px;display:flex;gap:8px;align-items:center}
+  .insight h4 .b{background:var(--red);width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px}
+  .insight ul{list-style:none}
+  .insight li{font-size:13.5px;padding:6px 0 6px 16px;position:relative;border-top:1px solid rgba(255,255,255,.12);color:#e4e4f2}
+  .insight li:first-child{border-top:none}
+  .insight li:before{content:"›";position:absolute;left:0;color:var(--red);font-weight:800}
+  .swot-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--line)}
+  .swot-tab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;margin-bottom:-1px}
+  .swot-tab.active{color:var(--navy);border-color:var(--red)}
+  .report-block{margin-bottom:30px}
+  .report-block .rb-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:3px}
+  .report-block .rb-sub{font-size:12px;color:var(--muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy-900);color:#fff;padding:13px 22px;border-radius:30px;font-size:14px;font-weight:600;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.25);display:none}
+  .toast.show{display:block;animation:pop .2s}
+  .loadbox{text-align:center;padding:50px 20px}
+  .spinner{width:38px;height:38px;border:3px solid var(--line);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loadbox p{color:var(--muted);font-size:14px}
+  .banner{background:var(--warn-bg);border:1px solid #ecd9a6;border-radius:var(--radius-sm);padding:12px 16px;font-size:13px;color:#7a5c00;margin-bottom:18px;display:flex;gap:10px}
+  .banner.err{background:#fde8e8;border-color:#f3b4b4;color:#a01217}
+  .banner.ok{background:var(--ok-bg);border-color:#bfe3cd;color:#176b40}
+  .meta-line{font-size:12px;color:var(--muted);margin-top:8px}
+  /* login */
+  .login-screen{min-height:100vh;display:grid;place-items:center;background:var(--navy);padding:20px}
+  .login-card{background:#fff;border-radius:18px;padding:34px 30px;width:100%;max-width:390px;box-shadow:0 30px 70px rgba(0,0,0,.4)}
+  .logochip{background:#fff;border-radius:8px;padding:5px 10px;display:inline-flex;align-items:center;height:38px}
+  .logochip img{height:24px;width:auto;display:block}
+  .navsub{font-size:10px;font-weight:700;letter-spacing:.14em;color:#b9b9d6;text-transform:uppercase}
+  .login-logo{height:48px;width:auto;display:block;margin-bottom:16px}
+  .staff-logochip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:34px}
+  .staff-logochip img{height:22px;width:auto;display:block}
+  .login-card .mark{width:46px;height:46px;border-radius:12px;background:var(--red);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800;margin-bottom:18px}
+  .login-card h2{font-size:21px;color:var(--navy);margin-bottom:4px}
+  .login-card p{font-size:13px;color:var(--muted);margin-bottom:20px}
+  .login-toggle{display:flex;gap:6px;background:var(--soft);padding:5px;border-radius:10px;margin-bottom:20px}
+  .login-toggle button{flex:1;border:none;background:transparent;font-family:var(--font);font-weight:600;font-size:13px;padding:9px;border-radius:7px;cursor:pointer;color:var(--muted)}
+  .login-toggle button.active{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  /* staff thank you */
+  .staff-wrap{max-width:760px;margin:0 auto;padding:24px 20px 80px}
+  .staff-top{background:var(--navy);color:#fff;padding:18px 20px;border-radius:0 0 16px 16px;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+  .staff-top .mark{width:34px;height:34px;border-radius:9px;background:var(--red);display:grid;place-items:center;font-weight:800}
+  .staff-top b{font-size:16px}.staff-top span{font-size:12px;color:#b9b9d6;display:block}
+  .thanks{text-align:center;padding:70px 20px}
+  .thanks .big{font-size:48px;margin-bottom:14px}
+  .thanks h2{color:var(--navy);font-size:24px;margin-bottom:8px}
+  .thanks p{color:var(--muted);max-width:420px;margin:0 auto 20px}
+  @media (max-width:640px){.swot-grid{grid-template-columns:1fr}.page-head h1{font-size:21px}.scale-grp .lbl{width:100%}.top-nav button{padding:8px}}
+  @media print{header.top,.staff-top,.swot-tabs,.no-print,.btn{display:none!important}body{background:#fff}main,.staff-wrap{padding:0}.report-block{page-break-inside:avoid}.print-cover{display:block!important}}
+  .print-cover{display:none;border-bottom:4px solid var(--navy);padding-bottom:18px;margin-bottom:26px}
+  .print-cover .pl{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:700}
+  .print-cover h1{font-size:28px;color:var(--navy);margin:4px 0}
+  .print-cover .mt{font-size:13px;color:var(--muted)}
+</style>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/logo.png">
+<script src="assets/core.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+<div class="overlay" id="confirm-overlay" style="z-index:150"><div class="modal" id="confirm-box" style="max-width:430px">
+  <div class="modal-head"><h3 id="confirm-title">Onay</h3></div>
+  <div class="modal-body"><p id="confirm-msg" style="font-size:15px;line-height:1.55"></p></div>
+  <div class="modal-foot"><button class="btn btn-line" id="confirm-cancel">Vazgeç</button><button class="btn btn-primary" id="confirm-ok">Evet</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+const LOGO="assets/logo.png";
+/* =========================================================
+   ARTIFARMA 360° SWOT TANI PANELİ — v3
+   Bireysel giriş (Eczane ID + kişi şifresi) · tam gizlilik
+   Merkezî düzenlenebilir soru bankası · eczaneye özel PDF rapor
+   ========================================================= */
+
+const ROLES={
+  eczaci:{label:"Eczacı",color:"#2A2A5E"},
+  ikinci_eczaci:{label:"İkinci Eczacı",color:"#3a3a72"},
+  yardimci_eczaci:{label:"Yardımcı Eczacı",color:"#484886"},
+  teknisyen:{label:"Eczane Teknisyeni",color:"#DC1A22"},
+  dermokozmetik:{label:"Dermokozmetik Uzmanı",color:"#b35a00"},
+  cirak:{label:"Çırak",color:"#6b6b80"},
+};
+const ROLE_KEYS=Object.keys(ROLES);
+
+/* ---------- VARSAYILAN SORU BANKASI ---------- */
+const BANK_VERSION=3;
+function defaultBank(){
+  const Q=(group,text,type)=>({id:uid(),group,text,type:type||"scale",hidden:false});
+  return {
+    eczaci:[
+      Q("Liderlik & Yönetim","Eczanenizin en önemli hedefi nedir?","open"),
+      Q("Liderlik & Yönetim","Ekibiniz bu hedefi biliyor mu?"),
+      Q("Liderlik & Yönetim","Çalışanlarınıza görev verirken yazılı sistem kullanıyor musunuz?"),
+      Q("Liderlik & Yönetim","Verdiğiniz görevlerin takibini nasıl yapıyorsunuz?","open"),
+      Q("Liderlik & Yönetim","İşler size sorulmadan ilerleyebiliyor mu?"),
+      Q("Liderlik & Yönetim","Siz olmadığınızda eczane aynı düzenle çalışabilir mi?"),
+      Q("Liderlik & Yönetim","Son bir yılda ekibinizde hangi gelişimleri sağladınız?","open"),
+      Q("Liderlik & Yönetim","Çalışanlarınıza düzenli geri bildirim veriyor musunuz?"),
+      Q("Liderlik & Yönetim","Haftalık ekip toplantıları yapıyor musunuz?"),
+      Q("Liderlik & Yönetim","Performansı nasıl ölçüyorsunuz?","open"),
+      Q("Liderlik & Yönetim","En çok zamanınızı alan işler nelerdir?","open"),
+      Q("Liderlik & Yönetim","Operasyondan çıkıp stratejiye yeterince zaman ayırabiliyor musunuz?"),
+      Q("Mesleki Yetkinlik","Kendinizi hangi alanlarda güçlü görüyorsunuz?","open"),
+      Q("Mesleki Yetkinlik","En son hangi mesleki eğitime katıldınız?","open"),
+      Q("Mesleki Yetkinlik","OTC danışmanlığında kendinizi nasıl değerlendirirsiniz?"),
+      Q("Mesleki Yetkinlik","Dermokozmetik danışmanlığı yapabiliyor musunuz?"),
+      Q("Mesleki Yetkinlik","Takviye ürünlerde ne kadar rahatsınız?"),
+      Q("Mesleki Yetkinlik","Hastalar size özellikle danışmanlık için gelir mi?"),
+      Q("Mesleki Yetkinlik","Hastalar sizi isminizle tanıyor mu?"),
+      Q("İşletmecilik","Aylık ciroyu biliyor musunuz?"),
+      Q("İşletmecilik","Net kârlılığı biliyor musunuz?"),
+      Q("İşletmecilik","En kârlı kategoriniz hangisi?","open"),
+      Q("İşletmecilik","En düşük devir yapan kategori hangisi?","open"),
+      Q("İşletmecilik","Miat raporlarını takip ediyor musunuz?"),
+      Q("İşletmecilik","Yazılımın raporlarını düzenli inceliyor musunuz?"),
+      Q("İşletmecilik","Günlük satış analizlerini kim yapıyor?","open"),
+      Q("Finans","Günlük nakit akışını takip ediyor musunuz?"),
+      Q("Finans","Aylık bütçe hazırlıyor musunuz?"),
+      Q("Finans","Gider hedefleriniz var mı?"),
+      Q("Finans","Borç ve alacak dengenizi düzenli izliyor musunuz?"),
+      Q("Finans","Karlılığı artırmak için belirlediğiniz KPI'lar var mı?"),
+      Q("Dijitalleşme","Yapay zekâyı kullanıyor musunuz?"),
+      Q("Dijitalleşme","Google yorumlarını takip ediyor musunuz?"),
+      Q("Dijitalleşme","Sosyal medya planınız var mı?"),
+      Q("Dijitalleşme","WhatsApp müşteri grubunuz var mı?"),
+      Q("Dijitalleşme","Dijital sadakat sisteminiz bulunuyor mu?"),
+      Q("Kurumsallaşma","Yazılı görev tanımları var mı?"),
+      Q("Kurumsallaşma","İşe başlayan personele oryantasyon uygulanıyor mu?"),
+      Q("Kurumsallaşma","Standart operasyon prosedürleriniz (SOP) var mı?"),
+      Q("Kurumsallaşma","Çalışan el kitabınız bulunuyor mu?"),
+      Q("Kurumsallaşma","Eczanenin yazılı kuralları var mı?"),
+      Q("Gelecek Vizyonu","Beş yıl sonra eczanenizi nerede görüyorsunuz?","open"),
+      Q("Gelecek Vizyonu","Yeni sağlık hizmetleri sunmayı düşünüyor musunuz?"),
+      Q("Gelecek Vizyonu","Teknoloji yatırımı planlıyor musunuz?"),
+      Q("Gelecek Vizyonu","Kendi markanızı oluşturmayı düşünüyor musunuz?"),
+    ],
+    ikinci_eczaci:[
+      Q("Liderlik","Ekip sizi lider olarak görüyor mu?"),
+      Q("Liderlik","Karar alma sürecine katılıyor musunuz?"),
+      Q("Liderlik","İş dağılımında aktif rol alıyor musunuz?"),
+      Q("Liderlik","Sorun yaşandığında ilk size mi gelinir?"),
+      Q("Mesleki","Güncel tedavi rehberlerini takip ediyor musunuz?"),
+      Q("Mesleki","OTC danışmanlığı konusunda kendinizi nasıl değerlendirirsiniz?"),
+      Q("Mesleki","Dermokozmetik danışmanlığı yapıyor musunuz?"),
+      Q("Mesleki","Takviye ürün bilgileriniz yeterli mi?"),
+      Q("Operasyon","Sipariş yönetiminde görev alıyor musunuz?"),
+      Q("Operasyon","Raf düzenini kontrol ediyor musunuz?"),
+      Q("Operasyon","Miat kontrollerini yapıyor musunuz?"),
+      Q("Operasyon","Stok analizlerini inceliyor musunuz?"),
+      Q("Takım Çalışması","Ekibe eğitim veriyor musunuz?"),
+      Q("Takım Çalışması","Yeni başlayan personele destek oluyor musunuz?"),
+      Q("Takım Çalışması","Çatışmaları çözebiliyor musunuz?"),
+    ],
+    yardimci_eczaci:[
+      Q("Liderlik","Ekip sizi lider olarak görüyor mu?"),
+      Q("Liderlik","Karar alma sürecine katılıyor musunuz?"),
+      Q("Liderlik","İş dağılımında aktif rol alıyor musunuz?"),
+      Q("Liderlik","Sorun yaşandığında ilk size mi gelinir?"),
+      Q("Mesleki","Güncel tedavi rehberlerini takip ediyor musunuz?"),
+      Q("Mesleki","OTC danışmanlığı konusunda kendinizi nasıl değerlendirirsiniz?"),
+      Q("Mesleki","Dermokozmetik danışmanlığı yapıyor musunuz?"),
+      Q("Mesleki","Takviye ürün bilgileriniz yeterli mi?"),
+      Q("Operasyon","Sipariş yönetiminde görev alıyor musunuz?"),
+      Q("Operasyon","Raf düzenini kontrol ediyor musunuz?"),
+      Q("Operasyon","Miat kontrollerini yapıyor musunuz?"),
+      Q("Operasyon","Stok analizlerini inceliyor musunuz?"),
+      Q("Takım Çalışması","Ekibe eğitim veriyor musunuz?"),
+      Q("Takım Çalışması","Yeni başlayan personele destek oluyor musunuz?"),
+      Q("Takım Çalışması","Çatışmaları çözebiliyor musunuz?"),
+    ],
+    teknisyen:[
+      Q("Kişisel","Kendinizi bu meslekte nerede görüyorsunuz?","open"),
+      Q("Kişisel","En güçlü yönünüz nedir?","open"),
+      Q("Kişisel","En geliştirmek istediğiniz yönünüz nedir?","open"),
+      Q("Kişisel","Eğitimlere katılmayı sever misiniz?"),
+      Q("Mesleki","OTC ürün önerirken rahat mısınız?"),
+      Q("Mesleki","Dermokozmetik bilgileriniz yeterli mi?"),
+      Q("Mesleki","Takviye ürün öneriyor musunuz?"),
+      Q("Mesleki","En güçlü olduğunuz kategori hangisi?","open"),
+      Q("Operasyon","Sipariş hazırlıyor musunuz?"),
+      Q("Operasyon","Raf düzeniyle ilgileniyor musunuz?"),
+      Q("Operasyon","Miat kontrolü yapıyor musunuz?"),
+      Q("Operasyon","Barkod sistemine hâkim misiniz?"),
+      Q("Satış","Tamamlayıcı satış yapıyor musunuz?"),
+      Q("Satış","Kampanyaları müşteriye anlatıyor musunuz?"),
+      Q("Satış","Ortalama kaç ürün öneriyorsunuz?","open"),
+      Q("Satış","En başarılı satışınız neydi?","open"),
+      Q("İletişim","Zor müşterilerle nasıl baş ediyorsunuz?","open"),
+      Q("İletişim","Hasta sizi tekrar görmek ister mi?"),
+      Q("İletişim","Şikâyet durumunda nasıl davranıyorsunuz?","open"),
+    ],
+    dermokozmetik:[
+      Q("Uzmanlık","Cilt analizi yapabiliyor musunuz?"),
+      Q("Uzmanlık","Marka eğitimlerine katılıyor musunuz?"),
+      Q("Uzmanlık","En güçlü olduğunuz marka hangisi?","open"),
+      Q("Uzmanlık","En zorlandığınız kategori hangisi?","open"),
+      Q("Satış","Günlük danışan sayınız kaç?","open"),
+      Q("Satış","Ortalama sepet tutarınız nedir?","open"),
+      Q("Satış","Çapraz satış yapıyor musunuz?"),
+      Q("Satış","Müşteri takibi yapıyor musunuz?"),
+      Q("İletişim","Danışan sizi tekrar tercih ediyor mu?"),
+      Q("İletişim","Sadık müşteri oluşturabiliyor musunuz?"),
+      Q("İletişim","Şikâyet yönetiminde rahat mısınız?"),
+      Q("Gelişim","Sosyal medyada içerik üretiyor musunuz?"),
+      Q("Gelişim","Eğitim veriyor musunuz?"),
+      Q("Gelişim","Yeni ürünleri takip ediyor musunuz?"),
+    ],
+    cirak:[
+      Q("Öğrenme","Bu mesleği neden seçtiniz?","open"),
+      Q("Öğrenme","Öğrenmeye istekli misiniz?"),
+      Q("Öğrenme","Size verilen görevleri not alıyor musunuz?"),
+      Q("Öğrenme","Hata yaptığınızda nasıl hissediyorsunuz?","open"),
+      Q("Disiplin","İşe zamanında gelir misiniz?"),
+      Q("Disiplin","Günlük görevlerinizi takip ediyor musunuz?"),
+      Q("Disiplin","Sorumluluk almaktan çekinir misiniz?"),
+      Q("İletişim","Hastalarla iletişim kurabiliyor musunuz?"),
+      Q("İletişim","Ekip arkadaşlarınızla ilişkiniz nasıl?"),
+      Q("Gelişim","Son bir ayda ne öğrendiniz?","open"),
+      Q("Gelişim","Hangi konuda eğitim almak istersiniz?","open"),
+    ],
+    ortak:[
+      Q("Eczanenin Vizyonu","Eczanenin hedeflerini biliyor musunuz?"),
+      Q("Eczanenin Vizyonu","Bu hedefler size anlatıldı mı?"),
+      Q("Eczanenin Vizyonu","Eczanenin en güçlü yönü sizce nedir?","open"),
+      Q("Eczanenin Vizyonu","En zayıf yönü nedir?","open"),
+      Q("Eczanenin Vizyonu","Eczanenin sizi diğer eczanelerden ayıran özelliği nedir?","open"),
+      Q("Ekip","Görevler net mi?"),
+      Q("Ekip","Kim ne yapacağını biliyor mu?"),
+      Q("Ekip","Görevler yazılı mı?"),
+      Q("Ekip","Birbirinizin işine müdahale oluyor mu?"),
+      Q("Ekip","Yardımlaşma yeterli mi?"),
+      Q("Ekip","İletişim güçlü mü?"),
+      Q("Ekip","Ekip içinde çatışmalar yaşanıyor mu?"),
+      Q("Kurallar","Eczanenin yazılı kuralları var mı?"),
+      Q("Kurallar","Bu kurallara herkes uyuyor mu?"),
+      Q("Kurallar","Kurallara uymayanlara ne oluyor?","open"),
+      Q("Kurallar","Yeni başlayanlara kurallar anlatılıyor mu?"),
+      Q("Operasyon","İşler zamanında tamamlanıyor mu?"),
+      Q("Operasyon","Açılış-kapanış kontrol listesi var mı?"),
+      Q("Operasyon","Sipariş süreci düzenli mi?"),
+      Q("Operasyon","Miat kontrolleri yapılıyor mu?"),
+      Q("Operasyon","Eksik ürünler takip ediliyor mu?"),
+      Q("Operasyon","Stok sayımı düzenli yapılıyor mu?"),
+      Q("Hasta Deneyimi","Hastalar bekliyor mu?"),
+      Q("Hasta Deneyimi","Şikâyetler nasıl çözülüyor?","open"),
+      Q("Hasta Deneyimi","Hastalar sizi tekrar tercih ediyor mu?"),
+      Q("Hasta Deneyimi","Sizi tavsiye ediyorlar mı?"),
+      Q("Hasta Deneyimi","Hasta kayıtları tutuluyor mu?"),
+      Q("Hasta Deneyimi","Sadakat uygulaması var mı?"),
+      Q("Satış","Tamamlayıcı satış yapılıyor mu?"),
+      Q("Satış","Kampanyalar anlatılıyor mu?"),
+      Q("Satış","Kategori hedefleri var mı?"),
+      Q("Satış","Hedefler takip ediliyor mu?"),
+      Q("Satış","Sepet ortalaması takip ediliyor mu?"),
+      Q("Teknoloji","Program aktif kullanılıyor mu?"),
+      Q("Teknoloji","Raporlar inceleniyor mu?"),
+      Q("Teknoloji","Yapay zekâ kullanılıyor mu?"),
+      Q("Teknoloji","Google yorumları takip ediliyor mu?"),
+      Q("Teknoloji","WhatsApp kullanılıyor mu?"),
+      Q("Teknoloji","CRM sistemi var mı?"),
+      Q("Eğitim","Son eğitim ne zaman yapıldı?","open"),
+      Q("Eğitim","Kim verdi?","open"),
+      Q("Eğitim","Faydalı oldu mu?"),
+      Q("Eğitim","Eğitimler yeterli mi?"),
+      Q("Eğitim","Hangi konuda eğitim almak isterdiniz?","open"),
+      Q("Yönetim","Sorun yaşandığında çözüm bulunuyor mu?"),
+      Q("Yönetim","Kararlar hızlı alınıyor mu?"),
+      Q("Yönetim","Eczacı ulaşılabilir mi?"),
+      Q("Yönetim","Fikirleriniz dinleniyor mu?"),
+      Q("Yönetim","Kendinizi değerli hissediyor musunuz?"),
+      Q("Fiziksel Ortam","Eczanenin düzeni yeterli mi?"),
+      Q("Fiziksel Ortam","Depo düzenli mi?"),
+      Q("Fiziksel Ortam","Raflar düzenli mi?"),
+      Q("Fiziksel Ortam","Ürün bulmak kolay mı?"),
+      Q("Fiziksel Ortam","Vitrin yeterince dikkat çekiyor mu?"),
+      Q("Fiziksel Ortam","Danışmanlık alanı yeterli mi?"),
+      Q("Kurumsal Kültür","Burada çalışmaktan mutlu musunuz?"),
+      Q("Kurumsal Kültür","Bu eczaneyi arkadaşınıza önerir misiniz?"),
+      Q("Kurumsal Kültür","Kendinizi ekibin parçası hissediyor musunuz?"),
+      Q("Kurumsal Kültür","Bu eczane sizce profesyonel yönetiliyor mu?"),
+      Q("Gelecek","Önümüzdeki iki yılda eczanenin nasıl olacağını düşünüyorsunuz?","open"),
+      Q("Gelecek","En çok hangi konuda gelişmesi gerekiyor?","open"),
+      Q("Gelecek","İlk değiştireceğiniz şey ne olurdu?","open"),
+    ],
+  };
+}
+function defaultPeerDims(){ return [
+  {id:uid(),text:"İşbirliği & uyum",hidden:false},
+  {id:uid(),text:"Mesleki katkı & performans",hidden:false},
+]; }
+
+/* ---------- STORAGE ---------- */
+const SH=true;
+const K_CFG="af2_cfg",K_IDX="af2_idx",KPH=id=>"af2_ph_"+id;
+async function sget(k){ try{ const r=await window.storage.get(k,SH); return r?JSON.parse(r.value):null; }catch(e){ return null; } }
+async function sset(k,v){ try{ await window.storage.set(k,JSON.stringify(v),SH); }catch(e){ toast("Kayıt hatası"); console.error(e); } }
+async function loadCfg(){ return await sget(K_CFG); }
+async function saveCfg(c){ await sset(K_CFG,c); }
+async function loadIndex(){ return (await sget(K_IDX))||[]; }
+async function saveIndex(l){ await sset(K_IDX,l); }
+async function loadPh(id){ const p=await sget(KPH(id)); return p?ensureDefaults(p):null; }
+async function savePh(p){ await sset(KPH(p.id),p); }
+
+/* ---------- HELPERS ---------- */
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const $=s=>document.querySelector(s);
+const esc=s=>(s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let TT; function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(TT); TT=setTimeout(()=>t.classList.remove("show"),2600); }
+function openModal(h,wide){ const m=$("#modal"); m.className="modal"+(wide?" wide":""); m.innerHTML=h; $("#overlay").classList.add("open"); }
+function closeModal(){ $("#overlay").classList.remove("open"); }
+function uiConfirm(msg, okLabel, danger){
+  return new Promise(resolve=>{
+    const ov=document.getElementById("confirm-overlay");
+    document.getElementById("confirm-msg").textContent=msg;
+    const okb=document.getElementById("confirm-ok"); okb.textContent=okLabel||"Evet";
+    okb.className="btn "+(danger===false?"btn-navy":"btn-primary");
+    const cb=document.getElementById("confirm-cancel");
+    ov.classList.add("open");
+    const done=v=>{ ov.classList.remove("open"); okb.onclick=null; cb.onclick=null; ov.onclick=null; resolve(v); };
+    okb.onclick=()=>done(true);
+    cb.onclick=()=>done(false);
+    ov.onclick=e=>{ if(e.target===ov) done(false); };
+  });
+}
+$("#overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeModal(); });
+function initials(n){ return (n||"?").trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase(); }
+function genPass(){ const a="ABCDEFGHJKLMNPRSTUVYZ23456789"; let s=""; for(let i=0;i<6;i++) s+=a[Math.floor(Math.random()*a.length)]; return s; }
+function genRecoveryCode(){ const a="ABCDEFGHJKLMNPRSTUVYZ23456789"; let s=""; for(let i=0;i<8;i++){ if(i===4)s+="-"; s+=a[Math.floor(Math.random()*a.length)]; } return s; }
+function copyText(id){ const el=document.getElementById(id); if(!el) return; el.focus(); el.select();
+  let ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+  if(ok){ toast("Kopyalandı"); return; }
+  if(navigator.clipboard){ navigator.clipboard.writeText(el.value).then(()=>toast("Kopyalandı")).catch(()=>toast("Elle kopyala: Ctrl+A, Ctrl+C")); }
+  else toast("Elle kopyala: Ctrl+A, Ctrl+C");
+}
+function downloadFile(filename, text, mime){
+  try{
+    const blob=new Blob([text],{type:(mime||"text/plain")+";charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download=filename; a.style.display="none";
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ try{document.body.removeChild(a);}catch(e){} URL.revokeObjectURL(url); },1500);
+    return true;
+  }catch(e){ console.error(e); return false; }
+}
+function genCode(name){ const base=(name||"ECZ").replace(/[^A-Za-zÇĞİÖŞÜçğıöşü]/g,"").toUpperCase().slice(0,4)||"ECZ"; return base+"-"+Math.floor(1000+Math.random()*9000); }
+function ensureDefaults(p){
+  if(!p.code) p.code=genCode(p.name);
+  (p.people||[]).forEach(pp=>{ if(!pp.pass) pp.pass=genPass(); if(!pp.answers)pp.answers={}; if(!pp.openAnswers)pp.openAnswers={}; if(!pp.peer)pp.peer={}; });
+  if(!p.eczaneAnswers)p.eczaneAnswers={}; if(!p.eczaneOpen)p.eczaneOpen={};
+  return p;
+}
+function visibleQs(role){ return (CFG.questionBank[role]||[]).filter(q=>!q.hidden); }
+const ROLE_SHORT={eczaci:'EC',ikinci_eczaci:'2E',yardimci_eczaci:'YE',teknisyen:'TK',dermokozmetik:'DK',cirak:'ÇR'};
+function audienceOf(q,kit){ return (q.roles&&q.roles.length)?q.roles:[kit]; }
+// Bir role sorulan tüm sorular: her rol kitinden, kitlesine o rol dahil edilmiş görünür sorular
+function roleQuestions(role){
+  const out=[];
+  ROLE_KEYS.forEach(kit=>{ (CFG.questionBank[kit]||[]).forEach(q=>{ if(!q.hidden && audienceOf(q,kit).includes(role)) out.push(q); }); });
+  return out;
+}
+function scaleQs(role){ return roleQuestions(role).filter(q=>q.type==="scale"); }
+function openQs(role){ return roleQuestions(role).filter(q=>q.type==="open"); }
+function visiblePeer(){ return (CFG.peerDims||[]).filter(d=>!d.hidden); }
+function staffStatus(person){
+  const sc=scaleQs(person.role); if(sc.length===0) return person.submitted?"done":"todo";
+  let f=0; sc.forEach(q=>{ if(person.answers[q.id]!=null) f++; });
+  if(person.submitted) return "done"; if(f===0) return "todo"; return "part";
+}
+function personAnsweredOrtak(person){
+  const o=(CFG.questionBank.ortak||[]).filter(q=>!q.hidden);
+  return o.some(q=>q.type==="open"?(person.openAnswers&&person.openAnswers[q.id]):(person.answers&&person.answers[q.id]!=null));
+}
+function pharmacyProgress(p){
+  const totalP=p.people.length;
+  const doneP=p.people.filter(x=>staffStatus(x)==="done").length;
+  const ortakAnswered=p.people.filter(x=>personAnsweredOrtak(x)).length;
+  return {doneP,totalP,ortakAnswered,pct:totalP>0?Math.round(doneP/totalP*100):0};
+}
+
+/* ---------- SESSION ---------- */
+let SESSION=null, CFG=null, STATE={view:"list",phId:null};
+
+/* Merkezî kayıt sayfasından gelen eczaneleri kurar. */
+async function kuyruguIsle(){
+  if(!window.ArtifarmaKurulum) return;
+  const bekleyen=ArtifarmaKurulum.bekleyenler('swot');
+  if(!bekleyen.length) return;
+  const idx=await loadIndex();
+  for(const k of bekleyen){
+    let varMi=false;
+    for(const it of idx){ const e=await sget(KPH(it.id));
+      if(e && (e.code||'').toUpperCase()===k.id.toUpperCase()){ varMi=true; break; } }
+    if(!varMi){
+      const p={id:uid(),code:k.id,name:k.ad,
+        info:{location:k.sehir||"",populasyon:""},
+        people:[{id:uid(),name:k.eczaci||"Eczacı",role:"eczaci",note:"",pass:k.sifre,
+                 answers:{},openAnswers:{},peer:{},submitted:false,swot:null}],
+        eczaneAnswers:{},eczaneOpen:{},eczaneSwot:null};
+      await savePh(p); idx.push({id:p.id,name:p.name});
+    }
+    ArtifarmaKurulum.tamamlandi('swot',k.id);
+  }
+  await saveIndex(idx);
+  toast(bekleyen.length+" eczane merkezî kayıttan kuruldu");
+}
+
+/* Eczane kodunu ortak kimliğe çeker; ortak şifreyle girebilen bir
+   eczacı kaydı yoksa ekler (kişi şifreleri kişiye özel kalır). */
+async function kuyruguEsitle(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler("swot","esle");
+  if(!emirler.length) return;
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  const idx=await loadIndex();
+  let sayi=0;
+  for(const k of emirler){
+    for(const it of idx){
+      const p=await loadPh(it.id);
+      if(p && _sade(p.name)===_sade(k.ad)){
+        p.code=k.id;
+        if(!p.people.some(x=>x.pass===k.sifre)){
+          const ecz=p.people.find(x=>x.role==="eczaci");
+          if(ecz) ecz.pass=k.sifre;
+          else p.people.push({id:uid(),name:"Eczacı",role:"eczaci",note:"",pass:k.sifre,
+                              answers:{},openAnswers:{},peer:{},submitted:false,swot:null});
+        }
+        await savePh(p); sayi++; break;
+      }
+    }
+    ArtifarmaKurulum.tamamlandi("swot",k.id);
+  }
+  if(sayi) toast(sayi+" eczane ortak kimliğe getirildi");
+}
+
+async function boot(){
+  CFG=await loadCfg();
+  if(CFG){ // migrate
+    if(!CFG.questionBank){ CFG.questionBank=defaultBank(); await saveCfg(CFG); }
+    if(!CFG.peerDims){ CFG.peerDims=defaultPeerDims(); await saveCfg(CFG); }
+    if(!CFG.adminUser){ CFG.adminUser="admin"; await saveCfg(CFG); }
+  }
+  /* Kuyruk, yönetici kurulumundan bağımsız işlenir: eczane kayıtları
+     CFG gerektirmez, kurulum bitince listede hazır dururlar. */
+/* Merkezden gelen silme emirleri. */
+async function kuyruguSil(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler("swot","sil");
+  if(!emirler.length) return;
+  const _sade=x=>(x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+  let idx=await loadIndex(), sayi=0;
+  for(const k of emirler){
+    const kalan=[];
+    for(const it of idx){
+      const p=await loadPh(it.id);
+      const eslesti=p && ((p.code||"").toUpperCase()===k.id.toUpperCase()||_sade(p.name)===_sade(k.ad));
+      if(eslesti){ await sset(KPH(it.id),null); sayi++; } else kalan.push(it);
+    }
+    idx=kalan;
+    ArtifarmaKurulum.tamamlandi("swot",k.id);
+  }
+  if(sayi){ await saveIndex(idx); toast(sayi+" eczane silindi"); }
+}
+
+/* Merkezden gelen arşiv emirleri — eczane listede gizlenir. */
+async function kuyruguArsiv(){
+  if(!window.ArtifarmaKurulum) return;
+  const emirler=ArtifarmaKurulum.bekleyenler("swot","arsiv");
+  if(!emirler.length) return;
+  const _s=x=>(x||"").toLocaleLowerCase("tr-TR").trim();
+  const idx=await loadIndex();
+  for(const k of emirler){
+    for(const it of idx){
+      const p=await loadPh(it.id);
+      if(p && ((p.code||"").toUpperCase()===k.id.toUpperCase()||_s(p.name)===_s(k.ad))){
+        p.arsiv=!!k.arsivDeger; await savePh(p);
+      }
+    }
+    ArtifarmaKurulum.tamamlandi("swot",k.id);
+  }
+}
+
+/* Merkezdeki çalışanları bu aracın kişi kayıtlarına yansıtır.
+   Şifre merkezden gelir; böylece kişi her araca AYNI şifreyle girer. */
+async function merkezCalisanlari(){
+  if(!window.ArtifarmaCalisan) return;
+  const idx=await loadIndex(); let degisti=0;
+  for(const it of idx){
+    const p=await loadPh(it.id);
+    if(!p || !p.code) continue;
+    const merkez=ArtifarmaCalisan.liste(p.code);
+    if(!merkez.length) continue;
+    let yazilacak=false;
+    for(const mc of merkez){
+      let kisi=p.people.find(x=>x.merkezId===mc.id)
+             || p.people.find(x=>!x.merkezId && (x.name||"").toLocaleLowerCase("tr-TR").trim()
+                                 ===(mc.ad||"").toLocaleLowerCase("tr-TR").trim());
+      const rol=(window.ArtifarmaPozisyon && ArtifarmaPozisyon.arac(mc.pozisyon,"swot")) || "teknisyen";
+      if(!kisi){
+        /* Şifre bu eczanede başkasındaysa merkezdeki şifre yenilenir;
+           tek kaynak merkez olsun diye çakışmayı orada çözeriz. */
+        let sifre=mc.sifre;
+        if(p.people.some(x=>x.pass===sifre)) sifre=ArtifarmaCalisan.sifreYenile(mc.id).sifre;
+        p.people.push({id:uid(),merkezId:mc.id,name:mc.ad,role:rol,note:"",pass:sifre,
+          answers:{},openAnswers:{},peer:{},submitted:false,swot:null});
+        yazilacak=true;
+      }else{
+        if(!kisi.merkezId){ kisi.merkezId=mc.id; yazilacak=true; }
+        if(kisi.name!==mc.ad){ kisi.name=mc.ad; yazilacak=true; }
+        if(kisi.role!==rol){ kisi.role=rol; yazilacak=true; }
+        if(kisi.pass!==mc.sifre && !p.people.some(x=>x.id!==kisi.id && x.pass===mc.sifre)){
+          kisi.pass=mc.sifre; yazilacak=true;
+        }
+      }
+    }
+    /* Merkezde pasife alınan kişi burada da pasif olur; merkezden
+       silinen kişi (merkezId'si artık kütükte yok) buradan da kalkar.
+       Elle eklenmiş kişilere (merkezId'siz) dokunulmaz. */
+    const merkezIdler = merkez.map(x=>x.id);
+    merkez.forEach(mc=>{
+      const kisi = p.people.find(x=>x.merkezId===mc.id);
+      if(kisi && !!kisi.pasif !== (mc.aktif===false)){ kisi.pasif = (mc.aktif===false); yazilacak=true; }
+    });
+    const kalan = p.people.filter(x=>!x.merkezId || merkezIdler.indexOf(x.merkezId)>=0);
+    if(kalan.length !== p.people.length){ p.people = kalan; yazilacak=true; }
+
+    if(yazilacak){ await savePh(p); degisti++; }
+  }
+  if(degisti) toast("Merkezî çalışan kayıtları alındı");
+}
+
+  await kuyruguIsle();
+  await kuyruguEsitle();
+  await kuyruguSil();
+  await kuyruguArsiv();
+  await merkezCalisanlari();
+  if(!CFG){ renderSetup(); return; }
+  if(!SESSION){ renderLogin(); return; }
+  renderShell();
+}
+boot();
+
+/* ---------- SETUP ---------- */
+function renderSetup(){
+  $("#root").innerHTML=`<div class="login-screen"><div class="login-card">
+    <img src="${LOGO}" alt="Artıfarma Group" class="login-logo"><h2>Paneli Kur</h2>
+    <p>İlk girişte yönetici kullanıcı adını ve şifreni belirle.</p>
+    <div class="field"><label>Admin kullanıcı adı</label><input id="su_u" placeholder="Örn. faruk"></div>
+    <div class="field"><label>Admin şifresi</label><input id="su_p" type="password" placeholder="Güçlü bir şifre"></div>
+    <div class="field"><label>Şifre tekrar</label><input id="su_p2" type="password"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doSetup()">Kur ve Gir</button>
+  </div></div>`;
+  setTimeout(()=>$("#su_u").focus(),50);
+}
+async function doSetup(){
+  const u=$("#su_u").value.trim();
+  const a=$("#su_p").value,b=$("#su_p2").value;
+  if(!u){ toast("Kullanıcı adı gerekli"); return; }
+  if(a.length<4){ toast("Şifre en az 4 karakter"); return; }
+  if(a!==b){ toast("Şifreler eşleşmiyor"); return; }
+  const rc=genRecoveryCode();
+  CFG={adminUser:u,adminPass:a,consultants:[],questionBank:defaultBank(),peerDims:defaultPeerDims(),bankVersion:BANK_VERSION,recoveryCode:rc};
+  await saveCfg(CFG);
+  PENDING_LOGIN={role:"admin",id:"admin",name:u};
+  renderRecoveryInfo(rc);
+}
+let PENDING_LOGIN=null;
+function renderRecoveryInfo(rc){
+  $("#root").innerHTML=`<div class="login-screen"><div class="login-card">
+    <img src="${LOGO}" alt="Artıfarma Group" class="login-logo"><h2>Kurtarma Kodun</h2>
+    <p>Yönetici şifreni unutursan bu kodla, verilerini kaybetmeden sıfırlarsın. Lütfen güvenli bir yere <b>kaydet</b>. (Ayarlar'dan da görebilirsin.)</p>
+    <div class="field"><input id="rc_show" readonly value="${esc(rc)}" style="font-weight:800;letter-spacing:.18em;text-align:center;font-size:19px;color:var(--navy)"></div>
+    <button class="btn btn-navy btn-sm" style="width:100%;justify-content:center;margin-bottom:10px" onclick="copyText('rc_show')">📋 Kopyala</button>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="finishRecoveryInfo()">Kaydettim, Devam Et</button>
+  </div></div>`;
+}
+function finishRecoveryInfo(){ if(PENDING_LOGIN){ SESSION=PENDING_LOGIN; PENDING_LOGIN=null; renderShell(); } else renderLogin(); }
+
+/* ---------- LOGIN ---------- */
+let LOGIN_TAB="staff";
+function renderLogin(){
+  $("#root").innerHTML=`<div class="login-screen"><div class="login-card">
+    <img src="${LOGO}" alt="Artıfarma Group" class="login-logo"><h2>Artıfarma Paneli</h2>
+    <p>Yönetici kendi kullanıcı adı ve şifresiyle, eczane ekibi ise eczane ID'si ve kişisel şifresiyle giriş yapar.</p>
+    <div class="login-toggle">
+      <button id="t_staff" class="${LOGIN_TAB==='staff'?'active':''}" onclick="setLoginTab('staff')">Eczane Ekibi</button>
+      <button id="t_admin" class="${LOGIN_TAB==='admin'?'active':''}" onclick="setLoginTab('admin')">Yönetici / Danışman</button>
+    </div>
+    <div id="login_fields"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Giriş Yap</button>
+    <div id="lg_err" style="color:var(--red);font-size:13px;margin-top:12px;display:none"></div>
+    <div style="text-align:center;margin-top:16px"><a href="#" onclick="renderForgot();return false" style="font-size:13px;color:var(--muted);text-decoration:underline">Yönetici şifremi unuttum</a></div>
+  </div></div>`;
+  renderLoginFields();
+}
+function setLoginTab(t){ LOGIN_TAB=t; document.querySelectorAll(".login-toggle button").forEach(b=>b.classList.remove("active")); $("#t_"+t).classList.add("active"); renderLoginFields(); $("#lg_err").style.display="none"; }
+function renderLoginFields(){
+  if(LOGIN_TAB==="staff"){
+    $("#login_fields").innerHTML=`
+      <div class="field"><label>Eczane ID</label><input id="lg_code" placeholder="Örn. KARA-4827" style="text-transform:uppercase"></div>
+      <div class="field"><label>Kişisel şifren</label><input id="lg_pass" type="password" placeholder="Yöneticinin verdiği şifre"></div>`;
+  } else {
+    $("#login_fields").innerHTML=`
+      <div class="field"><label>Kullanıcı</label><input id="lg_u" placeholder="yönetici veya danışman adı"></div>
+      <div class="field"><label>Şifre</label><input id="lg_p" type="password"></div>`;
+  }
+}
+async function doLogin(){
+  const err=$("#lg_err"); const fail=m=>{ err.style.display="block"; err.textContent=m; };
+  if(LOGIN_TAB==="admin"){
+    const u=$("#lg_u").value.trim().toLowerCase(),p=$("#lg_p").value;
+    const au=(CFG.adminUser||"admin").toLowerCase();
+    if(u===au&&p===CFG.adminPass){ SESSION={role:"admin",id:"admin",name:CFG.adminUser||"Yönetici"}; return renderShell(); }
+    const c=(CFG.consultants||[]).find(x=>x.name.toLowerCase()===u||(x.email||"").toLowerCase()===u);
+    if(c&&c.pass===p){ SESSION={role:"consultant",id:c.id,name:c.name}; return renderShell(); }
+    return fail("Kullanıcı adı veya şifre hatalı.");
+  } else {
+    const code=$("#lg_code").value.trim().toUpperCase(), pass=$("#lg_pass").value.trim();
+    const idx=await loadIndex();
+    for(const it of idx){
+      const p=await loadPh(it.id);
+      if(p && (p.code||"").toUpperCase()===code){
+        const person=p.people.find(pp=>pp.pass===pass);
+        if(person){
+          if(person.pasif) return fail("Bu kullanıcı pasife alınmış. Eczacınıza başvurun.");
+          if(window.ArtifarmaYetki){
+            const _rol = person.role==="eczaci" ? "eczaci" : "personel";
+            if(ArtifarmaYetki.izin(p.code,"swot",_rol)==="yok") return fail(ArtifarmaYetki.mesaj(_rol));
+          }
+          SESSION={role:"staff",phId:p.id,personId:person.id,name:person.name}; return renderShell(); }
+        return fail("Bu eczane için şifre hatalı.");
+      }
+    }
+    return fail("Eczane ID veya şifre hatalı.");
+  }
+}
+function logout(){ SESSION=null; STATE={view:"list",phId:null}; renderLogin(); }
+function renderForgot(){
+  const hasRC=!!(CFG&&CFG.recoveryCode);
+  $("#root").innerHTML=`<div class="login-screen"><div class="login-card">
+    <img src="${LOGO}" alt="Artıfarma Group" class="login-logo"><h2>Yönetici Şifresini Sıfırla</h2>
+    ${hasRC
+      ? `<p>Kurtarma kodunu gir ve yeni yönetici şifresi belirle. Tüm verilerin korunur.</p>
+         <div class="field"><label>Kurtarma kodu</label><input id="fp_rc" placeholder="XXXX-XXXX" style="text-transform:uppercase;letter-spacing:.1em"></div>`
+      : `<div class="banner">Bu kurulumda kurtarma kodu tanımlı değil (eski sürüm). Verilerini kaybetmeden yeni bir yönetici şifresi belirleyebilirsin; ardından sana bir kurtarma kodu verilecek.</div>`}
+    <div class="field"><label>Yönetici kullanıcı adı</label><input id="fp_u" value="${esc((CFG&&CFG.adminUser)||"admin")}"></div>
+    <div class="field"><label>Yeni şifre</label><input id="fp_p" type="password" placeholder="En az 4 karakter"></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doForgot()">Şifreyi Sıfırla</button>
+    <div id="fp_err" style="color:var(--red);font-size:13px;margin-top:12px;display:none"></div>
+    <div style="text-align:center;margin-top:16px"><a href="#" onclick="renderLogin();return false" style="font-size:13px;color:var(--muted);text-decoration:underline">← Girişe dön</a></div>
+  </div></div>`;
+}
+async function doForgot(){
+  const err=$("#fp_err"); const fail=m=>{ err.style.display="block"; err.textContent=m; };
+  const hasRC=!!(CFG&&CFG.recoveryCode);
+  if(hasRC){ const code=$("#fp_rc").value.trim().toUpperCase(); if(code!==CFG.recoveryCode) return fail("Kurtarma kodu hatalı."); }
+  const u=$("#fp_u").value.trim()||"admin"; const p=$("#fp_p").value;
+  if(p.length<4) return fail("Şifre en az 4 karakter olmalı.");
+  CFG.adminUser=u; CFG.adminPass=p;
+  const newRC=CFG.recoveryCode||genRecoveryCode(); CFG.recoveryCode=newRC;
+  await saveCfg(CFG);
+  PENDING_LOGIN={role:"admin",id:"admin",name:u};
+  toast("Şifre sıfırlandı");
+  renderRecoveryInfo(newRC);
+}
+async function adminSettings(){
+  if(!CFG.recoveryCode){ CFG.recoveryCode=genRecoveryCode(); await saveCfg(CFG); }
+  openModal(`<div class="modal-head"><h3>Yönetici Ayarları</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Kullanıcı adı</label><input id="as_u" value="${esc(CFG.adminUser||"admin")}"></div>
+      <div class="field"><label>Yeni şifre (boş bırakırsan değişmez)</label><input id="as_p" type="password" placeholder="••••••"></div>
+      <div class="field"><label>Kurtarma kodu (şifre sıfırlama için)</label>
+        <input id="as_rc" readonly value="${esc(CFG.recoveryCode)}" style="letter-spacing:.12em;font-weight:700;color:var(--navy)">
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn btn-ghost btn-sm" onclick="copyText('as_rc')">📋 Kopyala</button>
+          <button class="btn btn-line btn-sm" onclick="regenRecovery()">Yeni kod üret</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-top:6px">Bu kodu güvenli bir yerde sakla; şifreni unutursan gerekecek.</div>
+      </div>
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="saveAdminSettings()">Kaydet</button></div>`);
+}
+async function regenRecovery(){ CFG.recoveryCode=genRecoveryCode(); await saveCfg(CFG); const el=document.getElementById("as_rc"); if(el) el.value=CFG.recoveryCode; toast("Yeni kurtarma kodu üretildi"); }
+
+/* ---------- YEDEK / GERİ YÜKLE ---------- */
+async function buildBackup(){
+  const idx=await loadIndex(); const pharmacies=[];
+  for(const it of idx){ const p=await sget(KPH(it.id)); if(p) pharmacies.push(p); }
+  return JSON.stringify({app:"artifarma-swot",kind:"backup",ts:new Date().toISOString(),cfg:CFG,index:idx,pharmacies},null,2);
+}
+async function openBackup(){
+  openModal(`<div class="modal-head"><h3>Yedekleme & Geri Yükleme</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="banner">⚠️ Yeni sürüme geçmeden <b>ÖNCE</b> buradan yedek al; yeni sürümde <b>geri yükle</b>. Veriler her dosyada ayrı tutulduğundan, güncellemede aktarım şarttır.</div>
+      <div class="field"><label>1 · Yedeği indir</label>
+        <button class="btn btn-navy btn-sm" onclick="dlBackup()">⤓ Yedeği (.json) indir</button>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px">İndirme bu ortamda engellenirse aşağıdaki metni kopyalayıp bir metin dosyasına (.json) yapıştır — bu her zaman çalışır.</div>
+        <textarea id="bk_out" readonly style="height:110px;font-family:ui-monospace,Menlo,monospace;font-size:11px;margin-top:8px"></textarea>
+        <button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="copyText('bk_out')">📋 Yedeği kopyala</button>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--line);margin:18px 0">
+      <div class="field"><label>2 · Yedekten geri yükle</label>
+        <input type="file" id="bk_file" accept=".json,.txt,application/json" onchange="fileToImport(event)" style="font-size:13px">
+        <div style="font-size:12px;color:var(--muted);margin:8px 0">veya yedek metnini buraya yapıştır:</div>
+        <textarea id="bk_in" placeholder='{"app":"artifarma-swot",...}' style="height:90px;font-family:ui-monospace,Menlo,monospace;font-size:11px"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Kapat</button>
+      <button class="btn btn-primary" onclick="doImport()">Geri Yükle</button></div>`,true);
+  const json=await buildBackup(); const el=document.getElementById("bk_out"); if(el) el.value=json;
+}
+function dlBackup(){
+  const t=document.getElementById("bk_out").value;
+  const ok=downloadFile("artifarma-swot-yedek-"+new Date().toISOString().slice(0,10)+".json", t, "application/json");
+  toast(ok?"Yedek indirildi":"İndirme engellendi — aşağıdaki metni kopyala");
+}
+function fileToImport(ev){ const f=ev.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ document.getElementById("bk_in").value=r.result; toast("Dosya yüklendi — Geri Yükle'ye bas"); }; r.readAsText(f); }
+async function doImport(){
+  const raw=document.getElementById("bk_in").value.trim(); if(!raw){ toast("Önce yedek dosyası seç veya metni yapıştır"); return; }
+  let data; try{ data=JSON.parse(raw); }catch(e){ toast("Yedek okunamadı (geçersiz JSON)"); return; }
+  if(!data.cfg||!Array.isArray(data.pharmacies)){ toast("Bu geçerli bir Artıfarma yedeği değil"); return; }
+  if(!(await uiConfirm("Mevcut tüm veriler bu yedekle DEĞİŞTİRİLECEK. Devam edilsin mi?","Evet, geri yükle"))) return;
+  CFG=data.cfg; await saveCfg(CFG);
+  await saveIndex(data.index||data.pharmacies.map(p=>({id:p.id,name:p.name})));
+  for(const p of data.pharmacies){ await savePh(p); }
+  closeModal(); toast("Geri yükleme tamamlandı"); STATE={view:"list",phId:null}; renderShell();
+}
+async function saveAdminSettings(){
+  const u=$("#as_u").value.trim(); if(!u){ toast("Kullanıcı adı gerekli"); return; }
+  const np=$("#as_p").value;
+  if(np && np.length<4){ toast("Şifre en az 4 karakter"); return; }
+  CFG.adminUser=u; if(np) CFG.adminPass=np;
+  await saveCfg(CFG); SESSION.name=u; closeModal(); toast("Ayarlar güncellendi"); renderShell();
+}
+
+/* ---------- SHELL ---------- */
+function renderShell(){
+  if(SESSION.role==="staff"){ renderStaffShell(); return; }
+  const isAdmin=SESSION.role==="admin";
+  $("#root").innerHTML=`
+    <header class="top"><div class="wrap top-inner">
+      <div class="logo" onclick="go('list')"><span class="logochip"><img src="${LOGO}" alt="Artıfarma Group"></span><span class="navsub">360° SWOT Paneli</span></div>
+      <div class="top-spacer"></div>
+      <div class="top-nav">
+        <button id="nav-list" onclick="go('list')">Eczaneler</button>
+        ${isAdmin?`<button id="nav-team" onclick="go('team')">Ekip</button><button id="nav-qbank" onclick="go('qbank')">Sorular</button><button onclick="openBackup()" title="Yedekle / Geri yükle">Yedek</button>`:""}
+        <div class="whoami"><b>${esc(SESSION.name)}</b>${isAdmin?"Yönetici":"Danışman"}</div>
+        ${isAdmin?`<button onclick="adminSettings()" title="Ayarlar">⚙</button>`:""}
+        <button onclick="logout()" title="Çıkış">⏻</button>
+      </div>
+    </div></header>
+    <main><div class="wrap" id="app"></div></main>`;
+  render();
+}
+async function go(view,phId){ STATE={view,phId:phId??STATE.phId}; await render(); window.scrollTo(0,0); }
+async function render(){
+  const app=$("#app"); if(!app) return;
+  document.querySelectorAll(".top-nav button").forEach(b=>b.classList.remove("active"));
+  if(STATE.view==="list"){ $("#nav-list")?.classList.add("active"); await renderList(app); }
+  else if(STATE.view==="team"){ $("#nav-team")?.classList.add("active"); await renderTeam(app); }
+  else if(STATE.view==="qbank"){ $("#nav-qbank")?.classList.add("active"); await renderQBank(app); }
+  else if(STATE.view==="detail"){ await renderDetail(app); }
+  else if(STATE.view==="report"){ await renderReport(app); }
+}
+async function visibleIndex(){
+  let idx=await loadIndex();
+  /* Merkezden arşive alınan eczaneler listelerde görünmez. */
+  const kalan=[];
+  for(const it of idx){ const p=await loadPh(it.id); if(p && !p.arsiv) kalan.push(it); }
+  idx=kalan;
+  if(SESSION.role==="admin") return idx;
+  const c=(CFG.consultants||[]).find(x=>x.id===SESSION.id);
+  const a=(c&&c.pharmacies)||[]; return idx.filter(i=>a.includes(i.id));
+}
+
+/* ---------- LIST ---------- */
+async function renderList(app){
+  const idx=await visibleIndex(); let cards="";
+  for(const item of idx){
+    const p=await loadPh(item.id); if(!p) continue;
+    const prog=pharmacyProgress(p); const done=prog.doneP;
+    cards+=`<div class="card ph-card" onclick="go('detail','${p.id}')"><span class="accent"></span>
+      <h3>${esc(p.name)}</h3><div class="loc">${esc(p.info.location||"Konum belirtilmemiş")}</div>
+      <div class="code">ID: ${esc(p.code)}</div>
+      <div class="stats">
+        <div class="stat"><b>${p.people.length}</b><span>Personel</span></div>
+        <div class="stat"><b>${done}</b><span>Tamamladı</span></div>
+        <div class="stat"><b>${p.eczaneSwot?"✓":"–"}</b><span>SWOT</span></div>
+      </div>
+      <div class="progress" title="%${prog.pct} tamamlandı"><i style="width:${prog.pct}%"></i></div></div>`;
+  }
+  app.innerHTML=`
+    <div class="page-head"><div><div class="eyebrow">Yapısal Eczane Yönetimi</div><h1>Eczane Portföyü</h1>
+    <p>${SESSION.role==="admin"?"Eczane tanımla, ekibi ekle, herkese şifre ver. Personel kendi girişiyle gizlice doldurur; SWOT'u yalnızca sen ve danışmanların görür.":"Sana atanan eczaneler."}</p></div>
+    ${SESSION.role==="admin"?`<button class="btn btn-primary" onclick="newPharmacy()">+ Yeni Eczane</button>`:""}</div>
+    ${idx.length===0
+      ? `<div class="empty"><div class="ico">🏥</div><h3>${SESSION.role==="admin"?"Henüz eczane yok":"Sana atanmış eczane yok"}</h3>
+         <p>${SESSION.role==="admin"?"İlk eczaneni tanımla; sorular otomatik atanır.":"Yönetici sana eczane atadığında görünecek."}</p>
+         ${SESSION.role==="admin"?`<button class="btn btn-primary" onclick="newPharmacy()">+ İlk Eczaneyi Ekle</button>`:""}</div>`
+      : `<div class="grid grid-cards">${cards}</div>`}`;
+}
+
+/* ---------- TEAM ---------- */
+async function renderTeam(app){
+  if(SESSION.role!=="admin"){ go("list"); return; }
+  const idx=await loadIndex();
+  const rows=(CFG.consultants||[]).map(c=>{
+    const names=(c.pharmacies||[]).map(id=>idx.find(i=>i.id===id)?.name).filter(Boolean);
+    return `<div class="person-row"><div class="avatar">${initials(c.name)}</div>
+      <div class="who"><b>${esc(c.name)}</b><span>${esc(c.email||"")} · ${names.length} eczane${names.length?": "+esc(names.join(", ")):""}</span></div>
+      <span class="pwbox">${esc(c.pass)}</span>
+      <div class="row-actions">
+        <button class="btn btn-ghost btn-sm" onclick="assignModal('${c.id}')">Eczane Ata</button>
+        <button class="btn btn-line btn-sm" onclick="editConsultant('${c.id}')">Düzenle</button>
+        <button class="btn btn-line btn-sm" onclick="delConsultant('${c.id}')">Sil</button>
+      </div></div>`;
+  }).join("");
+  app.innerHTML=`<div class="page-head"><div><div class="eyebrow">Erişim Yönetimi</div><h1>Danışman Ekibi</h1>
+    <p>Danışmanlarını ekle, şifre ver ve eczane ata. Danışmanlar atanan eczanelerin SWOT'unu görebilir; eczane personeli göremez.</p></div>
+    <button class="btn btn-primary" onclick="newConsultant()">+ Danışman Ekle</button></div>
+    ${(CFG.consultants||[]).length===0?`<div class="empty" style="padding:46px"><div class="ico">👥</div><h3>Henüz danışman yok</h3><button class="btn btn-primary" onclick="newConsultant()">+ Danışman Ekle</button></div>`:rows}`;
+}
+function newConsultant(){ consultantForm(); }
+function editConsultant(id){ consultantForm((CFG.consultants||[]).find(c=>c.id===id)); }
+function consultantForm(c){
+  const e=c||{};
+  openModal(`<div class="modal-head"><h3>${c?"Danışmanı Düzenle":"Danışman Ekle"}</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Ad Soyad *</label><input id="c_name" value="${esc(e.name||"")}"></div>
+      <div class="field"><label>E-posta</label><input id="c_email" value="${esc(e.email||"")}"></div>
+      <div class="field"><label>Şifre *</label><input id="c_pass" value="${esc(e.pass||genPass())}"></div>
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="saveConsultant('${c?c.id:""}')">Kaydet</button></div>`);
+}
+async function saveConsultant(id){
+  const name=$("#c_name").value.trim(),pass=$("#c_pass").value.trim();
+  if(!name||!pass){ toast("Ad ve şifre gerekli"); return; }
+  const email=$("#c_email").value.trim(); CFG.consultants=CFG.consultants||[];
+  if(id){ const c=CFG.consultants.find(x=>x.id===id); c.name=name; c.email=email; c.pass=pass; }
+  else CFG.consultants.push({id:uid(),name,email,pass,pharmacies:[]});
+  await saveCfg(CFG); closeModal(); toast("Kaydedildi"); renderTeam($("#app"));
+}
+async function delConsultant(id){ if(!(await uiConfirm("Bu danışmanı silmek istediğine emin misin?","Evet, sil"))) return; CFG.consultants=CFG.consultants.filter(c=>c.id!==id); await saveCfg(CFG); toast("Silindi"); renderTeam($("#app")); }
+async function assignModal(cid){
+  const c=CFG.consultants.find(x=>x.id===cid); const idx=await loadIndex();
+  const boxes=idx.map(i=>`<label><input type="checkbox" value="${i.id}" ${(c.pharmacies||[]).includes(i.id)?"checked":""}> ${esc(i.name)}</label>`).join("");
+  openModal(`<div class="modal-head"><h3>${esc(c.name)} · Eczane Ata</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">${idx.length?`<div class="checks">${boxes}</div>`:`<p style="color:var(--muted)">Önce eczane ekle.</p>`}</div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="saveAssign('${cid}')">Kaydet</button></div>`);
+}
+async function saveAssign(cid){ const c=CFG.consultants.find(x=>x.id===cid); c.pharmacies=Array.from(document.querySelectorAll('.checks input:checked')).map(x=>x.value); await saveCfg(CFG); closeModal(); toast("Atama güncellendi"); renderTeam($("#app")); }
+
+/* ---------- QUESTION BANK ---------- */
+let QB_TAB="eczaci";
+async function renderQBank(app){
+  if(SESSION.role!=="admin"){ go("list"); return; }
+  const tabs=[...ROLE_KEYS,"ortak","peer"];
+  const tabLabel=k=>k==="ortak"?"Ortak Eczane Analizi":k==="peer"?"Akran Geri Bildirimi":ROLES[k].label;
+  const tabBtns=tabs.map(k=>`<button class="${QB_TAB===k?'active':''}" onclick="QB_TAB='${k}';renderQBank($('#app'))">${tabLabel(k)}</button>`).join("");
+  let body="";
+  if(QB_TAB==="peer"){
+    body=`<p style="color:var(--muted);font-size:13px;margin-bottom:14px">Her kişi, ekipteki diğer herkesi bu kriterlerle değerlendirir (gizli kalır).</p>`;
+    body+=(CFG.peerDims||[]).map(d=>`<div class="qb-row ${d.hidden?'hidden':''}"><div class="qt">${esc(d.text)}</div>
+      <button class="iconbtn" title="${d.hidden?'Göster':'Gizle'}" onclick="togglePeer('${d.id}')">${d.hidden?'🚫':'👁'}</button>
+      <button class="iconbtn" title="Düzenle" onclick="editPeer('${d.id}')">✎</button>
+      <button class="iconbtn" title="Sil" onclick="delPeer('${d.id}')">🗑</button></div>`).join("");
+    body+=`<button class="btn btn-navy btn-sm" style="margin-top:12px" onclick="editPeer()">+ Kriter Ekle</button>`;
+  } else {
+    const list=CFG.questionBank[QB_TAB]||[];
+    const groups=[...new Set(list.map(q=>q.group))];
+    const isOrtak=QB_TAB==="ortak";
+    body=groups.map(g=>{
+      const qs=list.filter(q=>q.group===g);
+      return `<div class="qb-group">${esc(g)}</div>`+qs.map(q=>`<div class="qb-row ${q.hidden?'hidden':''}">
+        <span class="typ">${q.type==="open"?"Açık":"Puan"}</span>
+        <div class="qt">${esc(q.text)}</div>
+        ${isOrtak?`<span class="aud"><span class="aud-badge" style="background:var(--ok)">HERKES</span></span>`:`<span class="aud">${audienceOf(q,QB_TAB).map(r=>`<span class="aud-badge" style="background:${ROLES[r]?ROLES[r].color:'#888'}" title="${ROLES[r]?ROLES[r].label:r}">${ROLE_SHORT[r]||r}</span>`).join("")}</span>
+        <button class="iconbtn" title="Kimler cevaplayacak" onclick="editAudience('${QB_TAB}','${q.id}')">👥</button>`}
+        <button class="iconbtn" title="${q.hidden?'Göster':'Gizle'}" onclick="toggleQ('${QB_TAB}','${q.id}')">${q.hidden?'🚫':'👁'}</button>
+        <button class="iconbtn" title="Düzenle" onclick="editQ('${QB_TAB}','${q.id}')">✎</button>
+        <button class="iconbtn" title="Sil" onclick="delQ('${QB_TAB}','${q.id}')">🗑</button></div>`).join("");
+    }).join("");
+    body+=`<button class="btn btn-navy btn-sm" style="margin-top:14px" onclick="editQ('${QB_TAB}')">+ Soru Ekle</button>`;
+  }
+  app.innerHTML=`<div class="page-head"><div><div class="eyebrow">Merkezî Soru Bankası</div><h1>Sorular</h1>
+    <p>Her sorunun yanındaki 👥 ile <b>hangi rollerin göreceğini</b> belirle; aynı soruyu birden fazla role atayabilirsin. Rozetler (EC, TK…) o soruyu kimin cevaplayacağını gösterir. Ortak sorular herkese sorulur.</p></div>
+    <button class="btn btn-line" onclick="resetBank()">↻ Fabrika sorularını yükle</button></div>
+    ${(CFG.bankVersion||1)<BANK_VERSION?`<div class="banner">✨ Daha detaylı, ayırt edici yeni soru seti hazır. Yüklemek için sağ üstteki <b>Fabrika sorularını yükle</b>'ye bas. (Kendi eklediğin/düzenlediğin sorular silinir.)</div>`:""}
+    <div class="qbank-tabs">${tabBtns}</div>${body}`;
+}
+async function resetBank(){
+  if(!(await uiConfirm("Soru bankası varsayılan (detaylı) sorulara sıfırlanacak. Kendi eklediğin/düzenlediğin sorular silinir. Devam edilsin mi?","Evet, yükle"))) return;
+  CFG.questionBank=defaultBank(); CFG.peerDims=defaultPeerDims(); CFG.bankVersion=BANK_VERSION;
+  await saveCfg(CFG); toast("Detaylı sorular yüklendi"); renderQBank($("#app"));
+}
+async function toggleQ(role,id){ const q=CFG.questionBank[role].find(x=>x.id===id); q.hidden=!q.hidden; await saveCfg(CFG); renderQBank($("#app")); }
+async function delQ(role,id){ if(!(await uiConfirm("Bu soruyu silmek istediğine emin misin?","Evet, sil"))) return; CFG.questionBank[role]=CFG.questionBank[role].filter(x=>x.id!==id); await saveCfg(CFG); toast("Silindi"); renderQBank($("#app")); }
+function editAudience(kit,id){
+  const q=CFG.questionBank[kit].find(x=>x.id===id);
+  const cur=audienceOf(q,kit);
+  const boxes=ROLE_KEYS.map(r=>`<label><input type="checkbox" class="aud-chk" value="${r}" ${cur.includes(r)?'checked':''}> ${ROLES[r].label}</label>`).join("");
+  openModal(`<div class="modal-head"><h3>Bu soruyu kimler cevaplayacak?</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div style="font-size:13px;color:var(--muted);margin-bottom:12px">“${esc(q.text)}”</div>
+      <div class="checks">${boxes}</div></div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="saveAudience('${kit}','${id}')">Kaydet</button></div>`);
+}
+async function saveAudience(kit,id){
+  const roles=Array.from(document.querySelectorAll('.aud-chk:checked')).map(x=>x.value);
+  if(roles.length===0){ toast("En az bir rol seçilmeli"); return; }
+  CFG.questionBank[kit].find(x=>x.id===id).roles=roles;
+  await saveCfg(CFG); closeModal(); toast("Atama güncellendi"); renderQBank($("#app"));
+}
+function editQ(role,id){
+  const q=id?CFG.questionBank[role].find(x=>x.id===id):null;
+  const groups=[...new Set((CFG.questionBank[role]||[]).map(x=>x.group))];
+  const gopts=groups.map(g=>`<option ${q&&q.group===g?'selected':''}>${esc(g)}</option>`).join("");
+  const isOrtak=role==="ortak";
+  const cur=q?audienceOf(q,role):[role];
+  const audField=isOrtak
+    ? `<div class="field"><label>Kimler cevaplayacak?</label><div style="font-size:13px;color:var(--muted)">Ortak sorular tüm ekibe (herkese) sorulur.</div></div>`
+    : `<div class="field"><label>Kimler cevaplayacak? (birden fazla seçebilirsin)</label><div class="checks">${ROLE_KEYS.map(r=>`<label><input type="checkbox" class="aud-chk" value="${r}" ${cur.includes(r)?'checked':''}> ${ROLES[r].label}</label>`).join("")}</div></div>`;
+  openModal(`<div class="modal-head"><h3>${q?"Soruyu Düzenle":"Soru Ekle"}</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Grup / başlık</label><input id="q_group" list="glist" value="${esc(q?q.group:(groups[0]||""))}"><datalist id="glist">${gopts}</datalist></div>
+      <div class="field"><label>Soru metni *</label><textarea id="q_text">${esc(q?q.text:"")}</textarea></div>
+      <div class="field"><label>Tip</label><select id="q_type"><option value="scale" ${q&&q.type==="scale"?'selected':''}>Puanlı (1-5)</option><option value="open" ${q&&q.type==="open"?'selected':''}>Açık uçlu</option></select></div>
+      ${audField}
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="saveQ('${role}','${id||""}')">Kaydet</button></div>`);
+}
+async function saveQ(role,id){
+  const text=$("#q_text").value.trim(); if(!text){ toast("Soru metni gerekli"); return; }
+  const group=$("#q_group").value.trim()||"Genel", type=$("#q_type").value;
+  let roles=null;
+  if(role!=="ortak"){ roles=Array.from(document.querySelectorAll('.aud-chk:checked')).map(x=>x.value); if(roles.length===0) roles=[role]; }
+  if(id){ const q=CFG.questionBank[role].find(x=>x.id===id); q.text=text; q.group=group; q.type=type; if(roles) q.roles=roles; }
+  else CFG.questionBank[role].push({id:uid(),group,text,type,hidden:false,roles:roles||undefined});
+  await saveCfg(CFG); closeModal(); toast("Kaydedildi"); renderQBank($("#app"));
+}
+async function togglePeer(id){ const d=CFG.peerDims.find(x=>x.id===id); d.hidden=!d.hidden; await saveCfg(CFG); renderQBank($("#app")); }
+async function delPeer(id){ if(!(await uiConfirm("Bu kriteri silmek istediğine emin misin?","Evet, sil"))) return; CFG.peerDims=CFG.peerDims.filter(x=>x.id!==id); await saveCfg(CFG); renderQBank($("#app")); }
+function editPeer(id){
+  const d=id?CFG.peerDims.find(x=>x.id===id):null;
+  openModal(`<div class="modal-head"><h3>${d?"Kriteri Düzenle":"Kriter Ekle"}</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div class="field"><label>Kriter metni *</label><input id="pd_text" value="${esc(d?d.text:"")}"></div></div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="savePeer('${id||""}')">Kaydet</button></div>`);
+}
+async function savePeer(id){ const t=$("#pd_text").value.trim(); if(!t){ toast("Metin gerekli"); return; } if(id){ CFG.peerDims.find(x=>x.id===id).text=t; } else CFG.peerDims.push({id:uid(),text:t,hidden:false}); await saveCfg(CFG); closeModal(); renderQBank($("#app")); }
+
+/* ---------- NEW / EDIT PHARMACY ---------- */
+function newPharmacy(){
+  openModal(`<div class="modal-head"><h3>Yeni Eczane</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Eczane adı *</label><input id="f_name" placeholder="Örn. Karanfil Eczanesi"></div>
+      <div class="field"><label>Konum / İlçe</label><input id="f_loc" placeholder="Örn. Üsküdar, İstanbul"></div>
+      <div class="field"><label>Hasta popülasyonu / not</label><textarea id="f_pop"></textarea></div>
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="savePharmacyForm()">Kaydet</button></div>`);
+  setTimeout(()=>{$("#f_name").focus();
+    if(window.ArtifarmaEczane)ArtifarmaEczane.onerileriBagla(document.getElementById('f_name'));},50);
+}
+async function savePharmacyForm(){
+  const name=$("#f_name").value.trim(); if(!name){ toast("Eczane adı gerekli"); return; }
+  const _o=window.ArtifarmaEczane?ArtifarmaEczane.esle(name):null;
+  const p={id:uid(),code:_o?_o.id:genCode(name),name,info:{location:$("#f_loc").value.trim(),populasyon:$("#f_pop").value.trim()},people:[],eczaneAnswers:{},eczaneOpen:{},eczaneSwot:null};
+  /* Ortak şifreyle girebilmesi için eczacı kaydı baştan açılır. */
+  if(_o) p.people.push({id:uid(),name:"Eczacı",role:"eczaci",note:"",pass:_o.sifre,answers:{},openAnswers:{},peer:{},submitted:false,swot:null});
+  await savePh(p); const idx=await loadIndex(); idx.push({id:p.id,name:p.name}); await saveIndex(idx); if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:'360° SWOT Tanı Paneli',baslik:p.name,kalici:true,ortak:true,satirlar:[{etiket:'Eczane Kodu',deger:p.code}],not:'Her ekip üyesi bu kodla ve kendisine özel şifresiyle girer. Kişi şifreleri, ekip listesine kişi eklendikçe oluşturulur.'});
+  closeModal(); toast("Eczane eklendi · sorular otomatik atandı"); go("detail",p.id);
+}
+async function editPharmacy(){
+  const p=await loadPh(STATE.phId);
+  openModal(`<div class="modal-head"><h3>Eczaneyi Düzenle</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Eczane adı</label><input id="f_name" value="${esc(p.name)}"></div>
+      <div class="field"><label>Eczane ID (giriş kodu)</label><input id="f_code" value="${esc(p.code)}" style="text-transform:uppercase"></div>
+      <div class="field"><label>Konum</label><input id="f_loc" value="${esc(p.info.location||"")}"></div>
+      <div class="field"><label>Popülasyon notu</label><textarea id="f_pop">${esc(p.info.populasyon||"")}</textarea></div>
+    </div><div class="modal-foot">
+      <button class="btn btn-line" onclick="delPharmacy()">Eczaneyi Sil</button>
+      <button class="btn btn-line" onclick="arsivDegistir()">${p.arsiv?"Arşivden çıkar":"Arşivle"}</button>
+    <button class="btn btn-primary" onclick="savePharmacyEdit()">Kaydet</button></div>`);
+}
+/* Yalnızca bu araç için arşiv; merkezî kütüğe ve diğer araçlara dokunmaz. */
+async function arsivDegistir(){
+  const p=await loadPh(STATE.phId);
+  p.arsiv=!p.arsiv; await savePh(p); closeModal();
+  toast(p.arsiv?"Eczane bu araçta arşivlendi":"Arşivden çıkarıldı");
+  go("list");
+}
+async function savePharmacyEdit(){
+  const p=await loadPh(STATE.phId);
+  p.name=$("#f_name").value.trim()||p.name; p.code=$("#f_code").value.trim().toUpperCase()||p.code;
+  p.info.location=$("#f_loc").value.trim(); p.info.populasyon=$("#f_pop").value.trim();
+  await savePh(p); const idx=await loadIndex(); const i=idx.find(x=>x.id===p.id); if(i)i.name=p.name; await saveIndex(idx);
+  closeModal(); toast("Güncellendi"); renderDetail($("#app"));
+}
+async function delPharmacy(){
+  if(!(await uiConfirm("Bu eczaneyi ve tüm verilerini (personel, cevaplar, SWOT) silmek istediğine emin misin?","Evet, sil"))) return;
+  try{ await window.storage.delete(KPH(STATE.phId),SH); }catch(e){}
+  const idx=(await loadIndex()).filter(x=>x.id!==STATE.phId); await saveIndex(idx);
+  (CFG.consultants||[]).forEach(c=>{ if(c.pharmacies) c.pharmacies=c.pharmacies.filter(id=>id!==STATE.phId); }); await saveCfg(CFG);
+  closeModal(); toast("Silindi"); go("list");
+}
+
+/* ---------- DETAIL (admin/consultant) ---------- */
+async function renderDetail(app){
+  const p=await loadPh(STATE.phId); if(!p){ go("list"); return; }
+  const prog=pharmacyProgress(p);
+  const people=p.people.map(person=>{
+    const st=staffStatus(person);
+    const tag=st==="done"?`<span class="tag tag-done">Tamamladı</span>`:st==="part"?`<span class="tag tag-part">Eksik</span>`:`<span class="tag tag-todo">Bekliyor</span>`;
+    const rm=ROLES[person.role];
+    return `<div class="person-row"><div class="avatar" style="background:${rm.color}">${initials(person.name)}</div>
+      <div class="who"><b>${esc(person.name)}</b><span>${rm.label}${person.note?" · "+esc(person.note):""}</span></div>
+      ${tag}<span class="pwbox">🔑 ${esc(person.pass)}</span>
+      <div class="row-actions">
+        <button class="btn btn-line btn-sm" onclick="changePass('${person.id}')">Şifre</button>
+        <button class="btn btn-line btn-sm" onclick="editPerson('${person.id}')">Düzenle</button>
+        <button class="btn btn-line btn-sm" onclick="pasifDegistir('${person.id}')">${person.pasif?"Etkinleştir":"Pasife al"}</button>
+        <button class="btn btn-line btn-sm" onclick="removePerson('${person.id}')">Sil</button>
+      </div></div>`;
+  }).join("");
+  const ortakAll=(CFG.questionBank.ortak||[]).filter(q=>!q.hidden);
+  const etag=prog.ortakAnswered===0?`<span class="tag tag-todo">Bekliyor</span>`:prog.ortakAnswered<prog.totalP?`<span class="tag tag-part">${prog.ortakAnswered}/${prog.totalP} yanıt</span>`:`<span class="tag tag-done">Tüm ekip yanıtladı</span>`;
+  const hasSwot=p.eczaneSwot||p.people.some(x=>x.swot);
+  app.innerHTML=`
+    <div class="page-head"><div>
+      <button class="btn btn-line btn-sm no-print" onclick="go('list')" style="margin-bottom:12px">← Portföy</button>
+      <h1>${esc(p.name)}</h1><p>${esc(p.info.location||"")}</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        ${hasSwot?`<button class="btn btn-line" onclick="go('report')">SWOT Raporu</button>`:""}
+        <button class="btn btn-line" onclick="openManualSwot()">Manuel SWOT</button>
+        <button class="btn btn-primary" onclick="generateAll()">⚡ SWOT Üret</button>
+      </div></div>
+    <div class="section"><div class="info-row">
+      <div class="info-box"><label>Eczane Giriş ID</label><div class="v code">${esc(p.code)}</div></div>
+      <div class="info-box"><label>Konum</label><div class="v">${esc(p.info.location||"—")}</div></div>
+      <div class="info-box"><label>Personel</label><div class="v">${p.people.length} kişi</div></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn btn-ghost btn-sm" onclick="editPharmacy()">Eczane bilgilerini düzenle</button></div></div>
+    <div class="banner ok">🔒 Personel <b>${esc(p.code)}</b> ID'si ve kendi şifresiyle girer; rol sorularını ve <b>Ortak Eczane Analizi</b>'ni doldurur. Cevaplar ve SWOT yalnızca sana/danışmanına görünür.</div>
+    <div class="section"><div class="card" style="padding:16px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;flex-wrap:wrap;gap:6px">
+        <b style="color:var(--navy);font-size:14px">Değerlendirme ilerlemesi</b>
+        <span style="font-size:13px;color:var(--muted)">${prog.doneP}/${prog.totalP} personel tamamladı · Ortak analiz: ${prog.ortakAnswered}/${prog.totalP} yanıt · <b style="color:var(--navy)">%${prog.pct}</b></span>
+      </div>
+      <div class="progress"><i style="width:${prog.pct}%"></i></div>
+    </div></div>
+    <div class="section">
+      <div class="section-head"><h2><span class="dot"></span> Bu Eczanenin Personeli</h2><button class="btn btn-navy btn-sm" onclick="newPerson()">+ Kişi Ekle</button></div>
+      ${p.people.length===0?`<div class="empty" style="padding:40px"><div class="ico">👥</div><h3>Bu eczaneye personel ekle</h3><p>Eczacı, teknisyen, dermokozmetik uzmanı, çırak ve diğer rolleri ekle; her birine otomatik şifre atanır.</p><button class="btn btn-navy btn-sm" onclick="newPerson()">+ Kişi Ekle</button></div>`:people}
+    </div>
+    <div class="section">
+      <div class="section-head"><h2><span class="dot"></span> Ortak Eczane Analizi</h2>${etag}</div>
+      <div class="person-row"><div class="avatar" style="background:var(--ok)">🏥</div>
+      <div class="who"><b>${ortakAll.length} ortak soru</b><span>Tüm personele aynı sorulur; cevaplar karşılaştırılarak eczane SWOT'u üretilir</span></div>
+      <span class="pwbox">${prog.ortakAnswered}/${prog.totalP} yanıt</span></div>
+    </div>`;
+}
+function newPerson(){
+  const opts=ROLE_KEYS.map(k=>`<option value="${k}">${ROLES[k].label}</option>`).join("");
+  openModal(`<div class="modal-head"><h3>Kişi Ekle</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Ad Soyad *</label><input id="p_name"></div>
+      <div class="field"><label>Rol *</label><select id="p_role">${opts}</select></div>
+      <div class="field"><label>Not (opsiyonel)</label><input id="p_note"></div>
+      <div class="field"><label>Kişisel şifre</label><input id="p_pass" value="${genPass()}"></div>
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="savePersonForm()">Ekle</button></div>`);
+  setTimeout(()=>$("#p_name").focus(),50);
+}
+async function savePersonForm(){
+  const name=$("#p_name").value.trim(); if(!name){ toast("Ad gerekli"); return; }
+  const pass=$("#p_pass").value.trim()||genPass();
+  const p=await loadPh(STATE.phId);
+  if(p.people.some(x=>x.pass===pass)){ toast("Bu şifre bu eczanede kullanımda, değiştir"); return; }
+  p.people.push({id:uid(),name,role:$("#p_role").value,note:$("#p_note").value.trim(),pass,answers:{},openAnswers:{},peer:{},submitted:false,swot:null});
+  await savePh(p); closeModal(); toast("Kişi eklendi");
+  if(window.ArtifarmaKimlik)ArtifarmaKimlik.goster({arac:"360° SWOT Tanı Paneli",baslik:name,kalici:true,
+    satirlar:[{etiket:"Eczane Kodu",deger:p.code},{etiket:"Kişisel şifre",deger:pass}],
+    not:"Bu kişi, eczane koduyla ve yalnızca kendisine ait bu şifreyle girer. Yanıtları diğer ekip üyelerine kapalıdır."});
+  renderDetail($("#app"));
+}
+async function editPerson(pid){
+  const p=await loadPh(STATE.phId); const person=p.people.find(x=>x.id===pid);
+  const opts=ROLE_KEYS.map(k=>`<option value="${k}" ${person.role===k?'selected':''}>${ROLES[k].label}</option>`).join("");
+  openModal(`<div class="modal-head"><h3>Kişiyi Düzenle</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Ad Soyad</label><input id="p_name" value="${esc(person.name)}"></div>
+      <div class="field"><label>Rol</label><select id="p_role">${opts}</select></div>
+      <div class="field"><label>Kişisel şifre</label><input id="p_pass" value="${esc(person.pass)}"></div>
+      <div class="field"><label>Not</label><input id="p_note" value="${esc(person.note||"")}"></div>
+    </div><div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="savePersonEdit('${pid}')">Kaydet</button></div>`);
+}
+async function savePersonEdit(pid){
+  const p=await loadPh(STATE.phId); const person=p.people.find(x=>x.id===pid);
+  person.name=$("#p_name").value.trim()||person.name; person.role=$("#p_role").value; person.note=$("#p_note").value.trim();
+  /* Şifre bu ekrandan da değiştirilebilir; eczanede benzersiz olmalı. */
+  const yeniPass=($("#p_pass")&&$("#p_pass").value||"").trim();
+  if(yeniPass && yeniPass!==person.pass){
+    if(p.people.some(x=>x.id!==pid && x.pass===yeniPass)){ toast("Bu şifre bu eczanede kullanımda"); return; }
+    person.pass=yeniPass;
+  }
+  await savePh(p); closeModal(); toast("Güncellendi"); renderDetail($("#app"));
+}
+async function changePass(pid){
+  const p=await loadPh(STATE.phId); const person=p.people.find(x=>x.id===pid);
+  openModal(`<div class="modal-head"><h3>${esc(person.name)} · Şifre</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body"><div class="field"><label>Kişisel şifre</label><input id="np" value="${esc(person.pass)}"></div>
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('np').value='${genPass()}'">Rastgele üret</button></div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Vazgeç</button>
+    <button class="btn btn-primary" onclick="savePass('${pid}')">Kaydet</button></div>`);
+}
+async function savePass(pid){
+  const p=await loadPh(STATE.phId); const person=p.people.find(x=>x.id===pid);
+  const np=$("#np").value.trim(); if(!np){ toast("Şifre boş olamaz"); return; }
+  if(p.people.some(x=>x.id!==pid&&x.pass===np)){ toast("Bu şifre bu eczanede kullanımda"); return; }
+  person.pass=np; await savePh(p); closeModal(); toast("Şifre güncellendi"); renderDetail($("#app"));
+}
+/* Yalnızca bu araç için pasife alır; merkezî kütüğe dokunmaz. */
+async function pasifDegistir(pid){
+  const p=await loadPh(STATE.phId);
+  const kisi=p.people.find(x=>x.id===pid); if(!kisi) return;
+  kisi.pasif=!kisi.pasif; await savePh(p);
+  toast(kisi.pasif?"Pasife alındı — bu araca giriş yapamaz":"Yeniden etkinleştirildi");
+  renderDetail($("#app"));
+}
+async function removePerson(pid){
+  if(!(await uiConfirm("Bu kişiyi ve değerlendirmesini silmek istediğine emin misin?","Evet, sil"))) return;
+  const p=await loadPh(STATE.phId); p.people=p.people.filter(x=>x.id!==pid);
+  p.people.forEach(o=>{ if(o.peer) delete o.peer[pid]; });
+  await savePh(p); toast("Silindi"); renderDetail($("#app"));
+}
+
+/* DRAFT: ortak (genel) modal taslakları için ortak değişken */
+let DRAFT=null;
+
+/* ---------- STAFF SHELL & SURVEY ---------- */
+function renderStaffShell(){
+  $("#root").innerHTML=`
+    <div class="staff-top"><div class="wrap" style="display:flex;align-items:center;gap:12px">
+      <span class="staff-logochip"><img src="${LOGO}" alt="Artıfarma Group"></span><div style="flex:1"><b>Değerlendirme</b><span>Gizli · yalnızca kendi yanıtların</span></div>
+      <button class="btn btn-line btn-sm" onclick="logout()">Çıkış</button></div></div>
+    <div id="staffapp"></div>`;
+  renderStaffSurvey();
+}
+let SDRAFT=null;
+async function renderStaffSurvey(){
+  const p=await loadPh(SESSION.phId); const person=p.people.find(x=>x.id===SESSION.personId);
+  if(!person){ logout(); return; }
+  if(!SDRAFT) SDRAFT={answers:JSON.parse(JSON.stringify(person.answers||{})),open:JSON.parse(JSON.stringify(person.openAnswers||{})),peer:JSON.parse(JSON.stringify(person.peer||{}))};
+  const sc=scaleQs(person.role), op=openQs(person.role);
+  const groups=[...new Set(sc.map(q=>q.group))];
+  let body=`<div class="banner">👋 Merhaba ${esc(person.name)}. Aşağıdaki soruları içtenlikle yanıtla. Yanıtların <b>gizlidir</b>; ekipteki kimse (eczacı dahil) cevaplarını görmez.</div>`;
+  body+=`<div style="font-size:13px;font-weight:700;color:var(--red);letter-spacing:.06em;text-transform:uppercase;margin:6px 0 10px">Bölüm 1 · Sana Özel Sorular</div>`;
+  groups.forEach(g=>{
+    body+=`<div class="dim"><div class="dim-head">${esc(g)}</div>`;
+    sc.filter(q=>q.group===g).forEach(q=>{
+      body+=`<div class="q"><div class="q-text">${esc(q.text)}</div><div class="scale-grp"><span class="lbl">1=Hayır/Zayıf · 5=Evet/Güçlü</span><div class="likert">`;
+      for(let i=1;i<=5;i++) body+=`<button class="${SDRAFT.answers[q.id]==i?'on':''}" onclick="setS('${q.id}',${i},this)">${i}</button>`;
+      body+=`</div></div></div>`;
+    });
+    body+=`</div>`;
+  });
+  if(op.length){
+    body+=`<div class="dim"><div class="dim-head">Açık Uçlu (sana özel)</div>`;
+    op.forEach(q=>{ body+=`<div class="q q-open"><div class="q-text">${esc(q.text)}</div><textarea oninput="SDRAFT.open['${q.id}']=this.value">${esc(SDRAFT.open[q.id]||"")}</textarea></div>`; });
+    body+=`</div>`;
+  }
+  // ORTAK ECZANE ANALİZİ — herkese aynı sorulur
+  const ort=visibleQs('ortak');
+  if(ort.length){
+    const og=[...new Set(ort.map(q=>q.group))];
+    body+=`<div style="font-size:13px;font-weight:700;color:var(--red);letter-spacing:.06em;text-transform:uppercase;margin:24px 0 10px">Bölüm 2 · Ortak Eczane Analizi</div>`;
+    body+=`<div class="banner">🏥 Bu bölümdeki sorular <b>eczanenin geneli</b> hakkındadır ve tüm ekibe aynı sorulur. Kendi gözlemine göre yanıtla.</div>`;
+    og.forEach(g=>{
+      body+=`<div class="dim"><div class="dim-head">${esc(g)}</div>`;
+      ort.filter(q=>q.group===g).forEach(q=>{
+        if(q.type==="open"){ body+=`<div class="q q-open"><div class="q-text">${esc(q.text)}</div><textarea oninput="SDRAFT.open['${q.id}']=this.value">${esc(SDRAFT.open[q.id]||"")}</textarea></div>`; }
+        else { body+=`<div class="q"><div class="q-text">${esc(q.text)}</div><div class="scale-grp"><span class="lbl">1=Hayır/Zayıf · 5=Evet/Güçlü</span><div class="likert">`; for(let i=1;i<=5;i++) body+=`<button class="${SDRAFT.answers[q.id]==i?'on':''}" onclick="setS('${q.id}',${i},this)">${i}</button>`; body+=`</div></div></div>`; }
+      });
+      body+=`</div>`;
+    });
+  }
+  // AKRAN GERİ BİLDİRİMİ
+  const others=p.people.filter(x=>x.id!==person.id);
+  const pdims=visiblePeer();
+  if(others.length && pdims.length){
+    body+=`<div style="font-size:13px;font-weight:700;color:var(--red);letter-spacing:.06em;text-transform:uppercase;margin:24px 0 10px">Bölüm 3 · Ekip Geri Bildirimi</div>`;
+    body+=`<div class="dim"><div class="dim-head fb">${person.role==="eczaci"?"Ekip Değerlendirmesi (gizli)":"Akran Değerlendirmesi (gizli)"}</div><div style="padding:13px 15px">`;
+    others.forEach(o=>{
+      const pf=SDRAFT.peer[o.id]||{};
+      body+=`<div class="peer-block"><div class="ph"><span class="av" style="background:${ROLES[o.role].color}">${initials(o.name)}</span>${esc(o.name)} · ${ROLES[o.role].label}</div>`;
+      pdims.forEach(pd=>{
+        body+=`<div class="scale-grp"><span class="lbl">${esc(pd.text)}</span><div class="likert">`;
+        for(let i=1;i<=5;i++) body+=`<button class="${pf[pd.id]==i?'on':''}" onclick="setSP('${o.id}','${pd.id}',${i},this)">${i}</button>`;
+        body+=`</div></div>`;
+      });
+      body+=`<div style="margin-top:8px"><textarea placeholder="Kısa yorum (opsiyonel)" oninput="setSPN('${o.id}',this.value)">${esc(pf.note||"")}</textarea></div></div>`;
+    });
+    body+=`</div></div>`;
+  }
+  $("#staffapp").innerHTML=`<div class="staff-wrap">
+    <div class="page-head"><div><div class="eyebrow">${esc(p.name)}</div><h1>${ROLES[person.role].label} Değerlendirmesi</h1></div></div>
+    ${body}
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px">
+      <button class="btn btn-ghost" onclick="saveStaff(false)">Taslağı Kaydet</button>
+      <button class="btn btn-primary" onclick="saveStaff(true)">Gönder</button>
+    </div></div>`;
+  window.scrollTo(0,0);
+}
+function setS(id,v,btn){ SDRAFT.answers[id]=v; btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); }
+function setSP(tid,pd,v,btn){ if(!SDRAFT.peer[tid])SDRAFT.peer[tid]={}; SDRAFT.peer[tid][pd]=v; btn.parentElement.querySelectorAll("button").forEach(b=>b.classList.remove("on")); btn.classList.add("on"); }
+function setSPN(tid,val){ if(!SDRAFT.peer[tid])SDRAFT.peer[tid]={}; SDRAFT.peer[tid].note=val; }
+async function saveStaff(submit){
+  const p=await loadPh(SESSION.phId); const person=p.people.find(x=>x.id===SESSION.personId);
+  person.answers=SDRAFT.answers; person.openAnswers=SDRAFT.open; person.peer=SDRAFT.peer;
+  if(submit){
+    const sc=scaleQs(person.role).concat((CFG.questionBank.ortak||[]).filter(q=>!q.hidden&&q.type==="scale"));
+    const missing=sc.filter(q=>person.answers[q.id]==null).length;
+    if(missing>0){ if(!(await uiConfirm(missing+" puanlı soru boş. Yine de göndermek istiyor musun?","Evet, gönder",false))){ await savePh(p); return; } }
+    person.submitted=true;
+  }
+  await savePh(p);
+  if(submit){ renderStaffThanks(p.name); } else { toast("Taslak kaydedildi"); }
+}
+function renderStaffThanks(phName){
+  $("#staffapp").innerHTML=`<div class="staff-wrap"><div class="thanks">
+    <div class="big">✅</div><h2>Teşekkürler!</h2>
+    <p>Değerlendirmen kaydedildi. Yanıtların gizli tutulur ve yalnızca danışmanlık ekibi tarafından analiz edilir.</p>
+    <button class="btn btn-line" onclick="logout()">Çıkış Yap</button>
+    <button class="btn btn-ghost" onclick="SDRAFT=null;renderStaffSurvey()" style="margin-left:8px">Yanıtlarımı Düzenle</button>
+  </div></div>`;
+}
+
+/* ---------- AI ---------- */
+function parseLenientJSON(txt){
+  let t=(txt||"").replace(/```json/gi,"").replace(/```/g,"").trim();
+  const a=t.indexOf("{"), b=t.lastIndexOf("}");
+  if(a>=0&&b>a) t=t.slice(a,b+1);
+  return JSON.parse(t);
+}
+async function callClaude(system,user){
+  const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,system,messages:[{role:"user",content:user}]})});
+  if(!res.ok) throw new Error("API "+res.status);
+  const data=await res.json();
+  if(data.error) throw new Error(data.error.message||"API hata");
+  const txt=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  return parseLenientJSON(txt);
+}
+const SWOT_SYS=`Sen Artıfarma'nın kıdemli eczane yönetim danışmanısın. Türk eczacılık sektörüne hakimsin (SGK, OTC, dermokozmetik, takviye, çapraz satış, personel yönetimi).
+Verilen 1-5 ölçekli öz-değerlendirme ve gizli 360° ekip geri bildiriminden profesyonel SWOT üretirsin. 4-5 güçlü yön, 1-2 zayıf yön; 3 izlenecek alan.
+Kişinin öz-algısı ile ekip geri bildirimi arasında belirgin (1.5+) fark varsa "kör nokta / algı farkı" olarak işaretle.
+Sorular soru formunda olabilir; 5=evet/güçlü, 1=hayır/zayıf demektir. Bazı sorular olumsuz ifade edilebilir (örn. "çatışmalar yaşanıyor mu", "hastalar bekliyor mu", "müdahale oluyor mu"); bu maddelerde yüksek puanı SORUN olarak yorumla, anlamına göre değerlendir.
+Yanıtı SADECE geçerli JSON ver. Markdown veya \`\`\` KULLANMA. Türkçe, kısa, eyleme dönük.
+Şema: {"guclu":[],"zayif":[],"firsatlar":[],"tehditler":[],"korNoktalar":[],"oneriler":[]}
+Her dizide en fazla 4 madde; korNoktalar yoksa boş dizi.`;
+
+function summarizePerson(person,ph){
+  const sc=scaleQs(person.role); const groups={};
+  sc.forEach(q=>{ (groups[q.group]=groups[q.group]||[]).push(q.text.replace(/\.$/,"")+" (öz:"+(person.answers[q.id]??"yanıtsız")+")"); });
+  const lines=Object.entries(groups).map(([g,a])=>"• "+g+": "+a.join(" | "));
+  const open=openQs(person.role).filter(q=>person.openAnswers?.[q.id]).map(q=>q.text+" → "+person.openAnswers[q.id]);
+  const pdims=visiblePeer(); const fb=[];
+  ph.people.forEach(o=>{ if(o.id!==person.id && o.peer && o.peer[person.id]){ const f=o.peer[person.id]; const seg=pdims.filter(d=>f[d.id]).map(d=>d.text+":"+f[d.id]); fb.push(`${o.name} (${ROLES[o.role].label})${o.role==="eczaci"?" [yönetici]":""}: ${seg.join(", ")||"-"}${f.note?" — \""+f.note+"\"":""}`); } });
+  return {lines:lines.join("\n"),open:open.join("\n"),fb:fb.join("\n")};
+}
+async function genPersonSwot(person,ph){
+  const s=summarizePerson(person,ph);
+  const user=`Analiz birimi: ${ROLES[person.role].label.toUpperCase()} — ${person.name}\nEczane: ${ph.name} (${ph.info.location||""})\n\nÖZ-DEĞERLENDİRME:\n${s.lines}\n\nGİZLİ 360° EKİP GERİ BİLDİRİMİ (bu kişi hakkında):\n${s.fb||"(yok)"}\n\nAÇIK UÇLU:\n${s.open||"(yok)"}\n\nBu kişi için SWOT üret. Öz-algı ile 360° geri bildirimi karşılaştır; fırsat/tehditlerde mesleki gelişim ve sektörel bağlamı dikkate al.`;
+  return await callClaude(SWOT_SYS,user);
+}
+function eczaneDataText(ph){
+  const list=(CFG.questionBank.ortak||[]).filter(q=>!q.hidden);
+  const scale=list.filter(q=>q.type==="scale"), opens=list.filter(q=>q.type==="open");
+  const groups={}; scale.forEach(q=>{ (groups[q.group]=groups[q.group]||[]).push(q); });
+  const lines=Object.entries(groups).map(([g,qs])=>{
+    const parts=qs.map(q=>{
+      const vals=ph.people.map(pp=>pp.answers&&pp.answers[q.id]).filter(v=>v!=null);
+      if(!vals.length) return q.text.replace(/\?$/,"")+" (yanıtsız)";
+      const avg=(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
+      const spread=Math.max(...vals)-Math.min(...vals);
+      return q.text.replace(/\?$/,"")+" (ort:"+avg+"/5"+(spread>=3?" ⚠FİKİR AYRILIĞI":"")+")";
+    });
+    return "• "+g+": "+parts.join(" | ");
+  });
+  const openBlocks=opens.map(q=>{
+    const ans=ph.people.map(pp=>(pp.openAnswers&&pp.openAnswers[q.id])?`${pp.name}(${ROLES[pp.role].label}): ${pp.openAnswers[q.id]}`:null).filter(Boolean);
+    return ans.length?q.text+"\n   - "+ans.join("\n   - "):null;
+  }).filter(Boolean);
+  return `Yanıtlayan ekip: ${ph.people.map(p=>p.name+" ("+ROLES[p.role].label+")").join(", ")||"(yok)"}\n\nORTAK ALGI VERİLERİ (tüm ekip aynı soruları yanıtladı; ortalama ve fikir ayrılıkları):\n${lines.join("\n")}\n\nEKİP AÇIK UÇLU YANITLARI (rolden role karşılaştır):\n${openBlocks.join("\n")||"(yok)"}`;
+}
+async function genEczaneSwot(ph){
+  const user=`Analiz birimi: ECZANE (İŞLETME) — ${ph.name} (${ph.info.location||""})\nPopülasyon: ${ph.info.populasyon||"(yok)"}\n\n${eczaneDataText(ph)}\n\nBu eczane için işletme düzeyinde SWOT üret. Yüksek ve uyumlu ortalamaları güçlü yön; düşük ortalamaları zayıf yön/tehdit olarak değerlendir. "FİKİR AYRILIĞI" işaretli maddeleri kör nokta olarak öne çıkar. Eğitim, kurumsallaşma ve dijitalleşmedeki açıkları fırsata bağla.`;
+  return await callClaude(SWOT_SYS,user);
+}
+
+/* ---------- MANUEL SWOT (her ortamda çalışır) ---------- */
+function buildSwotPrompt(ph){
+  const SCHEMA=`{"people":{"<kisi_id>":{"guclu":[],"zayif":[],"firsatlar":[],"tehditler":[],"korNoktalar":[],"oneriler":[]}},"eczane":{"guclu":[],"zayif":[],"firsatlar":[],"tehditler":[],"korNoktalar":[],"oneriler":[]}}`;
+  let out="";
+  out+="Sen Artıfarma'nın kıdemli eczane yönetim danışmanısın. Türk eczacılık sektörüne hakimsin (SGK, OTC, dermokozmetik, takviye, çapraz satış, personel yönetimi).\n";
+  out+="Aşağıdaki gizli 360° değerlendirme verilerinden, LİSTELENEN HER KİŞİ için ve ECZANE için ayrı bir SWOT üret.\n";
+  out+="4-5 puan güçlü yön, 1-2 zayıf yön; 3 izlenecek alandır. Öz-algı ile ekip geri bildirimi arasında 1.5+ fark varsa kör nokta olarak işaretle. Soru-cümlelerde 5=evet/güçlü, 1=hayır/zayıf; olumsuz ifadeli sorularda (çatışma var mı, hasta bekliyor mu vb.) yüksek puanı sorun say.\n";
+  out+="ÇIKTIYI SADECE aşağıdaki JSON şemasında ver; başka HİÇBİR metin, açıklama veya markdown ekleme. \"people\" içindeki anahtar olarak her kişinin verilen KİŞİ_ID'sini kullan:\n";
+  out+=SCHEMA+"\n";
+  out+="Her dizide en fazla 4 kısa, Türkçe, eyleme dönük madde. korNoktalar yoksa boş dizi ver.\n\n";
+  out+=`ECZANE: ${ph.name} (${ph.info.location||""})\n\n`;
+  ph.people.forEach(person=>{
+    if(staffStatus(person)==="todo") return;
+    const s=summarizePerson(person,ph);
+    out+=`### KİŞİ_ID: ${person.id} — ${person.name} (${ROLES[person.role].label})\n`;
+    out+=`ÖZ-DEĞERLENDİRME:\n${s.lines||"(yok)"}\n`;
+    out+=`GİZLİ 360° EKİP GERİ BİLDİRİMİ:\n${s.fb||"(yok)"}\n`;
+    out+=`AÇIK UÇLU:\n${s.open||"(yok)"}\n\n`;
+  });
+  out+=`### ECZANE (İŞLETME) — ortak analiz\n${eczaneDataText(ph)}\n`;
+  return out;
+}
+async function openManualSwot(){
+  openModal(`<div class="modal-head"><h3>Manuel SWOT · Kopyala–Yapıştır</h3><button class="x" onclick="closeModal()">×</button></div>
+    <div class="modal-body">
+      <div class="banner">Bu yöntem her ortamda çalışır:<div><b>1)</b> Aşağıdaki metni kopyala. <b>2)</b> Yeni bir Claude sohbetine yapıştırıp gönder. <b>3)</b> Claude'un verdiği JSON çıktısını ikinci kutuya yapıştır ve "Uygula"ya bas.</div></div>
+      <div class="field"><label>1 · Bu metni kopyala → Claude'a yapıştır</label>
+        <textarea id="manual_prompt" readonly style="height:170px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea>
+        <button class="btn btn-navy btn-sm" style="margin-top:8px" onclick="copyPrompt()">📋 Metni Kopyala</button></div>
+      <div class="field"><label>2 · Claude'un JSON cevabını buraya yapıştır</label>
+        <textarea id="manual_in" placeholder='{"people":{...},"eczane":{...}}' style="height:120px;font-family:ui-monospace,Menlo,monospace;font-size:12px"></textarea></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-line" onclick="closeModal()">Kapat</button>
+      <button class="btn btn-primary" onclick="applyManualSwot()">Uygula ve Raporu Aç</button></div>`,true);
+  const ph=await loadPh(STATE.phId);
+  const el=document.getElementById("manual_prompt"); if(el) el.value=buildSwotPrompt(ph);
+}
+function copyPrompt(){
+  const ta=document.getElementById("manual_prompt"); if(!ta) return;
+  ta.focus(); ta.select();
+  let ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+  if(ok){ toast("Kopyalandı"); return; }
+  if(navigator.clipboard){ navigator.clipboard.writeText(ta.value).then(()=>toast("Kopyalandı")).catch(()=>toast("Metni elle seç: Ctrl+A, Ctrl+C")); }
+  else toast("Metni elle seç: Ctrl+A, Ctrl+C");
+}
+async function applyManualSwot(){
+  const raw=document.getElementById("manual_in").value;
+  let data; try{ data=parseLenientJSON(raw); }catch(e){ toast("JSON okunamadı — çıktının tamamını yapıştırdığından emin ol"); return; }
+  const ph=await loadPh(STATE.phId);
+  let n=0;
+  if(data.people){ ph.people.forEach(p=>{ if(data.people[p.id]){ p.swot=data.people[p.id]; n++; } }); }
+  if(data.eczane){ ph.eczaneSwot=data.eczane; n++; }
+  if(n===0){ toast("Eşleşen SWOT bulunamadı — kişi ID'leri değişmiş olabilir"); return; }
+  ph.reportDate=new Date().toLocaleDateString("tr-TR"); ph.reportBy=SESSION.name;
+  await savePh(ph); closeModal(); toast(n+" SWOT uygulandı"); go("report");
+}
+async function generateAll(){
+  const ph=await loadPh(STATE.phId);
+  const targets=ph.people.filter(p=>staffStatus(p)!=="todo");
+  const ecReady=ph.people.some(p=>personAnsweredOrtak(p));
+  if(targets.length===0&&!ecReady){ toast("Önce en az bir değerlendirme doldurulmalı"); return; }
+  const total=targets.length+(ecReady?1:0);
+  $("#app").innerHTML=`<div class="loadbox"><div class="spinner"></div><p id="loadmsg">Analiz hazırlanıyor…</p></div>`;
+  let step=0;
+  try{
+    for(const person of targets){ step++; $("#loadmsg").textContent=`SWOT üretiliyor (${step}/${total}) · ${person.name}`; person.swot=await genPersonSwot(person,ph); await savePh(ph); }
+    if(ecReady){ step++; $("#loadmsg").textContent=`SWOT üretiliyor (${step}/${total}) · İşletme`; ph.eczaneSwot=await genEczaneSwot(ph); await savePh(ph); }
+    ph.reportDate=new Date().toLocaleDateString("tr-TR"); ph.reportBy=SESSION.name; await savePh(ph);
+    toast("SWOT raporu hazır"); go("report");
+  }catch(e){ console.error(e);
+    await renderDetail($("#app"));
+    toast("Otomatik üretim kapalı — manuel moda geçildi");
+    openManualSwot();
+  }
+}
+
+/* ---------- REPORT (admin/consultant) + PDF ---------- */
+let RTAB=0;
+async function renderReport(app){
+  const ph=await loadPh(STATE.phId); if(!ph){ go("list"); return; }
+  const blocks=[];
+  ph.people.forEach(p=>{ if(p.swot) blocks.push({label:p.name,role:ROLES[p.role].label,swot:p.swot}); });
+  if(ph.eczaneSwot) blocks.push({label:ph.name,role:"İşletme",swot:ph.eczaneSwot});
+  if(blocks.length===0){ go("detail"); return; }
+  if(RTAB>=blocks.length) RTAB=0;
+  const tabBtns=blocks.map((b,i)=>`<button class="swot-tab ${i===RTAB?'active':''}" onclick="RTAB=${i};renderReport($('#app'))">${esc(b.label)} · ${b.role}</button>`).join("");
+  const sections=blocks.map((b,i)=>`<div class="report-block" style="${i===RTAB?'':'display:none'}" data-sec="${i}">
+      <div class="rb-title">${esc(b.label)}</div><div class="rb-sub">${esc(b.role)} · SWOT</div>${renderSwotCard(b.swot)}</div>`).join("");
+  app.innerHTML=`
+    <div class="page-head no-print"><div>
+      <button class="btn btn-line btn-sm" onclick="go('detail')" style="margin-bottom:12px">← ${esc(ph.name)}</button>
+      <h1>SWOT Raporu</h1><p>Gizli 360° verilerden üretildi. PDF olarak indirip eczaneye özel rapor verebilirsin.</p></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-line" onclick="generateAll()">↻ Yeniden Üret</button>
+        <button class="btn btn-navy" onclick="downloadReport()">⤓ SWOT'u İndir</button>
+        <button class="btn btn-line" onclick="printReport()">🖨 Yazdır</button>
+      </div></div>
+    <div class="print-cover"><div class="pl">Artıfarma · Danışmanlık Raporu</div>
+      <h1>${esc(ph.name)} — 360° SWOT Analizi</h1>
+      <div class="mt">${esc(ph.info.location||"")} · Hazırlayan: ${esc(ph.reportBy||SESSION.name)} · ${esc(ph.reportDate||new Date().toLocaleDateString("tr-TR"))}</div></div>
+    <div class="swot-tabs no-print">${tabBtns}</div>
+    <div id="report-sections">${sections}</div>
+    <div class="meta-line no-print">Bu analiz danışmanlık değerlendirmesi amaçlıdır; nihai yorum danışmana aittir.</div>`;
+}
+function printReport(){
+  document.querySelectorAll("#report-sections .report-block").forEach(el=>el.style.display="block");
+  window.print();
+  setTimeout(()=>{ document.querySelectorAll("#report-sections .report-block").forEach((el,i)=>{ el.style.display=(i===RTAB?"block":"none"); }); },300);
+}
+function buildReportHTML(ph){
+  const blocks=[];
+  ph.people.forEach(p=>{ if(p.swot) blocks.push({label:p.name,role:ROLES[p.role].label,swot:p.swot}); });
+  if(ph.eczaneSwot) blocks.push({label:ph.name,role:"İşletme",swot:ph.eczaneSwot});
+  const li=arr=>(arr&&arr.length)?arr.map(x=>`<li>${esc(x)}</li>`).join(""):`<li class="none">—</li>`;
+  const extra=(t,a)=>(a&&a.length)?`<div class="ins"><h3>${t}</h3><ul>${li(a)}</ul></div>`:"";
+  const sec=b=>`<section class="rb">
+    <h2>${esc(b.label)} <span>${esc(b.role)} · SWOT</span></h2>
+    <div class="grid">
+      <div class="quad s"><h3>Güçlü Yönler</h3><ul>${li(b.swot.guclu)}</ul></div>
+      <div class="quad w"><h3>Zayıf Yönler</h3><ul>${li(b.swot.zayif)}</ul></div>
+      <div class="quad o"><h3>Fırsatlar</h3><ul>${li(b.swot.firsatlar)}</ul></div>
+      <div class="quad t"><h3>Tehditler</h3><ul>${li(b.swot.tehditler)}</ul></div>
+    </div>${extra("Kör Noktalar & Algı Farkları",b.swot.korNoktalar)}${extra("Stratejik Öneriler",b.swot.oneriler)}
+  </section>`;
+  return `<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(ph.name)} · SWOT</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,Arial,sans-serif;color:#1d1d2b;background:#fff;padding:34px;max-width:900px;margin:0 auto}
+.cover{border-bottom:4px solid #2A2A5E;padding-bottom:18px;margin-bottom:26px}
+.cover img{height:44px;margin-bottom:10px}
+.pl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#DC1A22;font-weight:800}
+.cover h1{font-size:26px;color:#2A2A5E;margin:4px 0}
+.cover .mt{font-size:13px;color:#6b6b80}
+.rb{margin-bottom:30px;page-break-inside:avoid}
+.rb h2{font-size:19px;color:#2A2A5E;margin-bottom:14px;border-left:4px solid #DC1A22;padding-left:10px}
+.rb h2 span{font-size:12px;color:#6b6b80;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.quad{border:1px solid #e6e6ee;border-radius:9px;padding:15px 17px}
+.quad h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+.quad.s{border-top:3px solid #1f8a52}.quad.s h3{color:#1f8a52}
+.quad.w{border-top:3px solid #DC1A22}.quad.w h3{color:#DC1A22}
+.quad.o{border-top:3px solid #2A6FDC}.quad.o h3{color:#2A6FDC}
+.quad.t{border-top:3px solid #b35a00}.quad.t h3{color:#b35a00}
+.quad ul,.ins ul{list-style:none}
+.quad li{font-size:13.5px;padding:6px 0 6px 15px;position:relative;border-top:1px dashed #e6e6ee}
+.quad li:first-child{border-top:none}
+.quad li:before{content:"";position:absolute;left:2px;top:13px;width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+.ins{background:#2A2A5E;color:#fff;border-radius:9px;padding:16px 18px;margin-top:14px}
+.ins h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:9px}
+.ins li{font-size:13.5px;padding:5px 0 5px 15px;position:relative;border-top:1px solid rgba(255,255,255,.12);color:#e4e4f2}
+.ins li:first-child{border-top:none}
+.ins li:before{content:"›";position:absolute;left:0;color:#DC1A22;font-weight:800}
+.none{opacity:.5}
+.tip{margin:0 0 20px;font-size:12px;color:#6b6b80;background:#f0f0f6;border-radius:8px;padding:10px 14px}
+@media print{.tip{display:none}body{padding:0}}
+</style></head><body>
+<div class="tip">💡 PDF olarak kaydetmek için: bu dosyayı tarayıcıda aç → yazdır (Ctrl/Cmd + P) → “Hedef: PDF olarak kaydet”.</div>
+<div class="cover"><img src="${LOGO}" alt="Artıfarma Group"><div class="pl">Artıfarma · Danışmanlık Raporu</div>
+<h1>${esc(ph.name)} — 360° SWOT Analizi</h1>
+<div class="mt">${esc(ph.info.location||"")} · Hazırlayan: ${esc(ph.reportBy||SESSION.name)} · ${esc(ph.reportDate||new Date().toLocaleDateString("tr-TR"))}</div></div>
+${blocks.map(sec).join("")}
+</body></html>`;
+}
+async function downloadReport(){
+  const ph=await loadPh(STATE.phId); if(!ph) return;
+  const html=buildReportHTML(ph);
+  const name=(ph.name||"eczane").replace(/[^\wÇĞİÖŞÜçğıöşü]+/g,"_")+"_SWOT.html";
+  const ok=downloadFile(name, html, "text/html");
+  if(ok) toast("Rapor indirildi — açıp PDF olarak yazdırabilirsin");
+  else { // fallback: yeni sekmede aç
+    try{ const w=window.open("","_blank"); if(w){ w.document.write(html); w.document.close(); toast("Rapor yeni sekmede açıldı"); } else toast("İndirme engellendi"); }
+    catch(e){ toast("İndirme bu ortamda engellendi"); }
+  }
+}
+function ql(arr){ return (arr&&arr.length)?arr.map(x=>`<li>${esc(x)}</li>`).join(""):`<li style="opacity:.5">—</li>`; }
+function renderSwotCard(s){
+  let h=`<div class="swot-grid">
+    <div class="quad s"><h4><span class="b">G</span> Güçlü Yönler</h4><ul>${ql(s.guclu)}</ul></div>
+    <div class="quad w"><h4><span class="b">Z</span> Zayıf Yönler</h4><ul>${ql(s.zayif)}</ul></div>
+    <div class="quad o"><h4><span class="b">F</span> Fırsatlar</h4><ul>${ql(s.firsatlar)}</ul></div>
+    <div class="quad t"><h4><span class="b">T</span> Tehditler</h4><ul>${ql(s.tehditler)}</ul></div></div>`;
+  if(s.korNoktalar&&s.korNoktalar.length) h+=`<div class="insight"><h4><span class="b">!</span> Kör Noktalar & Algı Farkları</h4><ul>${s.korNoktalar.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  if(s.oneriler&&s.oneriler.length) h+=`<div class="insight" style="background:var(--navy-700)"><h4><span class="b">→</span> Stratejik Öneriler</h4><ul>${s.oneriler.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  return h;
+}
+</script>
+</body>
+</html>
