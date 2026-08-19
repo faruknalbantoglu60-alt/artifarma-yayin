@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="tr" data-af-no-storage>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Artıfarma — Eczane Kayıt Merkezi</title>
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="assets/core.js"></script>
+<style>
+  :root{
+    --navy:#2A2A5E;--navy-700:#22224d;--navy-900:#14142c;
+    --red:#DC1A22;--red-700:#b71219;
+    --bg:#F5F6FB;--card:#fff;--line:#E4E6F1;--tint:#EEF0F8;
+    --ink:#1c1c2e;--muted:#6b6f86;--green:#1F9D6B;--amber:#E08A0B;
+    --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,select{font-family:inherit;font-size:14px;color:var(--ink)}
+  .hide{display:none!important}
+
+  .gate{position:fixed;inset:0;background:linear-gradient(150deg,var(--navy),#15152e);
+    display:flex;align-items:center;justify-content:center;padding:24px;z-index:100}
+  .gate-card{background:#fff;border-radius:18px;padding:34px 30px;width:100%;max-width:400px;
+    box-shadow:0 24px 70px rgba(0,0,0,.35)}
+  .gate-card img{height:42px;margin-bottom:20px}
+  .gate-card h1{font-size:20px;color:var(--navy);margin-bottom:5px;letter-spacing:-.02em}
+  .gate-card p{color:var(--muted);font-size:13px;margin-bottom:20px}
+  .err{color:var(--red);font-size:12.5px;min-height:17px;margin-top:8px;font-weight:600}
+
+  .top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:40;
+    display:flex;align-items:center;gap:14px;padding:12px 22px;flex-wrap:wrap}
+  .top .chip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:34px}
+  .top .chip img{height:22px;display:block}
+  .top .t{font-weight:800;font-size:15px;letter-spacing:-.01em}
+  .top .s{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b9b9d6}
+  .top .sp{flex:1}
+  .wrap{max-width:1060px;margin:0 auto;padding:24px 22px 60px}
+
+  .note{border-radius:10px;padding:14px 17px;font-size:13px;margin-bottom:20px;line-height:1.6}
+  .note-info{background:#eef2fc;color:#2c3d6b;border:1px solid #d6e0f5}
+  .note b{font-weight:800}
+
+  .kart{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:24px 26px;margin-bottom:20px;box-shadow:0 1px 3px rgba(20,20,50,.05)}
+  .kart h2{font-size:16px;color:var(--navy);margin-bottom:4px;letter-spacing:-.01em}
+  .kart .alt{color:var(--muted);font-size:12.5px;margin-bottom:20px}
+
+  .satir{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+  .f label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);margin-bottom:5px;
+    text-transform:uppercase;letter-spacing:.04em}
+  .f label b{color:var(--red)}
+  .f input,.f select{width:100%;padding:10px 12px;border:1.5px solid var(--line);
+    border-radius:9px;background:#fff;transition:.12s}
+  .f input:focus,.f select:focus{outline:none;border-color:var(--navy)}
+
+  .sub-baslik{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);margin:18px 0 8px}
+  .sub-baslik:first-child{margin-top:0}
+  .btn-sil{background:#fff;color:var(--red);border-color:#f3d0d2}
+  .btn-sil:hover{border-color:var(--red)}
+  .tek{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;letter-spacing:.05em}
+  .ipucu{font-size:12px;color:var(--muted);margin:-6px 0 18px}
+  .islem{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  tr.arsivli td{opacity:.62}
+  .araclar{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:6px 0 20px}
+  .ac{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--line);border-radius:10px;
+    padding:12px 14px;transition:.12s;background:#fff}
+  .ac-yetki{flex-direction:column;gap:5px}
+  .ac-yetki b{font-size:13.5px;font-weight:700;color:var(--ink)}
+  .ac-yetki > span{font-size:11.5px;color:var(--muted);line-height:1.4}
+  .ac-yetki select{width:100%;margin-top:6px;padding:8px 10px;border:1.5px solid var(--line);
+    border-radius:8px;font-family:inherit;font-size:12.5px;background:#fff}
+  .ac-yetki select:focus{outline:none;border-color:var(--navy)}
+  .ac-not{font-size:11px;color:var(--amber);font-weight:700;margin-top:5px;display:block}
+  .ac:hover{border-color:var(--navy)}
+  .ac input{width:18px;height:18px;margin-top:1px;accent-color:var(--navy);flex:none}
+  .ac b{display:block;font-size:13.5px;font-weight:700;color:var(--ink)}
+  .ac span{font-size:11.5px;color:var(--muted);line-height:1.4}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:11px 20px;border-radius:9px;font-weight:700;font-size:13.5px;transition:.15s;
+    border:1.5px solid transparent;font-family:inherit;text-decoration:none;white-space:nowrap}
+  .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-700)}
+  .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+  .btn-line{background:#fff;color:var(--navy);border-color:var(--line)}.btn-line:hover{border-color:var(--navy)}
+  .btn-onDark{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)}
+  .btn-onDark:hover{background:rgba(255,255,255,.24)}
+  .btn-sm{padding:8px 13px;font-size:12.5px}
+
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);padding:0 10px 10px;border-bottom:1px solid var(--line)}
+  td{padding:14px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  .ad{font-weight:700;font-size:14px}
+  .meta{font-size:12px;color:var(--muted);margin-top:2px}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:800;letter-spacing:.04em}
+  .rozetler{display:flex;gap:5px;flex-wrap:wrap}
+  .rz{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap}
+  .rz.ok{background:#e9f7f0;color:#0d6b47}
+  .rz.bek{background:#fdf6e6;color:#7a5c06}
+  .rz.yok{background:var(--tint);color:#7b7e93}
+  .bos{text-align:center;padding:44px 20px;color:var(--muted)}
+  .bos b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy-900);
+    color:#fff;padding:12px 20px;border-radius:24px;font-weight:600;font-size:13.5px;z-index:200;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.22s}
+  .toast.show{opacity:1;bottom:30px}
+
+  @media(max-width:720px){
+    .satir{grid-template-columns:1fr}
+    td .rozetler{margin-top:6px}
+    table,thead,tbody,tr,td,th{display:block}
+    thead{display:none}
+    td{border:none;padding:4px 0}
+    tbody tr{border-bottom:1px solid var(--line);padding:14px 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="assets/logo.png" alt="Artıfarma Group">
+    <h1 id="gTitle">Eczane Kayıt Merkezi</h1>
+    <p id="gSub">Devam etmek için yönetici şifrenizi girin.</p>
+    <div id="gFields"></div>
+    <div class="err" id="gErr"></div>
+    <button class="btn btn-navy" style="width:100%" id="gBtn">Giriş yap</button>
+  </div>
+</div>
+
+<div class="hide" id="app">
+  <div class="top">
+    <span class="chip"><img src="assets/logo.png" alt="Artıfarma Group"></span>
+    <div><div class="t">Eczane Kayıt Merkezi</div><div class="s">Artıfarma 360°</div></div>
+    <span class="sp"></span>
+    <a class="btn btn-onDark btn-sm" href="admin.html">← Panel</a>
+    <a class="btn btn-onDark btn-sm" href="kayitlar.html">Gelen Kayıtlar</a>
+    <a class="btn btn-onDark btn-sm" href="index.html#araclar">Araçlar</a>
+    <a class="btn btn-onDark btn-sm" href="yonetim.html">Site Yönetimi</a>
+    <button class="btn btn-onDark btn-sm" onclick="location.reload()">Yenile</button>
+  </div>
+
+  <div class="wrap">
+    <div class="note note-info">
+      Eczaneyi ve çalışanlarını burada <b>bir kez</b> kaydedin; seçtiğiniz araçlarda aynı ID
+      ve şifreyle otomatik açılır. Kayıt, ilgili araç <b>ilk açıldığında</b> oluşturulur —
+      aşağıdaki listede "bekliyor" görünen araçları bir kez açmanız yeterlidir. <b>Çalışan eklediğinizde, arşivlediğinizde veya sildiğinizde de aynı şekilde ilgili aracı bir kez açmanız gerekir</b> — kayıtları o araç kendi kodu ile oluşturur.
+      Her eczane yalnızca kendi verisini, her çalışan yalnızca kendi kayıtlarını görür.
+    </div>
+
+    <div class="kart">
+      <h2>Yeni eczane kaydı</h2>
+      <div class="alt">Kimlik otomatik üretilir. Aynı adı daha önce kaydettiyseniz mevcut kimlik kullanılır.</div>
+
+      <div class="satir">
+        <div class="f"><label for="ad">Eczane adı <b>*</b></label>
+          <input id="ad" list="adOneri" placeholder="Örn. Naturel Eczanesi" autocomplete="off"></div>
+        <div class="f"><label for="sehir">Şehir</label>
+          <input id="sehir" placeholder="İstanbul" autocomplete="off"></div>
+        <div class="f"><label for="eczaci">Eczacı adı</label>
+          <input id="eczaci" placeholder="Ecz. Ad Soyad" autocomplete="off"></div>
+      </div>
+
+      <div class="satir">
+        <div class="f"><label for="kimlik">Eczane ID <b>*</b></label>
+          <input id="kimlik" class="tek" placeholder="ECZ-1234" autocomplete="off"></div>
+        <div class="f"><label for="sifre">Şifre <b>*</b></label>
+          <input id="sifre" class="tek" placeholder="4–8 karakter" autocomplete="off"></div>
+        <div class="f"><label>&nbsp;</label>
+          <button class="btn btn-line" id="uret" type="button" style="width:100%">Rastgele üret</button></div>
+      </div>
+      <div class="ipucu">ID ve şifreyi kendiniz belirleyebilirsiniz; eczacıya vereceğiniz bilgiler bunlardır.</div>
+      <datalist id="adOneri"></datalist>
+
+      <label style="display:block;font-size:11.5px;font-weight:700;color:var(--muted);
+        margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em">Araç erişimleri</label>
+      <div class="araclar" id="acListe"></div>
+
+      <button class="btn btn-primary" id="kaydet">Kaydet ve araçlara gönder</button>
+    </div>
+
+    <div class="kart">
+      <h2>Çalışanlar</h2>
+      <div class="alt">Çalışanı burada bir kez tanımlayın; eczanesinin açık olduğu araçlarda
+        aynı kullanıcı adı ve şifreyle giriş yapar. Her çalışan yalnızca kendi kayıtlarını görür.</div>
+
+      <div class="satir">
+        <div class="f"><label for="cEcz">Eczane <b>*</b></label>
+          <select id="cEcz"></select></div>
+        <div class="f"><label for="cAd">Ad soyad <b>*</b></label>
+          <input id="cAd" placeholder="Örn. Ayşe Yılmaz" autocomplete="off"></div>
+        <div class="f"><label for="cPoz">Pozisyon <b>*</b></label>
+          <select id="cPoz"></select></div>
+      </div>
+
+      <button class="btn btn-primary" id="cKaydet">Çalışanı kaydet</button>
+
+      <div id="cListe" style="margin-top:24px"></div>
+    </div>
+
+    <div class="kart">
+      <h2>Araçlarda hâlihazırda açık eczaneler</h2>
+      <div class="alt">Daha önce açtığınız (veya yedekten geri yüklediğiniz) eczaneler.
+        Merkezde kayıtlı olmayanları tek kimliğe getirebilirsiniz.</div>
+      <div id="mevcut"></div>
+    </div>
+
+    <div class="kart">
+      <h2>Kayıtlı eczaneler</h2>
+      <div class="alt">Her aracın durumu: kuruldu / bekliyor.</div>
+      <div id="liste"></div>
+    </div>
+
+    <div class="kart" id="arsivKart" hidden>
+      <h2>Arşiv</h2>
+      <div class="alt">Arşivdeki eczaneler listelerde ve önerilerde görünmez; verileri araçlarda durur.</div>
+      <div id="arsivListe"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   ARTIFARMA — Eczane Kayıt Merkezi
+
+   Eczaneyi bir kez kaydeder, ortak kimliği (ArtifarmaEczane) üretir
+   ve seçilen araçlar için kurulum emri bırakır (ArtifarmaKurulum).
+   Kaydın kendisini her araç KENDİ fabrika koduyla oluşturur; bu sayfa
+   hiçbir aracın veri yapısını taklit etmez.
+   ========================================================= */
+
+const ARACLAR = [
+  {kod:'program',   ad:'Danışman Kokpiti',      not:'Kurumsallaşma programı ve görev takibi', dosya:'program.html'},
+  {kod:'yetkinlik', ad:'Yetkinlik Değerlendirme', not:'Personel performans ölçümü',            dosya:'yetkinlik.html'},
+  {kod:'swot',      ad:'SWOT Tanı Paneli',      not:'360° tanı ve kör nokta analizi',          dosya:'swot.html'},
+  {kod:'finans',    ad:'Finans Kokpiti',        not:'Nakit akış, hedef ve prim takibi',        dosya:'finans.html'},
+  {kod:'performans',ad:'Performans Yönetimi',  not:'Değerlendirme, gelişim, prim ve maaş',    dosya:'performans.html'},
+];
+
+/* Çalışan kaydı olan araçlar — merkezde tanımlanan çalışanlar bu araçlara akar. */
+const CALISAN_ARACLARI = ['performans'];
+
+/* Pozisyon önerileri — performans.html'deki rol tohumuyla aynı. */
+const POZISYONLAR = ['Yardımcı Eczacı','Dermokozmetik Uzmanı','Eczane Teknisyeni/Teknikeri','Çırak','Diğer/Özel Rol'];
+
+const $ = id => document.getElementById(id);
+let TT; const toast = m => {const t=$('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('show'),2400);};
+const kacis = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Giriş (yönetim paneliyle aynı şifre) ---------- */
+const SIFRE_ANAHTARI = 'artifarma:yonetim_sifre';
+function karistir(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 'h'+h.toString(36);}
+
+function gateKur(){
+  /* Danışman panelleri tek oturumu paylaşır: birinde giriş yapınca
+     sekme kapanana kadar diğerleri yeniden şifre sormaz. */
+  try{ if(sessionStorage.getItem(OTURUM)==='1' && localStorage.getItem(SIFRE_ANAHTARI)){ ac(); return; } }catch(e){}
+  const kayitli = localStorage.getItem(SIFRE_ANAHTARI);
+  if(!kayitli){
+    $('gTitle').textContent='Yönetici şifresi belirleyin';
+    $('gSub').textContent='Bu şifre site yönetim panelinde de geçerli olur.';
+    $('gFields').innerHTML =
+      '<div class="f" style="margin-bottom:14px"><label>Yeni şifre</label>'+
+      '<input type="password" id="s1" placeholder="En az 6 karakter"></div>'+
+      '<div class="f" style="margin-bottom:6px"><label>Şifre tekrar</label>'+
+      '<input type="password" id="s2"></div>';
+    $('gBtn').textContent='Belirle ve gir';
+    $('gBtn').onclick=()=>{
+      const a=$('s1').value.trim(), b=$('s2').value.trim();
+      if(a.length<6) return $('gErr').textContent='Şifre en az 6 karakter olmalı.';
+      if(a!==b)      return $('gErr').textContent='Şifreler birbirini tutmuyor.';
+      localStorage.setItem(SIFRE_ANAHTARI,karistir(a)); ac();
+    };
+  } else {
+    $('gFields').innerHTML='<div class="f"><label>Şifre</label><input type="password" id="s1" autofocus></div>';
+    const dene=()=>{ if(karistir($('s1').value.trim())===kayitli) ac();
+                     else {$('gErr').textContent='Şifre hatalı.'; $('s1').value='';} };
+    $('gBtn').onclick=dene;
+    $('gFields').addEventListener('keydown',e=>{if(e.key==='Enter')dene();});
+  }
+}
+const OTURUM='artifarma:oturum';
+function ac(){ try{sessionStorage.setItem(OTURUM,'1');}catch(e){} $('gate').classList.add('hide'); $('app').classList.remove('hide'); ciz(); calisanCiz(); mevcutCiz(); }
+
+/* ---------- Araç seçim kutuları ---------- */
+/* Her araç için erişim seçimi. "Kapalı" seçilirse o araçta kayıt açılmaz. */
+function yetkiSecenekleri(kod, secili){
+  const liste = ArtifarmaYetki.secenekler(kod);
+  if(ArtifarmaYetki.sadeceEczaci(kod) && secili !== 'kapali') secili = 'eczaci';
+  return liste
+    .map(o => `<option value="${o.deger}"${o.deger===secili?' selected':''}>${kacis(o.ad)}</option>`)
+    .join('');
+}
+
+function acKutulariCiz(){
+  $('acListe').innerHTML = ARACLAR.map(a =>
+    `<div class="ac ac-yetki">
+       <b>${kacis(a.ad)}</b>
+       <span>${kacis(a.not)}</span>
+       <select data-arac="${a.kod}">${yetkiSecenekleri(a.kod,'tam')}</select>
+       ${ArtifarmaYetki.sadeceEczaci(a.kod)
+         ? '<span class="ac-not">Personel bu araca hiçbir ayarla giremez.</span>' : ''}
+     </div>`).join('');
+}
+
+/* ---------- Kayıt ---------- */
+function kaydet(){
+  const ad = $('ad').value.trim();
+  const id = $('kimlik').value.trim();
+  const sf = $('sifre').value.trim();
+  const secimler = {};
+  document.querySelectorAll('#acListe select').forEach(x => secimler[x.dataset.arac] = x.value);
+  const secili = Object.keys(secimler).filter(k => secimler[k] !== 'kapali');
+  if(!secili.length) return toast('En az bir araca erişim verin');
+
+  const sonuc = ArtifarmaEczane.elleKaydet(ad, id, sf);
+  if(!sonuc.tamam) return toast(sonuc.hata);
+  const kimlik = sonuc.kayit;
+
+  Object.keys(secimler).forEach(a => ArtifarmaYetki.yaz(kimlik.id, a, secimler[a]));
+
+  ArtifarmaKurulum.sirala({
+    id: kimlik.id, ad: kimlik.ad,
+    sehir: $('sehir').value.trim(), eczaci: $('eczaci').value.trim(),
+    sifre: kimlik.sifre
+  }, secili);
+
+  $('ad').value=''; $('sehir').value=''; $('eczaci').value='';
+  uretDoldur();
+  ciz(); mevcutCiz();
+
+  ArtifarmaKimlik.goster({
+    arac: 'Artıfarma 360°', baslik: kimlik.ad, kalici: true, ortak: true,
+    satirlar: [{etiket:'Eczane ID', deger:kimlik.id},{etiket:'Şifre', deger:kimlik.sifre}],
+    not: 'Kayıt, seçtiğiniz araçlar ilk açıldığında oluşturulacak.'
+  });
+  toast('Eczane kaydedildi');
+}
+
+/* Form ilk açıldığında ve her kayıttan sonra kullanılabilir bir öneri koyar. */
+function uretDoldur(){
+  const o = ArtifarmaEczane.oneri();
+  $('kimlik').value = o.id;
+  $('sifre').value  = o.sifre;
+}
+
+/* ---------- Şifre / kimlik değiştirme ---------- */
+function kimlikDuzenle(eskiId){
+  const k = ArtifarmaEczane.bul(eskiId);
+  if(!k) return;
+  const yeniId = prompt('Eczane ID\n\n' + k.ad, k.id);
+  if(yeniId === null) return;
+  const yeniSf = prompt('Şifre (4–8 karakter)\n\n' + k.ad, k.sifre);
+  if(yeniSf === null) return;
+
+  const s = ArtifarmaEczane.elleKaydet(k.ad, yeniId, yeniSf, eskiId);
+  if(!s.tamam) return alert(s.hata);
+
+  /* Araçlardaki kayıtlar da yeni kimliğe çekilsin. */
+  const durum = ArtifarmaKurulum.durum(eskiId);
+  const araclar = Object.keys(durum).length ? Object.keys(durum) : ARACLAR.map(a=>a.kod);
+  if(eskiId.toUpperCase() !== s.kayit.id.toUpperCase()) ArtifarmaKurulum.sil(eskiId);
+  ArtifarmaKurulum.esitle({id:s.kayit.id, ad:s.kayit.ad, sifre:s.kayit.sifre}, araclar);
+
+  ciz(); mevcutCiz();
+  ArtifarmaKimlik.goster({
+    arac:'Artıfarma 360°', baslik:s.kayit.ad, kalici:true, ortak:true,
+    satirlar:[{etiket:'Eczane ID',deger:s.kayit.id},{etiket:'Yeni şifre',deger:s.kayit.sifre}],
+    not:'Değişiklik, araçlar bir kez açıldığında uygulanır. Eczacıya yeni bilgileri iletin.'
+  });
+}
+
+/* ---------- Arşiv / silme ---------- */
+function arsivle(id, deger){
+  const k = ArtifarmaEczane.arsivle(id, deger);
+  /* Araçlara da bildir: arşivdeki eczane listelerde görünmez, girişi kapalıdır. */
+  if(k){
+    const durum = ArtifarmaKurulum.durum(id);
+    const araclar = Object.keys(durum).length ? Object.keys(durum) : ARACLAR.map(a=>a.kod);
+    ArtifarmaKurulum.arsivle({id:k.id, ad:k.ad, sifre:k.sifre}, araclar, deger);
+  }
+  ciz(); mevcutCiz();
+  toast(deger ? 'Arşive alındı — araçlar açıldığında gizlenecek'
+              : 'Arşivden çıkarıldı — araçlar açıldığında geri gelecek');
+}
+
+function tamamenSil(id){
+  const k = ArtifarmaEczane.bul(id);
+  if(!k) return;
+  if(!confirm('"' + k.ad + '" tamamen silinecek.\n\n' +
+    'Eczane kaydı ve o eczaneye ait tüm veriler (metodoloji, kadro, ' +
+    'değerlendirmeler, finans kayıtları) araçlardan da silinir. ' +
+    'Bu işlem geri alınamaz.\n\nDevam edilsin mi?')) return;
+  if(!confirm('Son onay: "' + k.ad + '" ve tüm verileri silinsin mi?')) return;
+
+  ArtifarmaKurulum.sildir({id:k.id, ad:k.ad, sifre:k.sifre}, ARACLAR.map(a=>a.kod));
+  ArtifarmaEczane.kaldir(k.id);
+  ciz(); mevcutCiz();
+  toast('Silindi — araçlar açıldığında verileri de kaldırılacak');
+}
+
+/* ---------- Liste ---------- */
+function satirCiz(k, arsivMi){
+  const durum = ArtifarmaKurulum.durum(k.id);
+  const rozet = ARACLAR.map(a=>{
+    const d = durum[a.kod];
+    if(d === true)  return `<span class="rz ok">${kacis(a.ad)} ✓</span>`;
+    if(d === undefined) return `<span class="rz yok">${kacis(a.ad)} —</span>`;
+    const ad = {kur:'kurulacak', esle:'kimlik güncellenecek', sil:'silinecek', arsiv:'arşiv güncellenecek'}[d] || 'bekliyor';
+    return `<a class="rz bek" href="${a.dosya}" title="Aracı açınca uygulanacak">${kacis(a.ad)} · ${ad}</a>`;
+  }).join('');
+  const q = s => `'${String(s).replace(/'/g,"\\'")}'`;
+  return `<tr class="${arsivMi?'arsivli':''}">
+    <td><div class="ad">${kacis(k.ad)}</div>
+        <div class="meta">${new Date(k.olusturma).toLocaleDateString('tr-TR')}</div></td>
+    <td><span class="mono">${kacis(k.id)}</span></td>
+    <td><span class="mono">${kacis(k.sifre)}</span></td>
+    <td><div class="rozetler">${rozet}</div></td>
+    <td><div class="islem">
+      <button class="btn btn-line btn-sm" onclick="kartAc(${q(k.id)})">Bilgileri gör</button>
+      <button class="btn btn-line btn-sm" onclick="kimlikDuzenle(${q(k.id)})">ID / şifre</button>
+      ${arsivMi
+        ? `<button class="btn btn-navy btn-sm" onclick="arsivle(${q(k.id)},false)">Geri getir</button>`
+        : `<button class="btn btn-line btn-sm" onclick="arsivle(${q(k.id)},true)">Arşivle</button>`}
+      <button class="btn btn-sil btn-sm" onclick="tamamenSil(${q(k.id)})">Sil</button>
+    </div></td></tr>`;
+}
+
+function tabloCiz(kayitlar, hedef, arsivMi, bosMetin){
+  if(!kayitlar.length){ $(hedef).innerHTML = `<div class="bos"><b>${bosMetin}</b></div>`; return; }
+  $(hedef).innerHTML =
+    `<table><thead><tr><th>Eczane</th><th>ID</th><th>Şifre</th>
+      <th>Araç durumu</th><th></th></tr></thead>
+     <tbody>${kayitlar.slice().reverse().map(k=>satirCiz(k,arsivMi)).join('')}</tbody></table>`;
+}
+
+function ciz(){
+  const hepsi = ArtifarmaEczane.liste();
+  if(typeof calisanSecimDoldur==='function') calisanSecimDoldur();
+  const aktif = hepsi.filter(k=>!k.arsiv);
+  const arsiv = hepsi.filter(k=>k.arsiv);
+
+  $('adOneri').innerHTML = aktif.map(k=>`<option value="${kacis(k.ad)}">`).join('');
+
+  tabloCiz(aktif,'liste',false,'Henüz kayıtlı eczane yok');
+  $('arsivKart').hidden = !arsiv.length;
+  if(arsiv.length) tabloCiz(arsiv,'arsivListe',true,'Arşiv boş');
+}
+
+function kartAc(id){
+  const k = ArtifarmaEczane.bul(id);
+  if(!k) return;
+  ArtifarmaKimlik.goster({
+    arac:'Artıfarma 360°', baslik:k.ad, kalici:true, ortak:true,
+    satirlar:[{etiket:'Eczane ID',deger:k.id},{etiket:'Şifre',deger:k.sifre}]
+  });
+}
+
+
+/* ---------- Çalışanlar ----------
+   Çalışan merkezde bir kez tanımlanır; kimliği ve şifresi ortak
+   kütükte (ArtifarmaCalisan) durur. Çalışan kaydı olan araçlar
+   (CALISAN_ARACLARI) bu kütükten besleneceği için burada yalnızca
+   tanım ve şifre yönetimi yapılır.                                */
+
+/* Kayıtta kanonik kod tutulur; ekranda okunabilir adı gösterilir. */
+function pozAdi(kod){
+  const p = ArtifarmaPozisyon.bul(kod) || ArtifarmaPozisyon.coz(kod);
+  return p ? p.ad : (kod || '—');
+}
+
+function calisanEczaneleri(){
+  return ArtifarmaEczane.liste().filter(k => !k.arsiv);
+}
+
+function calisanSecimDoldur(){
+  const secili = $('cEcz').value;
+  const ecz = calisanEczaneleri();
+  $('cEcz').innerHTML = ecz.length
+    ? ecz.map(k=>`<option value="${kacis(k.id)}">${kacis(k.ad)}</option>`).join('')
+    : '<option value="">Önce eczane kaydedin</option>';
+  if(secili && ecz.some(k=>k.id===secili)) $('cEcz').value = secili;
+
+  if(!$('cPoz').options.length)
+    $('cPoz').innerHTML = ArtifarmaPozisyon.secenekler('teknisyen');
+}
+
+function calisanKaydet(){
+  const eczId = $('cEcz').value;
+  const ad = $('cAd').value.trim();
+  if(!eczId) return toast('Önce bir eczane kaydedin');
+  if(!ad)    return toast('Çalışanın adı gerekli');
+
+  const poz = $('cPoz').value;
+  const sonuc = ArtifarmaCalisan.ekle(eczId, {ad, pozisyon: poz});
+  const ecz = ArtifarmaEczane.bul(eczId);
+
+  $('cAd').value='';          // pozisyon seçili kalsın, arka arkaya ekleme kolay olsun
+  calisanCiz();
+
+  ArtifarmaKimlik.goster({
+    arac:'Artıfarma 360°', baslik: ad, kalici:true, ortak:true,
+    satirlar:[
+      {etiket:'Eczane', deger: (ecz?ecz.ad:'') + ' · ' + eczId},
+      {etiket:'Pozisyon', deger: pozAdi(poz)},
+      {etiket:'Kullanıcı adı', deger: sonuc.kadi},
+      {etiket:'Şifre', deger: sonuc.sifre}
+    ],
+    not: sonuc.yeni
+      ? 'Çalışan, eczanesinin açık olduğu araçlara bu bilgilerle girer.'
+      : 'Bu ada kayıtlı çalışan zaten vardı; mevcut bilgileri gösteriliyor.'
+  });
+  toast(sonuc.yeni ? 'Çalışan kaydedildi — araçları bir kez açın'
+                   : 'Bu çalışan zaten kayıtlı');
+}
+
+function calisanSifre(id){
+  const c = ArtifarmaCalisan.bul(id);
+  if(!c) return;
+  const yeni = prompt('Şifre (4–8 karakter)\n\n' + c.ad, c.sifre);
+  if(yeni === null) return;
+  const s = (yeni||'').trim();
+  if(s.length < 4 || s.length > 8) return alert('Şifre 4–8 karakter olmalı.');
+  ArtifarmaCalisan.sifreAyarla(id, s);
+  calisanCiz();
+  ArtifarmaKimlik.goster({
+    arac:'Artıfarma 360°', baslik:c.ad, kalici:true, ortak:true,
+    satirlar:[{etiket:'Kullanıcı adı',deger:c.kadi},{etiket:'Yeni şifre',deger:s}],
+    not:'Eski şifre artık geçersizdir.'
+  });
+}
+
+function calisanDurum(id, aktif){
+  ArtifarmaCalisan.guncelle(id, {aktif:aktif});
+  calisanCiz();
+  toast(aktif ? 'Yeniden etkinleştirildi' : 'Pasife alındı');
+}
+
+function calisanKaldir(id){
+  const c = ArtifarmaCalisan.bul(id);
+  if(!c) return;
+  if(!confirm('"' + c.ad + '" merkezden silinsin mi?\n\n' +
+              'Araçlardaki kaydı, ilgili aracın kendi ekranından silinmelidir.')) return;
+  ArtifarmaCalisan.sil(id);
+  calisanCiz();
+  toast('Çalışan silindi');
+}
+
+function calisanCiz(){
+  calisanSecimDoldur();
+  const ecz = calisanEczaneleri();
+  const hepsi = ArtifarmaCalisan.liste();
+
+  if(!hepsi.length){
+    $('cListe').innerHTML = '<div class="bos"><b>Henüz çalışan yok</b>' +
+      (ecz.length ? 'Yukarıdan ilk çalışanı ekleyin.' : 'Önce bir eczane kaydedin.') + '</div>';
+    return;
+  }
+
+  const q = s => `'${String(s).replace(/'/g,"\\'")}'`;
+  const gruplar = ecz.map(k => ({
+    ecz: k, kisiler: hepsi.filter(c => String(c.eczId).toUpperCase() === k.id.toUpperCase())
+  })).filter(g => g.kisiler.length);
+
+  const oksuz = hepsi.filter(c => !ecz.some(k => k.id.toUpperCase() === String(c.eczId).toUpperCase()));
+  if(oksuz.length) gruplar.push({ecz:{ad:'Arşivdeki / silinmiş eczaneler', id:''}, kisiler:oksuz});
+
+  $('cListe').innerHTML = gruplar.map(g => `
+    <div class="sub-baslik">${kacis(g.ecz.ad)}${g.ecz.id?` <span class="mono">${kacis(g.ecz.id)}</span>`:''}</div>
+    <table><thead><tr><th>Çalışan</th><th>Kullanıcı adı</th><th>Şifre</th><th></th></tr></thead>
+    <tbody>${g.kisiler.map(c => `<tr class="${c.aktif===false?'arsivli':''}">
+      <td><div class="ad">${kacis(c.ad)}</div>
+          <div class="meta">${kacis(pozAdi(c.pozisyon))}</div></td>
+      <td><span class="mono">${kacis(c.kadi)}</span></td>
+      <td><span class="mono">${kacis(c.sifre)}</span></td>
+      <td><div class="islem">
+        <button class="btn btn-line btn-sm" onclick="calisanSifre(${q(c.id)})">Şifre</button>
+        ${c.aktif===false
+          ? `<button class="btn btn-navy btn-sm" onclick="calisanDurum(${q(c.id)},true)">Etkinleştir</button>`
+          : `<button class="btn btn-line btn-sm" onclick="calisanDurum(${q(c.id)},false)">Pasife al</button>`}
+        <button class="btn btn-sil btn-sm" onclick="calisanKaldir(${q(c.id)})">Sil</button>
+      </div></td></tr>`).join('')}</tbody></table>`).join('');
+}
+
+/* ---------- Araçlarda mevcut eczaneleri tara ----------
+   Yalnızca OKUMA yapar: her aracın veri anahtarından eczane adlarını
+   ve kimliklerini çıkarır. Yazma işini araçların kendisi yapar. */
+const OKUYUCU = {
+  program: () => {
+    const d = JSON.parse(localStorage.getItem('artifarma:apos360_db') || 'null');
+    return d && d.pharmacies ? d.pharmacies.map(p => ({ad:p.name, kimlik:p.loginId||''})) : null;
+  },
+  yetkinlik: () => {
+    const d = JSON.parse(localStorage.getItem('artifarma:artifarma_db_v1') || 'null');
+    return d && d.pharmacies ? Object.values(d.pharmacies).map(p => ({ad:p.name, kimlik:p.id||''})) : null;
+  },
+  swot: () => {
+    const idx = JSON.parse(localStorage.getItem('artifarma:af2_idx') || 'null');
+    if (!idx) return null;
+    return idx.map(it => {
+      const e = JSON.parse(localStorage.getItem('artifarma:af2_ph_' + it.id) || '{}');
+      return {ad: e.name || it.name, kimlik: e.code || ''};
+    });
+  },
+  finans: () => {
+    const d = JSON.parse(localStorage.getItem('artifarma:ecz-finans-v1') || 'null');
+    return d && d.eczaneler ? d.eczaneler.map(e => ({ad:e.ad, kimlik:e.kod||''})) : null;
+  },
+  performans: () => {
+    const d = JSON.parse(localStorage.getItem('artifarma:perf_sistem_v1') || 'null');
+    return d && d.pharmacies ? d.pharmacies.map(e => ({ad:e.ad, kimlik:e.kod||''})) : null;
+  }
+};
+
+const sade = x => (x||'').toLocaleLowerCase('tr-TR').replace(/\s+/g,' ').trim();
+
+function tara(){
+  const gruplar = {};          // sadeAd -> {ad, araclar:{kod:kimlik}}
+  ARACLAR.forEach(a => {
+    let liste = null;
+    try { liste = OKUYUCU[a.kod](); } catch(e){ liste = null; }
+    if (!liste) return;                       // araç hiç açılmamış
+    liste.forEach(e => {
+      if (!e.ad) return;
+      const k = sade(e.ad);
+      if (!gruplar[k]) gruplar[k] = {ad:e.ad, araclar:{}};
+      gruplar[k].araclar[a.kod] = e.kimlik;
+    });
+  });
+  return gruplar;
+}
+
+function mevcutCiz(){
+  const gruplar = tara();
+  const anahtarlar = Object.keys(gruplar);
+  const hedef = $('mevcut');
+
+  if (!anahtarlar.length){
+    hedef.innerHTML = '<div class="bos"><b>Araçlarda eczane bulunamadı</b>' +
+      'Araçları hiç açmadıysanız veya yedek yüklemediyseniz burası boş görünür.</div>';
+    return;
+  }
+
+  const satirlar = anahtarlar.map(k => {
+    const g = gruplar[k];
+    const kayit = ArtifarmaEczane.bulAd(g.ad);
+    const kimlikler = Object.values(g.araclar).filter(Boolean);
+    const tekMi = kayit && kimlikler.length && kimlikler.every(x => x.toUpperCase() === kayit.id.toUpperCase());
+
+    const rozet = ARACLAR.map(a => {
+      const km = g.araclar[a.kod];
+      if (km === undefined) return `<span class="rz yok">${kacis(a.ad)} —</span>`;
+      const uyum = kayit && km && km.toUpperCase() === kayit.id.toUpperCase();
+      return `<span class="rz ${uyum?'ok':'bek'}">${kacis(a.ad)} · ${kacis(km||'kimliksiz')}</span>`;
+    }).join('');
+
+    return `<tr>
+      <td><div class="ad">${kacis(g.ad)}</div>
+          <div class="meta">${Object.keys(g.araclar).length} araçta açık</div></td>
+      <td><div class="rozetler">${rozet}</div></td>
+      <td style="text-align:right;white-space:nowrap">${
+        tekMi ? '<span class="rz ok">tek kimlik ✓</span>'
+              : `<button class="btn btn-navy btn-sm" onclick="esitle('${kacis(g.ad).replace(/'/g,"\\'")}')">Tek kimliğe getir</button>`
+      }</td></tr>`;
+  }).join('');
+
+  hedef.innerHTML = `<table><thead><tr><th>Eczane</th><th>Araçlardaki kimlikler</th><th></th></tr></thead>
+    <tbody>${satirlar}</tbody></table>`;
+}
+
+/* Bu eczaneyi ortak kimliğe çekmesi için araçlara emir bırakır. */
+function esitle(ad){
+  const gruplar = tara();
+  const g = gruplar[sade(ad)];
+  if (!g) return toast('Eczane bulunamadı');
+
+  const kimlik = ArtifarmaEczane.esle(g.ad);
+  ArtifarmaKurulum.esitle({id:kimlik.id, ad:g.ad, sifre:kimlik.sifre},
+                          Object.keys(g.araclar));
+  ciz(); mevcutCiz();
+
+  ArtifarmaKimlik.goster({
+    arac:'Artıfarma 360°', baslik:g.ad, kalici:true, ortak:true,
+    satirlar:[{etiket:'Eczane ID',deger:kimlik.id},{etiket:'Şifre',deger:kimlik.sifre}],
+    not:'Değişiklik, ilgili araçlar bir kez açıldığında uygulanacak. Eczacıya yeni bilgileri iletin.'
+  });
+}
+
+$('uret').onclick = uretDoldur;
+$('kaydet').onclick = kaydet;
+$('ad').addEventListener('keydown', e => { if(e.key==='Enter') kaydet(); });
+$('cKaydet').onclick = calisanKaydet;
+$('cAd').addEventListener('keydown', e => { if(e.key==='Enter') calisanKaydet(); });
+$('cPoz').addEventListener('keydown', e => { if(e.key==='Enter') calisanKaydet(); });
+acKutulariCiz();
+uretDoldur();
+gateKur();
+</script>
+</body>
+</html>

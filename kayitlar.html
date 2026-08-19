@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="tr" data-af-no-back data-af-no-storage>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Artıfarma — Gelen Kayıtlar</title>
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="assets/core.js"></script>
+<style>
+  :root{
+    --navy:#2A2A5E;--navy-700:#22224d;--navy-900:#14142c;
+    --red:#DC1A22;--red-700:#b71219;
+    --bg:#F5F6FB;--card:#fff;--line:#E4E6F1;--tint:#EEF0F8;
+    --ink:#1c1c2e;--muted:#6b6f86;--green:#1F9D6B;--amber:#E08A0B;
+    --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input{font-family:inherit;font-size:14px;color:var(--ink)}
+  .hide{display:none!important}
+
+  .gate{position:fixed;inset:0;background:linear-gradient(150deg,var(--navy),#15152e);
+    display:flex;align-items:center;justify-content:center;padding:24px;z-index:100}
+  .gate-card{background:#fff;border-radius:18px;padding:34px 30px;width:100%;max-width:400px;
+    box-shadow:0 24px 70px rgba(0,0,0,.35)}
+  .gate-card img{height:42px;margin-bottom:20px}
+  .gate-card h1{font-size:20px;color:var(--navy);margin-bottom:5px;letter-spacing:-.02em}
+  .gate-card p{color:var(--muted);font-size:13px;margin-bottom:20px}
+  .gf{margin-bottom:14px}
+  .gf label{display:block;font-size:11.5px;font-weight:700;color:var(--muted);
+    margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+  .gf input{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:9px}
+  .gf input:focus{outline:none;border-color:var(--navy)}
+  .err{color:var(--red);font-size:12.5px;min-height:17px;margin-top:8px;font-weight:600}
+
+  .top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:40;
+    display:flex;align-items:center;gap:14px;padding:12px 22px;flex-wrap:wrap}
+  .top .chip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:34px}
+  .top .chip img{height:22px;display:block}
+  .top .t{font-weight:800;font-size:15px}
+  .top .s{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b9b9d6}
+  .top .sp{flex:1}
+  .wrap{max-width:1120px;margin:0 auto;padding:24px 22px 60px}
+
+  .note{border-radius:10px;padding:14px 17px;font-size:13px;margin-bottom:20px;line-height:1.6}
+  .note-info{background:#eef2fc;color:#2c3d6b;border:1px solid #d6e0f5}
+  .note b{font-weight:800}
+
+  .sekmeler{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .sekme{padding:11px 20px;border-radius:10px;font-weight:700;font-size:13.5px;
+    background:var(--card);border:1.5px solid var(--line);color:var(--muted);transition:.14s}
+  .sekme:hover{border-color:var(--navy);color:var(--navy)}
+  .sekme.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .sekme .adet{display:inline-block;background:rgba(255,255,255,.22);border-radius:20px;
+    padding:1px 8px;margin-left:7px;font-size:11.5px}
+  .sekme:not(.on) .adet{background:var(--tint);color:var(--navy)}
+
+  .kart{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:22px 24px;box-shadow:0 1px 3px rgba(20,20,50,.05)}
+  .arac{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+  .arac input[type=search]{flex:1;min-width:190px;padding:10px 13px;
+    border:1.5px solid var(--line);border-radius:9px}
+  .arac input[type=search]:focus{outline:none;border-color:var(--navy)}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+    padding:10px 16px;border-radius:9px;font-weight:700;font-size:13px;transition:.14s;
+    border:1.5px solid transparent;font-family:inherit;white-space:nowrap;text-decoration:none}
+  .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+  .btn-line{background:#fff;color:var(--navy);border-color:var(--line)}.btn-line:hover{border-color:var(--navy)}
+  .btn-red{background:#fff;color:var(--red);border-color:#f3d0d2}.btn-red:hover{border-color:var(--red)}
+  .btn-onDark{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)}
+  .btn-onDark:hover{background:rgba(255,255,255,.24)}
+  .btn-sm{padding:7px 12px;font-size:12.5px}
+
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--muted);padding:0 10px 10px;border-bottom:1px solid var(--line)}
+  td{padding:13px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .ad{font-weight:700}
+  .kucuk{font-size:12px;color:var(--muted)}
+  .etiket{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .et-site{background:var(--tint);color:#5b5f78}
+  .et-netlify{background:#e9f7f0;color:#0d6b47}
+  a.bag{color:var(--navy);font-weight:600;border-bottom:1px solid var(--line)}
+  a.bag:hover{border-color:var(--navy)}
+  .bos{text-align:center;padding:52px 20px;color:var(--muted)}
+  .bos b{display:block;color:var(--ink);font-size:15px;margin-bottom:6px}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy-900);
+    color:#fff;padding:12px 20px;border-radius:24px;font-weight:600;font-size:13.5px;z-index:200;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.22s}
+  .toast.show{opacity:1;bottom:30px}
+
+  @media(max-width:820px){
+    table,thead,tbody,tr,td,th{display:block}
+    thead{display:none}
+    td{border:none;padding:3px 0}
+    tbody tr{border-bottom:1px solid var(--line);padding:14px 0}
+  }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="assets/logo.png" alt="Artıfarma Group">
+    <h1 id="gTitle">Gelen Kayıtlar</h1>
+    <p id="gSub">Devam etmek için yönetici şifrenizi girin.</p>
+    <div id="gFields"></div>
+    <div class="err" id="gErr"></div>
+    <button class="btn btn-navy" style="width:100%" id="gBtn">Giriş yap</button>
+  </div>
+</div>
+
+<div class="hide" id="app">
+  <div class="top">
+    <span class="chip"><img src="assets/logo.png" alt="Artıfarma Group"></span>
+    <div><div class="t">Gelen Kayıtlar</div><div class="s">Artıfarma 360°</div></div>
+    <span class="sp"></span>
+    <a class="btn btn-onDark btn-sm" href="admin.html">← Panel</a>
+    <a class="btn btn-onDark btn-sm" href="eczaneler.html">Eczane Kayıt</a>
+    <a class="btn btn-onDark btn-sm" href="yonetim.html">Site Yönetimi</a>
+    <a class="btn btn-onDark btn-sm" href="index.html#araclar">Araçlar</a>
+  </div>
+
+  <div class="wrap">
+    <div class="note note-info" id="uyari"></div>
+
+    <div class="sekmeler">
+      <button class="sekme on" data-tur="analiz">Öz Değerlendirme <span class="adet" id="sayAnaliz">0</span></button>
+      <button class="sekme" data-tur="talep">Danışmanlık Talepleri <span class="adet" id="sayTalep">0</span></button>
+    </div>
+
+    <div class="kart">
+      <div class="arac">
+        <input type="search" id="ara" placeholder="Ad, eczane, il veya e-posta ara…">
+        <button class="btn btn-navy btn-sm" id="csvAl">Netlify CSV'si yükle</button>
+        <button class="btn btn-line btn-sm" id="csvVer">CSV indir</button>
+        <button class="btn btn-red btn-sm" id="temizle">Listeyi temizle</button>
+        <input type="file" id="dosya" accept=".csv,text/csv" class="hide">
+      </div>
+      <div id="liste"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   ARTIFARMA — Gelen Kayıtlar
+
+   İki ayrı defter: öz değerlendirme (analiz.html) ve danışmanlık
+   talepleri (iletisim.html). Kayıtlar iki yoldan gelir:
+     1) bu cihazda doldurulan formlar — doğrudan yazılır
+     2) Netlify'dan indirilen CSV — "Netlify CSV'si yükle" ile alınır
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+let TT; const toast = m => {const t=$('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('show'),2500);};
+const kacis = s => (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const SIFRE_ANAHTARI='artifarma:yonetim_sifre';
+function karistir(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 'h'+h.toString(36);}
+
+let TUR = 'analiz';
+
+const SUTUNLAR = {
+  analiz: [['Ad Soyad','ad'],['Eczane Adı','eczane'],['İl','il'],['Telefon','tel'],['E-posta','mail']],
+  talep:  [['Ad Soyad','ad'],['Eczane Adı','eczane'],['İl','il'],['Telefon','tel'],['E-posta','mail'],
+           ['Çalışan Sayısı','calisan']]
+};
+
+function gateKur(){
+  /* Danışman panelleri tek oturumu paylaşır: birinde giriş yapınca
+     sekme kapanana kadar diğerleri yeniden şifre sormaz. */
+  try{ if(sessionStorage.getItem(OTURUM)==='1' && localStorage.getItem(SIFRE_ANAHTARI)){ ac(); return; } }catch(e){}
+  const kayitli = localStorage.getItem(SIFRE_ANAHTARI);
+  if(!kayitli){
+    $('gTitle').textContent='Yönetici şifresi belirleyin';
+    $('gSub').textContent='Bu şifre diğer danışman panellerinde de geçerli olur.';
+    $('gFields').innerHTML='<div class="gf"><label>Yeni şifre</label><input type="password" id="s1" placeholder="En az 6 karakter"></div>'+
+      '<div class="gf"><label>Şifre tekrar</label><input type="password" id="s2"></div>';
+    $('gBtn').textContent='Belirle ve gir';
+    $('gBtn').onclick=()=>{
+      const a=$('s1').value.trim(), b=$('s2').value.trim();
+      if(a.length<6) return $('gErr').textContent='Şifre en az 6 karakter olmalı.';
+      if(a!==b)      return $('gErr').textContent='Şifreler birbirini tutmuyor.';
+      localStorage.setItem(SIFRE_ANAHTARI,karistir(a)); ac();
+    };
+  } else {
+    $('gFields').innerHTML='<div class="gf"><label>Şifre</label><input type="password" id="s1" autofocus></div>';
+    const dene=()=>{ if(karistir($('s1').value.trim())===kayitli) ac();
+                     else {$('gErr').textContent='Şifre hatalı.'; $('s1').value='';} };
+    $('gBtn').onclick=dene;
+    $('gFields').addEventListener('keydown',e=>{if(e.key==='Enter')dene();});
+  }
+}
+const OTURUM='artifarma:oturum';
+function ac(){ try{sessionStorage.setItem(OTURUM,'1');}catch(e){} $('gate').classList.add('hide'); $('app').classList.remove('hide'); ciz(); }
+
+function tarih(t){
+  if(!t) return '—';
+  const d = new Date(t);
+  if(isNaN(d)) return kacis(String(t).slice(0,16));
+  return d.toLocaleDateString('tr-TR',{day:'2-digit',month:'short',year:'numeric'}) +
+         ' · ' + d.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+}
+
+function ciz(){
+  const analiz = ArtifarmaKayit.liste('analiz');
+  const talep  = ArtifarmaKayit.liste('talep');
+  $('sayAnaliz').textContent = analiz.length;
+  $('sayTalep').textContent  = talep.length;
+
+  $('uyari').innerHTML =
+    '<b>Bu liste yalnızca bu bilgisayardaki kayıtları gösterir.</b> Ziyaretçi formu ' +
+    'kendi cihazında doldurur; o kayıt size <b>e-posta</b> olarak ulaşır ve Netlify ' +
+    'panosunda birikir. Hepsini burada toplamak için Netlify → <b>Forms</b> → ilgili form → ' +
+    '<b>Download as CSV</b> ile indirip <b>“Netlify CSV\'si yükle”</b> düğmesiyle ekleyin. ' +
+    'Aynı kayıt iki kez eklenmez.';
+
+  const kayitlar = (TUR === 'analiz' ? analiz : talep).slice().reverse();
+  const q = ($('ara').value || '').toLocaleLowerCase('tr-TR').trim();
+  const suz = kayitlar.filter(k => !q ||
+    Object.values(k).some(v => String(v).toLocaleLowerCase('tr-TR').includes(q)));
+
+  if(!suz.length){
+    $('liste').innerHTML = '<div class="bos"><b>' +
+      (kayitlar.length ? 'Aramanıza uyan kayıt yok' : 'Henüz kayıt yok') + '</b>' +
+      (kayitlar.length ? 'Farklı bir kelime deneyin.'
+        : 'Siteden gelen kayıtlar e-postanıza düşer; buraya almak için Netlify CSV’sini yükleyin.') +
+      '</div>';
+    return;
+  }
+
+  const sut = SUTUNLAR[TUR];
+  const bas = sut.map(s=>`<th>${s[0]}</th>`).join('');
+  const satirlar = suz.map(k => {
+    const hucre = sut.map(([alan]) => {
+      const v = k[alan] || '';
+      if(alan === 'E-posta' && v) return `<td><a class="bag" href="mailto:${kacis(v)}">${kacis(v)}</a></td>`;
+      if(alan === 'Telefon' && v) return `<td><a class="bag" href="tel:${kacis(v.replace(/[^\d+]/g,''))}">${kacis(v)}</a></td>`;
+      if(alan === 'Ad Soyad') return `<td><div class="ad">${kacis(v||'—')}</div>
+        <div class="kucuk">${tarih(k.tarih)}</div></td>`;
+      return `<td>${kacis(v||'—')}</td>`;
+    }).join('');
+    const not = k['Not'] ? `<div class="kucuk" style="margin-top:4px">${kacis(k['Not'])}</div>` : '';
+    return `<tr>${hucre}
+      <td><span class="etiket et-${k.kaynak==='netlify'?'netlify':'site'}">${k.kaynak==='netlify'?'Netlify':'bu cihaz'}</span>${not}</td>
+      <td style="text-align:right"><button class="btn btn-line btn-sm"
+        onclick="silKayit('${kacis(k.tarih)}')">Sil</button></td></tr>`;
+  }).join('');
+
+  $('liste').innerHTML = `<table><thead><tr>${bas}<th>Kaynak</th><th></th></tr></thead>
+    <tbody>${satirlar}</tbody></table>`;
+}
+
+function silKayit(t){
+  if(!confirm('Bu kayıt silinsin mi?')) return;
+  ArtifarmaKayit.sil(TUR, t); ciz(); toast('Kayıt silindi');
+}
+
+document.querySelectorAll('.sekme').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.sekme').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); TUR = b.dataset.tur; ciz();
+});
+$('ara').addEventListener('input', ciz);
+
+$('csvAl').onclick = () => $('dosya').click();
+$('dosya').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const s = ArtifarmaKayit.csvAl(TUR, r.result);
+      ciz();
+      toast(s.eklenen + ' kayıt eklendi' + (s.atlanan ? ' · ' + s.atlanan + ' tekrar atlandı' : ''));
+    }catch(err){ toast('CSV okunamadı'); }
+    e.target.value = '';
+  };
+  r.readAsText(f, 'utf-8');
+};
+
+$('csvVer').onclick = () => {
+  const c = ArtifarmaKayit.csvVer(TUR);
+  if(!c) return toast('İndirilecek kayıt yok');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿'+c], {type:'text/csv;charset=utf-8'}));
+  a.download = 'artifarma-' + TUR + '-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+  toast('CSV indirildi');
+};
+
+$('temizle').onclick = () => {
+  const ad = ArtifarmaKayit.TURLER[TUR];
+  if(!confirm(ad + ' listesindeki tüm kayıtlar silinecek. Devam edilsin mi?')) return;
+  ArtifarmaKayit.temizle(TUR); ciz(); toast('Liste temizlendi');
+};
+
+gateKur();
+</script>
+</body>
+</html>

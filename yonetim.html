@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr" data-af-no-back>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Artıfarma — Site Yönetimi</title>
+<link rel="icon" href="assets/logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#2A2A5E;--navy-700:#22224d;--navy-900:#14142c;
+    --red:#DC1A22;--red-700:#b71219;
+    --bg:#F5F6FB;--card:#fff;--line:#E4E6F1;--tint:#EEF0F8;
+    --ink:#1c1c2e;--muted:#6b6f86;--green:#1F9D6B;--amber:#E08A0B;
+    --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  button{font-family:inherit;cursor:pointer;border:none;background:none}
+  input,textarea{font-family:inherit;font-size:14px;color:var(--ink)}
+  .hide{display:none!important}
+
+  /* ---- Giriş ---- */
+  .gate{position:fixed;inset:0;background:linear-gradient(150deg,var(--navy),#15152e);
+    display:flex;align-items:center;justify-content:center;padding:24px;z-index:100}
+  .gate-card{background:#fff;border-radius:18px;padding:34px 30px;width:100%;max-width:400px;
+    box-shadow:0 24px 70px rgba(0,0,0,.35)}
+  .gate-card img{height:42px;margin-bottom:20px}
+  .gate-card h1{font-size:20px;color:var(--navy);margin-bottom:5px;letter-spacing:-.02em}
+  .gate-card p{color:var(--muted);font-size:13px;margin-bottom:20px}
+  .err{color:var(--red);font-size:12.5px;min-height:17px;margin-top:8px;font-weight:600}
+
+  /* ---- Yerleşim ---- */
+  .top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:40;
+    display:flex;align-items:center;gap:14px;padding:12px 22px;flex-wrap:wrap}
+  .top .chip{background:#fff;border-radius:8px;padding:4px 9px;display:inline-flex;align-items:center;height:34px}
+  .top .chip img{height:22px;display:block}
+  .top .t{font-weight:800;font-size:15px;letter-spacing:-.01em}
+  .top .s{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b9b9d6}
+  .top .sp{flex:1}
+  .wrap{max-width:1200px;margin:0 auto;padding:22px}
+  .layout{display:grid;grid-template-columns:220px 1fr;gap:22px;align-items:start}
+
+  .sidenav{position:sticky;top:82px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:8px;box-shadow:0 1px 3px rgba(20,20,50,.05)}
+  .sidenav button{display:block;width:100%;text-align:left;padding:9px 12px;border-radius:8px;
+    font-size:13.5px;font-weight:600;color:var(--muted);transition:.12s}
+  .sidenav button:hover{background:var(--tint);color:var(--navy)}
+  .sidenav button.on{background:var(--navy);color:#fff}
+
+  .group{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:24px 26px;margin-bottom:18px;box-shadow:0 1px 3px rgba(20,20,50,.05);scroll-margin-top:88px}
+  .group > h2{font-size:16px;color:var(--navy);margin-bottom:4px;letter-spacing:-.01em}
+  .group > .gd{color:var(--muted);font-size:12.5px;margin-bottom:20px}
+  .f{margin-bottom:17px}
+  .f label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px;
+    text-transform:uppercase;letter-spacing:.04em}
+  .f input,.f textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);
+    border-radius:9px;background:#fff;transition:.12s}
+  .f input:focus,.f textarea:focus{outline:none;border-color:var(--navy)}
+  .f textarea{resize:vertical;min-height:78px;line-height:1.6}
+  .f .hint{font-size:11.5px;color:var(--muted);margin-top:5px}
+  .f.changed input,.f.changed textarea{border-color:var(--amber);background:#fffdf6}
+  .row2{display:grid;grid-template-columns:110px 1fr;gap:12px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:11px 18px;border-radius:9px;font-weight:700;font-size:13.5px;transition:.15s;
+    border:1.5px solid transparent;white-space:nowrap}
+  .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-700)}
+  .btn-navy{background:var(--navy);color:#fff}.btn-navy:hover{background:var(--navy-700)}
+  .btn-line{background:#fff;color:var(--navy);border-color:var(--line)}.btn-line:hover{border-color:var(--navy)}
+  .btn-onDark{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.22)}
+  .btn-onDark:hover{background:rgba(255,255,255,.24)}
+  .btn-sm{padding:8px 14px;font-size:12.5px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn.full{width:100%}
+
+  .savebar{position:sticky;bottom:0;background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);padding:14px 22px;display:flex;align-items:center;gap:12px;
+    flex-wrap:wrap;z-index:30}
+  .savebar .info{flex:1;font-size:12.5px;color:var(--muted);min-width:200px}
+  .savebar .info b{color:var(--amber)}
+
+  .note{border-radius:10px;padding:13px 16px;font-size:13px;margin-bottom:18px;line-height:1.6}
+  .note-info{background:#eef2fc;color:#2c3d6b;border:1px solid #d6e0f5}
+  .note-warn{background:#fdf6e6;color:#7a5c06;border:1px solid #f0e0b5}
+  .note-ok{background:#e9f7f0;color:#0d6b47;border:1px solid #c4e8d8}
+  .note b{font-weight:800}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--navy-900);
+    color:#fff;padding:12px 20px;border-radius:24px;font-weight:600;font-size:13.5px;z-index:200;
+    box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.22s}
+  .toast.show{opacity:1;bottom:30px}
+
+  .steps{counter-reset:s;margin:12px 0 0}
+  .steps li{counter-increment:s;position:relative;padding:6px 0 6px 30px;font-size:13px}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:7px;width:20px;height:20px;
+    border-radius:6px;background:var(--navy);color:#fff;font-size:11px;font-weight:800;
+    display:flex;align-items:center;justify-content:center}
+
+  @media(max-width:820px){
+    .layout{grid-template-columns:1fr}
+    .sidenav{position:static;display:flex;gap:6px;overflow-x:auto}
+    .sidenav button{white-space:nowrap}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== GİRİŞ EKRANI ========== -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="assets/logo.png" alt="Artıfarma Group">
+    <h1 id="gateTitle">Site Yönetimi</h1>
+    <p id="gateSub">Devam etmek için yönetici şifrenizi girin.</p>
+    <div id="gateFields"></div>
+    <div class="err" id="gateErr"></div>
+    <button class="btn btn-navy full" id="gateBtn">Giriş yap</button>
+  </div>
+</div>
+
+<!-- ========== PANEL ========== -->
+<div class="hide" id="app">
+  <div class="top">
+    <span class="chip"><img src="assets/logo.png" alt="Artıfarma Group"></span>
+    <div><div class="t">Site Yönetimi</div><div class="s">Artıfarma 360°</div></div>
+    <span class="sp"></span>
+    <a class="btn btn-onDark btn-sm" href="admin.html">← Panel</a>
+    <a class="btn btn-onDark btn-sm" href="kayitlar.html">Gelen Kayıtlar</a>
+    <a class="btn btn-onDark btn-sm" href="eczaneler.html">Eczane Kayıt Merkezi</a>
+    <button class="btn btn-onDark btn-sm" onclick="sifreDegistir()">Şifre değiştir</button>
+    <button class="btn btn-onDark btn-sm" onclick="cikis()">Çıkış</button>
+  </div>
+
+  <div class="wrap">
+    <div id="durum"></div>
+    <div class="layout">
+      <nav class="sidenav" id="sidenav"></nav>
+      <main id="form"></main>
+    </div>
+  </div>
+
+  <div class="savebar">
+    <div class="info" id="sayac">Değişiklik yok</div>
+    <button class="btn btn-line btn-sm" onclick="geriAl()">Değişiklikleri geri al</button>
+    <button class="btn btn-line" onclick="onizle()">Önizle</button>
+    <button class="btn btn-primary" onclick="indir()">Güncellenmiş siteyi indir</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="dosyaSec" accept=".html" class="hide">
+
+<script>
+/* =========================================================
+   ARTIFARMA — Site Yönetim Paneli
+
+   NASIL ÇALIŞIR
+   Panel, index.html dosyasını okur; içindeki data-af="..." ile
+   işaretlenmiş alanları forma döker. Düzenlemeler bittiğinde
+   dosyanın güncellenmiş hâlini indirir.
+
+   Site statik dosyalardan oluştuğu ve sunucusu olmadığı için
+   panel doğrudan yayına yazamaz: indirilen index.html, klasördeki
+   eskisinin yerine konur ve site yeniden yüklenir.
+   ========================================================= */
+
+/* ---------- Alan haritası ---------- */
+const GRUPLAR = [
+ {id:'serit', ad:'Üst şerit', not:'Sitenin en üstünde, her sayfada görünen program adı.', alanlar:[
+   ['serit.ad','Program adı','text'],
+   ['serit.alt','Alt başlık','text'],
+ ]},
+ {id:'giris', ad:'Giriş bölümü', not:'Ziyaretçinin ilk gördüğü büyük başlık alanı.', alanlar:[
+   ['hero.ustyazi','Üst yazı','text'],
+   ['hero.satir1','Başlık — birinci satır','text'],
+   ['hero.vurgu','Vurgulanan kelime','text','Kırmızı renkte gösterilir.'],
+   ['hero.satir2','Başlık — devamı','text'],
+   ['hero.aciklama','Açıklama','area'],
+   ['hero.btn1','Birinci düğme','text'],
+   ['hero.btn2','İkinci düğme','text'],
+ ]},
+ {id:'rakamlar', ad:'Rakamlar', not:'Giriş bölümünün altındaki dört kutu.', alanlar:[
+   ['rakam1.sayi','1. sayı','text'],['rakam1.etiket','1. etiket','text'],
+   ['rakam2.sayi','2. sayı','text'],['rakam2.etiket','2. etiket','text'],
+   ['rakam3.sayi','3. sayı','text'],['rakam3.etiket','3. etiket','text'],
+   ['rakam4.sayi','4. sayı','text'],['rakam4.etiket','4. etiket','text'],
+ ]},
+ {id:'yaklasim', ad:'Yaklaşımımız', not:'Yöntemin anlatıldığı bölüm ve üç aşama.', alanlar:[
+   ['yaklasim.ustyazi','Üst yazı','text'],
+   ['yaklasim.baslik','Başlık','text'],
+   ['yaklasim.aciklama','Açıklama','area'],
+   ['asama1.baslik','1. aşama — başlık','text'],
+   ['asama1.metin','1. aşama — metin','area'],
+   ['asama2.baslik','2. aşama — başlık','text'],
+   ['asama2.metin','2. aşama — metin','area'],
+   ['asama3.baslik','3. aşama — başlık','text'],
+   ['asama3.metin','3. aşama — metin','area'],
+ ]},
+ {id:'analiz', ad:'Öz değerlendirme', not:'Ziyaretçinin girişsiz kullandığı ücretsiz analiz bölümü.', alanlar:[
+   ['analiz.ustyazi','Üst yazı','text'],
+   ['analiz.baslik','Başlık','text'],
+   ['analiz.aciklama','Açıklama','area'],
+   ['analiz.sure','Rozet 1 — süre','text'],
+   ['analiz.kayit','Rozet 2 — kayıt','text'],
+   ['analiz.cikti','Rozet 3 — çıktı','text'],
+   ['analiz.btn','Düğme','text'],
+   ['analiz.boyutlar','Boyut listesi','liste'],
+ ]},
+ {id:'araclar', ad:'Araçlar bölümü', not:'Üç uygulamanın tanıtıldığı bölümün başlığı.', alanlar:[
+   ['araclar.ustyazi','Üst yazı','text'],
+   ['araclar.baslik','Başlık','text'],
+   ['araclar.aciklama','Açıklama','area'],
+ ]},
+ {id:'kartlar', ad:'Araç kartları', not:'Her kartın başlığı, açıklaması ve madde listesi.', alanlar:[
+   ['arac1.rozet','1. kart — rozet','text'],
+   ['arac1.baslik','1. kart — başlık','text'],
+   ['arac1.aciklama','1. kart — açıklama','area'],
+   ['arac1.maddeler','1. kart — maddeler','liste'],
+   ['arac1.btn','1. kart — düğme','text'],
+   ['arac2.rozet','2. kart — rozet','text'],
+   ['arac2.baslik','2. kart — başlık','text'],
+   ['arac2.aciklama','2. kart — açıklama','area'],
+   ['arac2.maddeler','2. kart — maddeler','liste'],
+   ['arac2.btn','2. kart — düğme','text'],
+   ['arac3.rozet','3. kart — rozet','text'],
+   ['arac3.baslik','3. kart — başlık','text'],
+   ['arac3.aciklama','3. kart — açıklama','area'],
+   ['arac3.maddeler','3. kart — maddeler','liste'],
+   ['arac3.btn','3. kart — düğme','text'],
+   ['arac4.rozet','4. kart — rozet','text'],
+   ['arac4.baslik','4. kart — başlık','text'],
+   ['arac4.aciklama','4. kart — açıklama','area'],
+   ['arac4.maddeler','4. kart — maddeler','liste'],
+   ['arac4.btn','4. kart — düğme','text'],
+   ['arac5.rozet','5. kart — rozet','text'],
+   ['arac5.baslik','5. kart — başlık','text'],
+   ['arac5.aciklama','5. kart — açıklama','area'],
+   ['arac5.maddeler','5. kart — maddeler','liste'],
+   ['arac5.btn','5. kart — düğme','text'],
+ ]},
+ {id:'egitim', ad:'Ekip eğitimi', not:'ETA Akademi bölümü.', alanlar:[
+   ['egitim.ustyazi','Üst yazı','text'],
+   ['egitim.baslik','Başlık','text'],
+   ['egitim.aciklama','Açıklama','area'],
+   ['egitim.maddeler','Maddeler','liste'],
+   ['egitim.btn','Düğme','text'],
+   ['egitim.kutuBaslik','Sağ kutu — başlık','text'],
+   ['egitim.kutuAlt','Sağ kutu — alt yazı','text'],
+ ]},
+ {id:'kapsam', ad:'Danışmanlık kapsamı', not:'Eczanenin dört temel alanı.', alanlar:[
+   ['kapsam.ustyazi','Üst yazı','text'],
+   ['kapsam.baslik','Başlık','text'],
+   ['kapsam.aciklama','Açıklama','area'],
+   ['kapsam.btn','Düğme','text'],
+   ['alan1.baslik','1. alan — başlık','text'],
+   ['alan1.metin','1. alan — metin','area'],
+   ['alan2.baslik','2. alan — başlık','text'],
+   ['alan2.metin','2. alan — metin','area'],
+   ['alan3.baslik','3. alan — başlık','text'],
+   ['alan3.metin','3. alan — metin','area'],
+   ['alan4.baslik','4. alan — başlık','text'],
+   ['alan4.metin','4. alan — metin','area'],
+ ]},
+ {id:'iletisim', ad:'İletişim', not:'Sayfanın altındaki çağrı bandı ve iletişim bilgileri.', alanlar:[
+   ['iletisim.baslik','Başlık','text'],
+   ['iletisim.metin','Metin','area'],
+   ['iletisim.eposta','E-posta adresi','text','Ziyaretçi düğmeye basınca bu adrese e-posta açılır.'],
+   ['iletisim.epostaBtn','E-posta düğmesinin yazısı','text'],
+   ['iletisim.telefon','Telefon numarası','text','Başında ülke kodu olmalı. Örnek: +905321234567'],
+   ['iletisim.telBtn','Telefon düğmesinin yazısı','text'],
+ ]},
+ {id:'altbilgi', ad:'Alt bilgi', not:'Sayfanın en altındaki bölüm.', alanlar:[
+   ['footer.aciklama','Kısa tanıtım','area'],
+   ['footer.telif','Telif satırı','text'],
+   ['footer.kvkk','KVKK notu','text'],
+ ]},
+];
+
+/* ---------- Yardımcılar ---------- */
+const $ = id => document.getElementById(id);
+let TT; function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');
+  clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('show'),2400);}
+
+/* Basit bir karıştırma. Panel yayına yazamadığı için bu şifre
+   yalnızca paneli gelişigüzel açılmaktan korur, sır saklamaz. */
+function karistir(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 'h'+h.toString(36);}
+const SIFRE_ANAHTARI='artifarma:yonetim_sifre';
+
+/* Sayfadaki kalın yazıyı ** ** ile göster, kaydederken geri çevir */
+function htmlToMetin(el){
+  let h = el.innerHTML;
+  h = h.replace(/<strong>(.*?)<\/strong>/gi, '**$1**').replace(/<br\s*\/?>/gi, ' ');
+  const t = document.createElement('textarea'); t.innerHTML = h.replace(/<[^>]+>/g,'');
+  return t.value.replace(/\s+/g,' ').trim();
+}
+function metinToHtml(s){
+  const kacir = x => x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return kacir(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+/* Telefon: yazıldığı biçimden bağımsız olarak doğru bağlantı üret.
+   "0533 431 30 06", "533 431 30 06", "+90 533..." hepsi kabul edilir. */
+function telBaglanti(s){
+  let r=(s||'').replace(/[^\d+]/g,'');
+  if(!r) return '';
+  if(r.startsWith('+')) return r;
+  if(r.startsWith('90') && r.length>=12) return '+'+r;
+  if(r.startsWith('0')) return '+90'+r.slice(1);
+  return '+90'+r;
+}
+/* Ekranda 0533 431 30 06 biçiminde göster */
+function telGoster(s){
+  const b=telBaglanti(s);
+  const m=b.match(/^\+90(\d{3})(\d{3})(\d{2})(\d{2})$/);
+  return m ? `0${m[1]} ${m[2]} ${m[3]} ${m[4]}` : (s||'').trim();
+}
+
+/* ---------- Durum ---------- */
+let belge = null;      // index.html'in ayrıştırılmış hâli
+let asil  = {};        // dosyadaki özgün değerler
+let taslak= {};        // formdaki güncel değerler
+const TASLAK_ANAHTARI='artifarma:yonetim_taslak';
+
+/* ---------- Giriş ---------- */
+function gateKur(){
+  /* Danışman panelleri tek oturumu paylaşır. */
+  try{ if(sessionStorage.getItem(OTURUM)==='1' && localStorage.getItem(SIFRE_ANAHTARI)){ ac(); return; } }catch(e){}
+  const kayitli = localStorage.getItem(SIFRE_ANAHTARI);
+  if(!kayitli){
+    $('gateTitle').textContent='Yönetici şifresi belirleyin';
+    $('gateSub').textContent='Bu panele ilk girişiniz. Kullanacağınız şifreyi belirleyin.';
+    $('gateFields').innerHTML=
+      '<div class="f"><label>Yeni şifre</label><input type="password" id="s1" placeholder="En az 6 karakter"></div>'+
+      '<div class="f"><label>Şifre tekrar</label><input type="password" id="s2"></div>';
+    $('gateBtn').textContent='Belirle ve gir';
+    $('gateBtn').onclick=()=>{
+      const a=$('s1').value.trim(), b=$('s2').value.trim();
+      if(a.length<6){$('gateErr').textContent='Şifre en az 6 karakter olmalı.';return;}
+      if(a!==b){$('gateErr').textContent='Şifreler birbirini tutmuyor.';return;}
+      localStorage.setItem(SIFRE_ANAHTARI,karistir(a)); ac();
+    };
+  } else {
+    $('gateFields').innerHTML='<div class="f"><label>Şifre</label><input type="password" id="s1" autofocus></div>';
+    $('gateBtn').textContent='Giriş yap';
+    const dene=()=>{
+      if(karistir($('s1').value.trim())===kayitli) ac();
+      else {$('gateErr').textContent='Şifre hatalı.'; $('s1').value='';}
+    };
+    $('gateBtn').onclick=dene;
+    $('gateFields').addEventListener('keydown',e=>{if(e.key==='Enter')dene();});
+  }
+}
+function cikis(){location.reload();}
+function sifreDegistir(){
+  const y=prompt('Yeni şifre (en az 6 karakter):');
+  if(y===null)return;
+  if(y.trim().length<6){alert('Şifre en az 6 karakter olmalı.');return;}
+  localStorage.setItem(SIFRE_ANAHTARI,karistir(y.trim()));
+  toast('Şifre değiştirildi');
+}
+
+const OTURUM='artifarma:oturum';
+async function ac(){
+  try{sessionStorage.setItem(OTURUM,'1');}catch(e){}
+  $('gate').classList.add('hide');
+  $('app').classList.remove('hide');
+  await siteyiYukle();
+}
+
+/* ---------- index.html'i oku ---------- */
+async function siteyiYukle(){
+  try{
+    const r = await fetch('index.html', {cache:'no-store'});
+    if(!r.ok) throw new Error('okunamadı');
+    belgeKur(await r.text());
+  }catch(e){
+    dosyadanIste();
+  }
+}
+function dosyadanIste(){
+  $('durum').innerHTML =
+    '<div class="note note-warn"><b>index.html dosyası okunamadı.</b><br>'+
+    'Bu genellikle sayfayı doğrudan dosyadan (çift tıklayarak) açtığınızda olur. '+
+    'Aşağıdaki düğmeyle klasördeki <b>index.html</b> dosyasını seçin.<br>'+
+    '<button class="btn btn-navy btn-sm" style="margin-top:10px" onclick="document.getElementById(\'dosyaSec\').click()">index.html dosyasını seç</button></div>';
+  $('dosyaSec').onchange = e => {
+    const f = e.target.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { $('durum').innerHTML=''; belgeKur(rd.result); };
+    rd.readAsText(f, 'utf-8');
+  };
+}
+
+function belgeKur(html){
+  belge = new DOMParser().parseFromString(html, 'text/html');
+  asil = {};
+
+  belge.querySelectorAll('[data-af]').forEach(el=>{
+    asil[el.getAttribute('data-af')] = htmlToMetin(el);
+  });
+  belge.querySelectorAll('[data-af-list]').forEach(ul=>{
+    asil[ul.getAttribute('data-af-list')] =
+      [...ul.querySelectorAll('li')].map(li=>htmlToMetin(li)).join('\n');
+  });
+  const mail = belge.querySelector('[data-af-mail]');
+  if(mail) asil[mail.getAttribute('data-af-mail')] = (mail.getAttribute('href')||'').replace(/^mailto:/,'');
+  const tel = belge.querySelector('[data-af-tel]');
+  if(tel) asil[tel.getAttribute('data-af-tel')] = telGoster((tel.getAttribute('href')||'').replace(/^tel:/,''));
+
+  const kayitli = localStorage.getItem(TASLAK_ANAHTARI);
+  taslak = Object.assign({}, asil, kayitli ? JSON.parse(kayitli) : {});
+  formKur();
+  if(kayitli) toast('Kaydedilmemiş düzenlemeleriniz geri yüklendi');
+}
+
+/* ---------- Formu çiz ---------- */
+function formKur(){
+  const nav=$('sidenav'), form=$('form');
+  nav.innerHTML=''; form.innerHTML='';
+
+  GRUPLAR.forEach((g,gi)=>{
+    const b=document.createElement('button');
+    b.textContent=g.ad; b.className = gi===0?'on':'';
+    b.onclick=()=>{ document.getElementById('g_'+g.id).scrollIntoView({behavior:'smooth'});
+      [...nav.children].forEach(x=>x.classList.remove('on')); b.classList.add('on'); };
+    nav.appendChild(b);
+
+    const sec=document.createElement('section');
+    sec.className='group'; sec.id='g_'+g.id;
+    sec.innerHTML=`<h2>${g.ad}</h2><div class="gd">${g.not}</div>`;
+
+    g.alanlar.forEach(([anahtar,etiket,tip,ipucu])=>{
+      if(!(anahtar in asil)) return;              // sayfada yoksa gösterme
+      const f=document.createElement('div'); f.className='f';
+      const alanId='alan_'+anahtar.replace('.','_');
+      let girdi;
+      if(tip==='area'||tip==='liste'){
+        girdi=document.createElement('textarea');
+        if(tip==='liste'){girdi.style.minHeight='120px';}
+      } else {
+        girdi=document.createElement('input'); girdi.type='text';
+      }
+      girdi.id=alanId; girdi.value=taslak[anahtar]||'';
+      girdi.oninput=()=>{
+        taslak[anahtar]=girdi.value;
+        f.classList.toggle('changed', girdi.value!==asil[anahtar]);
+        taslakKaydet(); sayacGuncelle();
+      };
+      const lbl=document.createElement('label'); lbl.textContent=etiket; lbl.htmlFor=alanId;
+      f.appendChild(lbl); f.appendChild(girdi);
+      let h=ipucu||'';
+      if(tip==='liste') h='Her satır bir madde olur. Satır ekleyip silebilirsiniz.';
+      if(tip==='area'&&!ipucu) h='Kalın yazmak için kelimeyi **iki yıldız** arasına alın.';
+      if(h){const d=document.createElement('div');d.className='hint';d.textContent=h;f.appendChild(d);}
+      if(taslak[anahtar]!==asil[anahtar]) f.classList.add('changed');
+      sec.appendChild(f);
+    });
+    form.appendChild(sec);
+  });
+  sayacGuncelle();
+}
+
+function degisenler(){ return Object.keys(taslak).filter(k=>taslak[k]!==asil[k]); }
+function sayacGuncelle(){
+  const d=degisenler().length;
+  $('sayac').innerHTML = d ? `<b>${d} alan değiştirildi.</b> İndirip yayına almayı unutmayın.`
+                           : 'Değişiklik yok';
+}
+function taslakKaydet(){
+  const d={}; degisenler().forEach(k=>d[k]=taslak[k]);
+  if(Object.keys(d).length) localStorage.setItem(TASLAK_ANAHTARI, JSON.stringify(d));
+  else localStorage.removeItem(TASLAK_ANAHTARI);
+}
+function geriAl(){
+  if(!degisenler().length){toast('Zaten değişiklik yok');return;}
+  if(!confirm('Tüm düzenlemeler iptal edilip dosyadaki hâline dönülecek. Devam edilsin mi?'))return;
+  localStorage.removeItem(TASLAK_ANAHTARI);
+  taslak=Object.assign({},asil); formKur(); toast('Değişiklikler geri alındı');
+}
+
+/* ---------- Değişiklikleri belgeye uygula ---------- */
+function belgeUret(){
+  const d = belge.cloneNode(true);
+
+  d.querySelectorAll('[data-af]').forEach(el=>{
+    const k=el.getAttribute('data-af');
+    if(k in taslak) el.innerHTML = metinToHtml(taslak[k]);
+  });
+  d.querySelectorAll('[data-af-list]').forEach(ul=>{
+    const k=ul.getAttribute('data-af-list');
+    if(!(k in taslak)) return;
+    ul.innerHTML = taslak[k].split('\n').map(s=>s.trim()).filter(Boolean)
+      .map(s=>`\n          <li>${metinToHtml(s)}</li>`).join('') + '\n        ';
+  });
+  /* E-posta ve telefon; hem düğmelerin bağlantısını hem de
+     çağrı bandındaki görünür satırı besler — tek alandan yönetilir. */
+  const mail=d.querySelector('[data-af-mail]');
+  const eposta=(taslak[mail && mail.getAttribute('data-af-mail')]||'').trim();
+  if(mail && eposta) mail.setAttribute('href','mailto:'+eposta);
+  d.querySelectorAll('[data-af-mailtext]').forEach(a=>{
+    if(!eposta) return;
+    a.setAttribute('href','mailto:'+eposta); a.textContent=eposta;
+  });
+
+  const tel=d.querySelector('[data-af-tel]');
+  const telHam=(taslak[tel && tel.getAttribute('data-af-tel')]||'').trim();
+  const telLink=telBaglanti(telHam);
+  if(tel && telLink) tel.setAttribute('href','tel:'+telLink);
+  d.querySelectorAll('[data-af-teltext]').forEach(a=>{
+    if(!telLink) return;
+    a.setAttribute('href','tel:'+telLink); a.textContent=telGoster(telHam);
+  });
+
+  return '<!DOCTYPE html>\n' + d.documentElement.outerHTML + '\n';
+}
+
+/* ---------- Önizleme ---------- */
+function onizle(){
+  const w=window.open('','_blank');
+  if(!w){toast('Tarayıcı yeni sekmeyi engelledi');return;}
+  w.document.open(); w.document.write(belgeUret()); w.document.close();
+}
+
+/* ---------- İndir ---------- */
+function indir(){
+  const blob=new Blob([belgeUret()],{type:'text/html;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='index.html';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+
+  $('durum').innerHTML =
+    '<div class="note note-ok"><b>index.html indirildi.</b> Değişikliklerin siteye yansıması için:'+
+    '<ol class="steps">'+
+    '<li>İndirilen <b>index.html</b> dosyasını <b>artifarma</b> klasörüne taşıyın; eskisinin üzerine yazsın.</li>'+
+    '<li><b>yayina-hazirla.command</b> dosyasına çift tıklayın.</li>'+
+    '<li>Oluşan <b>yayin</b> klasörünü Netlify penceresine sürükleyip bırakın.</li>'+
+    '</ol></div>';
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('İndirildi — yayına almayı unutmayın');
+}
+
+gateKur();
+</script>
+</body>
+</html>
