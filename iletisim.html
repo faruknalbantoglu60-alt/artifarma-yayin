@@ -57,7 +57,7 @@
         </ul>
         <div class="form-direct">
           <span>Doğrudan ulaşmak isterseniz</span>
-          <a href="mailto:faruk@artifarmagroup.com">faruk@artifarmagroup.com</a>
+          <a href="mailto:faruk@artifarma360.com">faruk@artifarma360.com</a>
           <a href="tel:+905334313006">0533 431 30 06</a>
         </div>
       </div>
@@ -221,7 +221,7 @@
         tarafından işlenir. Bilgiler üçüncü taraflarla paylaşılmaz ve pazarlama
         amacıyla kullanılmaz. KVKK m.11 kapsamında verilerinize erişme, düzeltilmesini
         veya silinmesini talep etme hakkına sahipsiniz; bunun için
-        <a href="mailto:faruk@artifarmagroup.com">faruk@artifarmagroup.com</a>
+        <a href="mailto:faruk@artifarma360.com">faruk@artifarma360.com</a>
         adresine yazmanız yeterlidir.
       </p>
     </div>
@@ -276,7 +276,7 @@ function basarili(){
 
 function yedekYol(metin){
   var konu = 'Danışmanlık Talebi';
-  var mail = 'mailto:faruk@artifarmagroup.com?subject=' + encodeURIComponent(konu) +
+  var mail = 'mailto:faruk@artifarma360.com?subject=' + encodeURIComponent(konu) +
              '&body=' + encodeURIComponent(metin);
   var wa   = 'https://wa.me/905334313006?text=' + encodeURIComponent(konu + '\n\n' + metin);
   durum.className = 'form-durum uyari';
@@ -306,7 +306,7 @@ form.addEventListener('submit', function(e){
   durum.className = 'form-durum';
   durum.textContent = '';
 
-  fetch('/', {
+  fetch('gonder.php', {
     method: 'POST',
     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
     body: new URLSearchParams(fd).toString()

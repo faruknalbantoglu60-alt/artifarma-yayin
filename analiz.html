@@ -832,7 +832,7 @@ function tanitOzet() {
 
 function tanitYedekYol(metin) {
   const konu = "Öz Değerlendirme — İletişim Bilgileri";
-  const mail = "mailto:faruk@artifarmagroup.com?subject=" + encodeURIComponent(konu) +
+  const mail = "mailto:faruk@artifarma360.com?subject=" + encodeURIComponent(konu) +
                "&body=" + encodeURIComponent(metin);
   const wa = "https://wa.me/905334313006?text=" + encodeURIComponent(konu + "\n\n" + metin);
   $("tfHata").innerHTML =
@@ -855,7 +855,7 @@ function tanitGonder() {
   const veri = new FormData(f);
   if (String(veri.get("dolduma") || "").trim()) return Promise.resolve();   // bot
   tanitDeftere();                       // gönderim başarısız olsa da kayıt kalsın
-  return fetch("/", {
+  return fetch("gonder.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams(veri).toString()

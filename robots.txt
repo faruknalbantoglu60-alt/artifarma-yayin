@@ -12,6 +12,7 @@ Disallow: /program.html
 Disallow: /egitim.html
 Disallow: /finans.html
 Disallow: /performans.html
+Disallow: /gonder.php
 Disallow: /admin.html
 Disallow: /yonetim.html
 Disallow: /eczaneler.html
